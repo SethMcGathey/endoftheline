@@ -308,22 +308,16 @@ jQuery(function($){
                 });
 
                 // Display the players' names on screen
-                $('#player1Score')
-                    .find('.playerName')
-                    .html(App.Host.players[0].playerName);
-
-                $('#player2Score')
-                    .find('.playerName')
-                    .html(App.Host.players[1].playerName);
-
-		$('#player3Score')
-                    .find('.playerName')
-                    .html(App.Host.players[2].playerName);
-
-                // Set the Score section on screen to 0 for each player.
-                $('#player1Score').find('.score').attr('id',App.Host.players[0].mySocketId);
-                $('#player2Score').find('.score').attr('id',App.Host.players[1].mySocketId);
-		$('#player3Score').find('.score').attr('id',App.Host.players[2].mySocketId);
+		for(var i = 0; i < App.numOfPlayers; i++)
+		{
+		    $('#player' + i + 'Score')
+                    	.find('.playerName')
+                    	.html(App.Host.players[i-1].playerName);
+			
+			// Set the Score section on screen to 0 for each player.
+                	$('#player' + i  + 'Score').find('.score').attr('id',App.Host.players[i-1].mySocketId);
+		}
+               
             },
 
             /**
@@ -384,10 +378,12 @@ jQuery(function($){
              */
             endGame : function(data) {
                 // Get the data for player 1 from the host screen
-                var $p1 = $('#player1Score');
-                var p1Score = +$p1.find('.score').text();
-                var p1Name = $p1.find('.playerName').text();
-
+               for(var i = 0; i < App.numOfPlayers; i++)
+	       {
+		  var $p1 = $('#player' + i + 'Score');
+                  var p1Score = +$p1.find('.score').text();
+                  var p1Name = $p1.find('.playerName').text();
+	       }
                 // Get the data for player 2 from the host screen
                 var $p2 = $('#player2Score');
                 var p2Score = +$p2.find('.score').text();
