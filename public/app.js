@@ -283,8 +283,8 @@ jQuery(function($){
                 App.Host.numPlayersInRoom += 1;
 
                 // If two players have joined, start the game!
-		
-                if (App.Host.numPlayersInRoom === App.numOfPlayers) {
+				
+                if (App.Host.numPlayersInRoom == App.numOfPlayers) {
                     // console.log('Room is full. Almost ready!');
 
                     // Let the server know that two players are present.
