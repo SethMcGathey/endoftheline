@@ -312,7 +312,7 @@ jQuery(function($){
 		{
 		    $('#player' + i + 'Score')
                     	.find('.playerName')
-                    	.html(App.Host.players[i-1].playerName);
+                    	.html(App.Host.players[i+1].playerName);
 			
 			// Set the Score section on screen to 0 for each player.
                 	$('#player' + i  + 'Score').find('.score').attr('id',App.Host.players[i-1].mySocketId);
