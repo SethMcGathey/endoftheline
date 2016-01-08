@@ -4,11 +4,11 @@
     <meta charset="utf-8"/>
 
     <!-- Ensure that everything scales appropriately on a mobile device -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, nitial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
 
     <!-- Let's borrow a cool looking Font from Google -->
     <link href='https://fonts.googleapis.com/css?family=Quicksand:300,400,700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     <link href="css/styles.css" rel="stylesheet">
 </head>
 
@@ -25,12 +25,24 @@
         <div class="titleWrapper">
 
             <div class="title">
-                ANAGRAMMATIX
+                End Of The Line
             </div>
 
             <div class="buttons">
-		<p>Number of Players</p><input id="numOfPlayers" class="numOfPlayersClass"></input>
-                <button id="btnCreateGame" class="btn left">CREATE</button>
+		<div>
+			<p># of Players</p>
+			<br/>
+			<select id="numOfPlayers" class="numOfPlayersClass">
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+			</select>
+                </div>
+		<button id="btnCreateGame" class="btn left">CREATE</button>
                 <button id="btnJoinGame" class="btn right">JOIN</button>
                 <div style="clear:both"></div>
             </div>

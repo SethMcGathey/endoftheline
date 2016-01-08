@@ -1,14 +1,14 @@
 /*
 
- Dark Green : #78BD4C
-  Mid Green : #A8FF56
-       Lite : #ECFFE0
+ Dark Red : #682228
+  Mid Red : #801B08
+       Tan : #F4EBCE
 Dark Purple : #A22FB0
 
 */
 
 html, body {
-    background-color: #78BD4C;
+    background-color: #682228;
     height: 100%;
     width: 100%;
     margin: 0;
@@ -21,19 +21,33 @@ html, body {
               BUTTONS!
      (Inspired by Bootstrap 3.0)
    ****************************** */
-
-.btn {
+p {
     display: inline-block;
     height: 100%;
     width: 49%;
-    margin-bottom: 0;
-    color: #ECFFE0;
+    margin-bottom: 5px;
+    color: #F4EBCE;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     font-size: 2em;
     line-height: 1.2;
     text-align: center;
-    background-color: #8AD453;
+    background-color: #801B08;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+.btn, select {
+    display: inline-block;
+    height: 100%;
+    width: 49%;
+    margin-bottom: 5px;
+    color: #F4EBCE;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 2em;
+    line-height: 1.2;
+    text-align: center;
+    background-color: #801B08;
     white-space: nowrap;
     vertical-align: middle;
     cursor: pointer;
@@ -87,7 +101,7 @@ html, body {
     font-weight: 400;
     position: absolute;
     height: 50%;
-    width: 96%;
+    width: 80%;
     margin: auto;
     bottom: 0;
     left: 0;
@@ -98,9 +112,9 @@ html, body {
 .title {
     margin: 0px auto;
     text-align: center;
-    width: 100%;
+    width: 90%;
     font-family: 'Quicksand', sans-serif;
-    color: #ECFFE0;
+    color: #F4EBCE;
     font-weight: 300;
 }
 
