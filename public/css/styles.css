@@ -277,7 +277,7 @@ p {
 }
 
 .playerScore {
-    width: 50%;
+    width: 100%;
     padding: 0;
     margin: 0;
     font-family: 'Quicksand', sans-serif;
@@ -295,12 +295,13 @@ p {
 
 .playerScore .score {
     text-align: center;
-    background-color: #A8FF56;
+    background-color: #F4EBCE;
 }
 
 .playerScore .playerName {
     width: 25%;
-    background-color: #ECFFE0;
+    color: #F4EBCE;
+    background-color: #801B08;
 }
 
 
