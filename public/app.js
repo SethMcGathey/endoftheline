@@ -339,10 +339,21 @@ jQuery(function($){
              * @param data{{round: *, playerId: *, answer: *, gameId: *}}
              */
             checkAnswer : function(data) {
+		
+		if(player.turn)//made up variable
+		{
+			//set board[location] = square[chosenSquare];//made up vairables
+			updateBoard();//doesn't exist yet
+			movePlayers();//doesn't exist yet
+				
+		}
+
+
+
                 // Verify that the answer clicked is from the current round.
                 // This prevents a 'late entry' from a player whos screen has not
                 // yet updated to the current round.
-                if (data.round === App.currentRound){
+		 /* if (data.round === App.currentRound){
 
                     // Get the player's score
                     var $pScore = $('#' + data.playerId);
@@ -368,7 +379,7 @@ jQuery(function($){
                         // A wrong answer was submitted, so decrement the player's score.
                         $pScore.text( +$pScore.text() - 3 );
                     }
-                }
+                }*/
             },
 
 
@@ -380,6 +391,12 @@ jQuery(function($){
                 // Get the data for player 1 from the host screen
                for(var i = 0; i < App.numOfPlayers; i++)
 	       {
+		  var player = 
+			{
+				$p = $('#player' + i + 'Score');
+				pScore = +$p.find('.score').text();
+				pName = $p.find('.playerName').text()		
+			}
 		  var $p1 = $('#player' + i + 'Score');
                   var p1Score = +$p1.find('.score').text();
                   var p1Name = $p1.find('.playerName').text();
