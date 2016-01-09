@@ -310,12 +310,13 @@ jQuery(function($){
                 // Display the players' names on screen
 		for(var i = 0; i < App.numOfPlayers; i++)
 		{
-		    $('#player' + i + 'Score')
-                    	.find('.playerName')
-                    	.html(App.Host.players[i+1].playerName);
+		    $('#playerScores')
+                    	//.find('.playerName')
+                    	.append('<div id="player'+ i + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + i
++' </span> </div>');
 			
 			// Set the Score section on screen to 0 for each player.
-                	$('#player' + i  + 'Score').find('.score').attr('id',App.Host.players[i-1].mySocketId);
+                	//$('#player' + i  + 'Score').find('.score').attr('id',App.Host.players[i-1].mySocketId);
 		}
                
             },
