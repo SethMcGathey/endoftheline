@@ -230,9 +230,9 @@ var wordPool = [
     {
         "words"  : [ "sale","seal","ales","leas" ],
         "decoys" : [ "lead","lamp","seed","eels","lean","cels","lyse","sloe","tels","self" ]
-    },
+    }
 
-    {
+  /*  {
         "words"  : [ "item","time","mite","emit" ],
         "decoys" : [ "neat","team","omit","tame","mate","idem","mile","lime","tire","exit" ]
     },
@@ -275,5 +275,5 @@ var wordPool = [
     {
         "words"  : [ "stone","tones","steno","onset" ],
         "decoys" : [ "snout","tongs","stent","tense","terns","santo","stony","toons","snort","stint" ]
-    }
+    }*/
 ]
