@@ -317,9 +317,7 @@ jQuery(function($){
 			           [2,7,7]];
                 // Display the players' names on screen
 		for(var i = 0; i < App.numOfPlayers; i++)
-		{
-
-		    var individual = [0,0,0] 
+		{ 
 		    $('#playerScores')
                     	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1)
 +' </span> </div>');
@@ -392,13 +390,13 @@ jQuery(function($){
              */
             checkAnswer : function(data) {
 		
-		if(player.turn)//made up variable
-		{
+		//if(player.turn)//made up variable
+		//{
 			//set board[location] = square[chosenSquare];//made up vairables
-			updateBoard();//doesn't exist yet
+		//	updateBoard();//doesn't exist yet
 			movePlayer();//doesn't exist yet
 				
-		}
+		//}
 
 
 
