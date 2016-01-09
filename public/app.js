@@ -310,12 +310,12 @@ jQuery(function($){
                 // Display the players' names on screen
 		for(var i = 0; i < App.numOfPlayers; i++)
 		{
-		    $('#player' + i + 'Score')
-                    	.find('.playerName')
-                    	.html(App.Host.players[i+1].playerName);
+		    $('#playerScores')
+                    	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1)
++' </span> </div>');
 			
 			// Set the Score section on screen to 0 for each player.
-                	$('#player' + i  + 'Score').find('.score').attr('id',App.Host.players[i-1].mySocketId);
+                	//$('#player' + i  + 'Score').find('.score').attr('id',App.Host.players[i-1].mySocketId);
 		}
                
             },
@@ -411,7 +411,7 @@ jQuery(function($){
              */
             endGame : function(data) {
                 // Get the data for player 1 from the host screen
-               for(var i = 0; i < App.numOfPlayers; i++)
+             /*  for(var i = 0; i < App.numOfPlayers; i++)
 	       {
 		  var player = 
 			{
@@ -464,7 +464,7 @@ jQuery(function($){
 
                 // Reset game data
                 App.Host.numPlayersInRoom = 0;
-                App.Host.isNewGame = true;
+                App.Host.isNewGame = true;*/
             },
 
             /**

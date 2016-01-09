@@ -23,12 +23,10 @@ html, body {
    ****************************** */
 p {
     display: inline-block;
-    height: 100%;
-    width: 49%;
     margin-bottom: 5px;
     color: #F4EBCE;
     font-family: 'Quicksand', sans-serif;
-    font-weight: 700;
+    font-weight: 800;
     font-size: 2em;
     line-height: 1.2;
     text-align: center;
@@ -273,12 +271,13 @@ p {
     height: 10%;
     width: 100%;
     position: fixed;
+    margin: 0px 10px;
     top: 0;
 }
 
 .playerScore {
-    width: 100%;
-    padding: 0;
+    max-width: 100%;
+    padding: 3px;
     margin: 0;
     font-family: 'Quicksand', sans-serif;
     font-weight: 400;
@@ -286,7 +285,7 @@ p {
 }
 
 .playerScore span {
-    display: inline-block;
+    display: inline;
     font-size: 1.4EM;
     padding: 2%;
     min-width: 10%;
@@ -299,7 +298,8 @@ p {
 }
 
 .playerScore .playerName {
-    width: 25%;
+   
+    width: 100%;
     color: #F4EBCE;
     background-color: #801B08;
 }
