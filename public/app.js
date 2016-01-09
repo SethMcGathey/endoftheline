@@ -344,25 +344,25 @@ jQuery(function($){
             },
 		
 	    /***********Added by Seth**************/
-	    movePlayer : function(newX, newY, player,board, square){
-		for(individual in player)
+	    movePlayer : function(newX, newY,board, square){
+		for(individual in App.Host.player)
 		{
 			var swapPosition = [5,4,7,6,1,0,3,2]; //swapPosition converts the position of old location into position of new location
-			if(checkForTouchingSquare(newX, newY, player, individual))
+			if(checkForTouchingSquare(newX, newY, individual))
 			{
-				player[individual][0] = newX;
-				player[individual][1] = newY;
-				player[individual][2] = square[  board[newX][newY]  ][  swapPosition[ player[individual][2] ]  ];
+				App.Host.player[individual][0] = newX;
+				App.Host.player[individual][1] = newY;
+				App.Host.player[individual][2] = square[  board[newX][newY]  ][  swapPosition[ App.Host.player[individual][2] ]  ];
 			}
-			console.log(player[individual][3] + " " + player[individual][0] + " " + player[individual][1] + " " + player[individual][2]);
+			console.log(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
 		}
 	    },
 
-	    checkForTouchingSquare : function(newX, newY, player, individual){
-		if((player[individual][0] == newX && player[individual][1] == newY+1 && (player[individual][2] == 0 || player[individual][2] == 1)) ||
-		(player[individual][0] == newX-1 && player[individual][1] == newY && (player[individual][2] == 2 || player[individual][2] == 3)) ||
-		(player[individual][0] == newX && player[individual][1] == newY-1 && (player[individual][2] == 4 || player[individual][2] == 5)) ||
-		(player[individual][0] == newX+1 && player[individual][1] == newY && (player[individual][2] == 6 || player[individual][2] == 7)))
+	    checkForTouchingSquare : function(newX, newY, individual){
+		if((App.Host.player[individual][0] == newX && App.Host.player[individual][1] == newY+1 && (App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)) ||
+		(App.Host.player[individual][0] == newX-1 && App.Host.player[individual][1] == newY && (App.Host.player[individual][2] == 2 || App.Host.player[individual][2] == 3)) ||
+		(App.Host.player[individual][0] == newX && App.Host.player[individual][1] == newY-1 && (App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)) ||
+		(App.Host.player[individual][0] == newX+1 && App.Host.player[individual][1] == newY && (App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)))
 		{	
 			return true;
 		}
