@@ -335,12 +335,30 @@ jQuery(function($){
             },
 		
 	    /***********Added by Seth**************/
-	    movePlayer : function(newX, newY){
-		foreach(player)
-		square[board[newX,newY]];
-		player.oldlocation = player.location;
-		player.location = playernewLocation;
+	    movePlayer : function(newX, newY, player,board, square){
+		for(individual in player)
+		{
+			var swapPosition = [5,4,7,6,1,0,3,2]; //swapPosition converts the position of old location into position of new location
+			if(checkForTouchingSquare(newX, newY, player, individual))
+			{
+				player[individual][0] = newX;
+				player[individual][1] = newY;
+				player[individual][2] = square[  board[newX][newY]  ][  swapPosition[ player[individual][2] ]  ];
+			}
+		}
 	    },
+
+	    checkForTouchingSquare : function(newX, newY, player, individual){
+		if((player[individual][0] == newX && player[individual][1] == newY+1 && (player[individual][2] == 0 || player[individual][2] == 1)) ||
+		(player[individual][0] == newX-1 && player[individual][1] == newY && (player[individual][2] == 2 || player[individual][2] == 3)) ||
+		(player[individual][0] == newX && player[individual][1] == newY-1 && (player[individual][2] == 4 || player[individual][2] == 5)) ||
+		(player[individual][0] == newX+1 && player[individual][1] == newY && (player[individual][2] == 6 || player[individual][2] == 7)))
+		{	
+			return true;
+		}
+		return false;
+	    },	
+
 
 	    turnSquare : function(turnRight, square){
 		if(turnRight)
