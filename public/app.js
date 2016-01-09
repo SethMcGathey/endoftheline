@@ -345,6 +345,7 @@ jQuery(function($){
 				player[individual][1] = newY;
 				player[individual][2] = square[  board[newX][newY]  ][  swapPosition[ player[individual][2] ]  ];
 			}
+			console.log(player[individual][3] + " " + player[individual][0] + " " + player[individual][1] + " " + player[individual][2]);
 		}
 	    },
 
