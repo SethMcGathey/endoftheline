@@ -333,6 +333,28 @@ jQuery(function($){
                 App.Host.currentCorrectAnswer = data.answer;
                 App.Host.currentRound = data.round;
             },
+		
+	    /***********Added by Seth**************/
+	    movePlayer : function(newX, newY){
+		foreach(player)
+		square[board[newX,newY]];
+		player.oldlocation = player.location;
+		player.location = playernewLocation;
+	    },
+
+	    turnSquare : function(turnRight, square){
+		if(turnRight)
+		{    
+		    var swapSquare = [square.shift(), square.shift()];
+		    square[6] = swapSquare[0];
+		    square[7] = swapSquare[1];
+		}else
+		{
+		    var swapSquare = [square.pop(), square.pop()];
+		    square.unshift(swapSquare[1], swapSquare[0]);
+		}
+	    },
+	    /***********Added by Seth**************/
 
             /**
              * Check the answer clicked by a player.
@@ -344,7 +366,7 @@ jQuery(function($){
 		{
 			//set board[location] = square[chosenSquare];//made up vairables
 			updateBoard();//doesn't exist yet
-			movePlayers();//doesn't exist yet
+			movePlayer();//doesn't exist yet
 				
 		}
 
