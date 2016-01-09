@@ -311,7 +311,7 @@ jQuery(function($){
 		for(var i = 0; i < App.numOfPlayers; i++)
 		{
 		    $('#playerScores')
-                    	.append('<div id="player'+ i + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + i
+                    	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1)
 +' </span> </div>');
 			
 			// Set the Score section on screen to 0 for each player.
@@ -389,7 +389,7 @@ jQuery(function($){
              */
             endGame : function(data) {
                 // Get the data for player 1 from the host screen
-               for(var i = 0; i < App.numOfPlayers; i++)
+             /*  for(var i = 0; i < App.numOfPlayers; i++)
 	       {
 		  var player = 
 			{
@@ -442,7 +442,7 @@ jQuery(function($){
 
                 // Reset game data
                 App.Host.numPlayersInRoom = 0;
-                App.Host.isNewGame = true;
+                App.Host.isNewGame = true;*/
             },
 
             /**
