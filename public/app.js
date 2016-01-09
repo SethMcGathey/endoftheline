@@ -311,7 +311,6 @@ jQuery(function($){
 		for(var i = 0; i < App.numOfPlayers; i++)
 		{
 		    $('#playerScores')
-                    	//.find('.playerName')
                     	.append('<div id="player'+ i + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + i
 +' </span> </div>');
 			
