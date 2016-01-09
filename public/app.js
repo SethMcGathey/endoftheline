@@ -307,12 +307,23 @@ jQuery(function($){
                     IO.socket.emit('hostCountdownFinished', App.gameId);
                 });
 
+		App.Host.player = [[0,2,4],
+				   [0,5,5],
+				   [7,3,1],
+				   [7,5,0],
+				   [2,0,2],
+				   [5,0,3],
+				   [2,7,6],
+			           [2,7,7]];
                 // Display the players' names on screen
 		for(var i = 0; i < App.numOfPlayers; i++)
 		{
+
+		    var individual = [0,0,0] 
 		    $('#playerScores')
                     	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1)
 +' </span> </div>');
+			
 			
 			// Set the Score section on screen to 0 for each player.
                 	//$('#player' + i  + 'Score').find('.score').attr('id',App.Host.players[i-1].mySocketId);
