@@ -29,6 +29,7 @@ jQuery(function($){
             IO.socket.on('beginNewGame', IO.beginNewGame );
             IO.socket.on('newWordData', IO.onNewWordData);
             IO.socket.on('hostCheckAnswer', IO.hostCheckAnswer);
+            IO.socket.on('hostMovePlayer', IO.hostMovePlayer);
             IO.socket.on('gameOver', IO.gameOver);
             IO.socket.on('error', IO.error );
         },
@@ -93,7 +94,13 @@ jQuery(function($){
                 App.Host.checkAnswer(data);
             }
         },
-
+	/*****ADDED BY BECKY*****/
+	hostMovePlayer : function(data) {
+            if(App.myRole === 'Host') {
+                App.Host.addSquare(1, 1, data);
+            }
+        },
+	/*****ADDED BY BECKY*****/
         /**
          * Let everyone know the game has ended.
          * @param data
@@ -329,11 +336,16 @@ jQuery(function($){
 		//CODE BY BECKY - create board and display on page
 		App.Host.createBoard();
 
-                $('#board').append(App.Host.board);
+                $('#board').append(App.Host.board+'<br>');
 		
+<<<<<<< HEAD
 		App.Host.addSquare(2, 1, 2);
 
 		$('#board').append(App.Host.board);
+=======
+		App.Host.addSquare(2, 2, 2);
+		$('#board').append(App.Host.board+'<br>');
+>>>>>>> 3aa305bea6886aede05dda9a90ce36673fe6b7a0
 		//END CODE BY BECKY
 
 		//TEMP CODE BY SETH
@@ -367,12 +379,17 @@ jQuery(function($){
             },
 
            addSquare : function(x, y, squareNumber) {
+<<<<<<< HEAD
 		//if player[2] = 0 || 1 { newY = player[1]+1 } 
 		//if player[2] = 2 || 3 { newX = player[0]+1 }
 		//if player[2] = 4 || 5 { newY = player[1]-1 }
 		//if player[2] = 6 || 7 { newX = player[0]-1 }
 		App.Host.board[x][y] = App.Host.square[squareNumber];
 		App.Host.movePlayer(x,y);//Added by seth 
+=======
+		App.Host.board[x][y] = squareNumber; 
+		$('#board').append(App.Host.board+'<br>');
+>>>>>>> 3aa305bea6886aede05dda9a90ce36673fe6b7a0
 	   },		
 	
 	    /***********Added by Seth**************/
@@ -588,6 +605,10 @@ jQuery(function($){
                 // Set the appropriate properties for the current player.
                 App.myRole = 'Player';
                 App.Player.myName = data.playerName;
+		
+		/*******ADDED BY BECKY********/
+		App.Player.cards = [0, 1, 2, 3];
+		/*******ADDED BY BECKY********/
             },
 
             /**
@@ -654,11 +675,27 @@ jQuery(function($){
              */
             newWord : function(data) {
                 // Create an unordered list element
-                var $list = $('<ul/>').attr('id','ulAnswers');
+                //var $list = $('<ul/>').attr('id','ulAnswers');
 
+		/*******ADDED BY BECKY********/	
+		var $cardlist = $('<ul/>').attr('id','ulAnswers');
+		
+		for (var card in App.Player.cards) {
+		     $cardlist                                //  <ul> </ul>
+                        .append( $('<li/>')              //  <ul> <li> </li> </ul>
+                            .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
+                                .addClass('btnAnswer')   //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
+                                .addClass('btn')         //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
+                                .val(card)               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
+                                .html(card)              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
+                            )
+                        )
+		};	
+		
+		/*******ADDED BY BECKY********/
                 // Insert a list item for each word in the word list
                 // received from the server.
-                $.each(data.list, function(){
+                /*$.each(data.list, function(){
                     $list                                //  <ul> </ul>
                         .append( $('<li/>')              //  <ul> <li> </li> </ul>
                             .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
@@ -668,10 +705,11 @@ jQuery(function($){
                                 .html(this)              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
                             )
                         )
-                });
+                })*/;
 
                 // Insert the list onto the screen.
-                $('#gameArea').html($list);
+               // $('#gameArea').html($list);
+		$('#gameArea').append($cardlist);
             },
 
             /**
