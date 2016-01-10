@@ -343,6 +343,26 @@ jQuery(function($){
 		$('#board').append(App.Host.board);
 		App.Host.addSquare(2, 2, 2);
 		$('#board').append(App.Host.board+'<br>');
+                $('#board').append('Original Board <br>');
+		$('#board').append(App.Host.board[0] + '<br>');
+		$('#board').append(App.Host.board[1] + '<br>');
+                $('#board').append(App.Host.board[2] + '<br>');
+                $('#board').append(App.Host.board[3] + '<br>');
+                $('#board').append(App.Host.board[4] + '<br>');
+                $('#board').append(App.Host.board[5] + '<br>');
+                $('#board').append(App.Host.board[6] + '<br>');
+                $('#board').append(App.Host.board[7] + '<br>');		
+
+		App.Host.addSquare(2, 1, 2);
+                $('#board').append('Board after adding square <br>');
+                $('#board').append(App.Host.board[0] + '<br>');
+                $('#board').append(App.Host.board[1] + '<br>');
+                $('#board').append(App.Host.board[2] + '<br>');
+                $('#board').append(App.Host.board[3] + '<br>');
+                $('#board').append(App.Host.board[4] + '<br>');
+                $('#board').append(App.Host.board[5] + '<br>');
+                $('#board').append(App.Host.board[6] + '<br>');
+                $('#board').append(App.Host.board[7] + '<br>');
 		//END CODE BY BECKY
 
 		//TEMP CODE BY SETH
@@ -380,9 +400,10 @@ jQuery(function($){
 		//if player[2] = 2 || 3 { newX = player[0]+1 }
 		//if player[2] = 4 || 5 { newY = player[1]-1 }
 		//if player[2] = 6 || 7 { newX = player[0]-1 }
-		App.Host.movePlayer(x,y);//Added by seth 
+
 		App.Host.board[x][y] = squareNumber; 
 		$('#board').append(App.Host.board+'<br>');
+		App.Host.movePlayer(x,y);//Added by seth 
 	   },		
 	
 	    /***********Added by Seth**************/
@@ -397,7 +418,7 @@ jQuery(function($){
 				App.Host.player[individual][1] = newY; //sets players y to y of new piece
 				App.Host.player[individual][2] = App.Host.square[  App.Host.board[newX][newY]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position
 			}
-			$('#board').append(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
+			$('#board').append(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2] + "<br> ");
 			//print new player positions to screen 
 			console.log(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
 			//print new player positions to console
