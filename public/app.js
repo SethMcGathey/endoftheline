@@ -329,11 +329,11 @@ jQuery(function($){
 		//CODE BY BECKY - create board and display on page
 		App.Host.createBoard();
 
-                $('#board').append(App.Host.board);
+                $('#board').append(App.Host.board+'<br>');
 		
 		App.Host.addSquare(2, 2, 2);
-
-		$('#board').append(App.Host.board);
+		$('#board').append('hi<br>');
+		$('#board').append(App.Host.board+'<br>');
 		//END CODE BY BECKY
             },
 
@@ -363,11 +363,7 @@ jQuery(function($){
             },
 
            addSquare : function(x, y, squareNumber) {
-		//if player[2] = 0 || 1 { newY = player[1]+1 } 
-		//if player[2] = 2 || 3 { newX = player[0]+1 }
-		//if player[2] = 4 || 5 { newY = player[1]-1 }
-		//if player[2] = 6 || 7 { newX = player[0]-1 }
-		App.Host.board[x][y] = App.Host.square[squareNumber]; 
+		App.Host.board[x][y] = squareNumber; 
 	   },		
 	
 	    /***********Added by Seth**************/
