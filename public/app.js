@@ -244,8 +244,8 @@ jQuery(function($){
                 App.Host.numPlayersInRoom = 0;
 
                 App.Host.displayNewGameScreen();
-                // console.log("Game started with ID: " + App.gameId + ' by host: ' + App.mySocketId);
-            },
+                //console.log("Game started with ID: " + App.gameId + ' by host: ' + App.mySocketId);
+	     },
 
             /**
              * Show the Host screen containing the game URL and unique game ID
@@ -307,16 +307,33 @@ jQuery(function($){
                     IO.socket.emit('hostCountdownFinished', App.gameId);
                 });
 
+		App.Host.player = [[0,2,4],
+				   [0,5,5],
+				   [7,3,1],
+				   [7,5,0],
+				   [2,0,2],
+				   [5,0,3],
+				   [2,7,6],
+			           [2,7,7]];
                 // Display the players' names on screen
 		for(var i = 0; i < App.numOfPlayers; i++)
-		{
+		{ 
 		    $('#playerScores')
                     	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1) + '</span></div>');
+			
 			
 			// Set the Score section on screen to 0 for each player.
                 	//$('#player' + i  + 'Score').find('.score').attr('id',App.Host.players[i-1].mySocketId);
 		}
-               
+		//CODE BY BECKY - create board and display on page
+		App.Host.createBoard();
+
+                $('#board').append(App.Host.board);
+		
+		App.Host.addSquare(2, 2, 2);
+
+		$('#board').append(App.Host.board);
+		//END CODE BY BECKY
             },
 
             /**
@@ -332,27 +349,42 @@ jQuery(function($){
                 App.Host.currentCorrectAnswer = data.answer;
                 App.Host.currentRound = data.round;
             },
-		
+	    /***********Added by Becky**************/ 
+	    createBoard : function() {
+		App.Host.board = new Array(8); 
+		App.Host.square = [[6, 5, 4, 7, 2, 1, 0, 3], [4, 7, 6, 5, 0, 3, 2, 1], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
+		for (var i = 0; i < 8; i++) {
+			App.Host.board[i] = new Array(8);
+			for (var j = 0; j < 8; j++) {
+				App.Host.board[i][j] = null;
+			}
+		}
+            },
+
+           addSquare : function(x, y, squareNumber) {
+		App.Host.board[x][y] = App.Host.square[squareNumber]; 
+	   },		
+	
 	    /***********Added by Seth**************/
-	    movePlayer : function(newX, newY, player,board, square){
-		for(individual in player)
+	    movePlayer : function(newX, newY,board, square){
+		for(individual in App.Host.player)
 		{
 			var swapPosition = [5,4,7,6,1,0,3,2]; //swapPosition converts the position of old location into position of new location
-			if(checkForTouchingSquare(newX, newY, player, individual))
+			if(checkForTouchingSquare(newX, newY, individual))
 			{
-				player[individual][0] = newX;
-				player[individual][1] = newY;
-				player[individual][2] = square[  board[newX][newY]  ][  swapPosition[ player[individual][2] ]  ];
+				App.Host.player[individual][0] = newX;
+				App.Host.player[individual][1] = newY;
+				App.Host.player[individual][2] = square[  board[newX][newY]  ][  swapPosition[ App.Host.player[individual][2] ]  ];
 			}
-			console.log(player[individual][3] + " " + player[individual][0] + " " + player[individual][1] + " " + player[individual][2]);
+			console.log(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
 		}
 	    },
 
-	    checkForTouchingSquare : function(newX, newY, player, individual){
-		if((player[individual][0] == newX && player[individual][1] == newY+1 && (player[individual][2] == 0 || player[individual][2] == 1)) ||
-		(player[individual][0] == newX-1 && player[individual][1] == newY && (player[individual][2] == 2 || player[individual][2] == 3)) ||
-		(player[individual][0] == newX && player[individual][1] == newY-1 && (player[individual][2] == 4 || player[individual][2] == 5)) ||
-		(player[individual][0] == newX+1 && player[individual][1] == newY && (player[individual][2] == 6 || player[individual][2] == 7)))
+	    checkForTouchingSquare : function(newX, newY, individual){
+		if((App.Host.player[individual][0] == newX && App.Host.player[individual][1] == newY+1 && (App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)) ||
+		(App.Host.player[individual][0] == newX-1 && App.Host.player[individual][1] == newY && (App.Host.player[individual][2] == 2 || App.Host.player[individual][2] == 3)) ||
+		(App.Host.player[individual][0] == newX && App.Host.player[individual][1] == newY-1 && (App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)) ||
+		(App.Host.player[individual][0] == newX+1 && App.Host.player[individual][1] == newY && (App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)))
 		{	
 			return true;
 		}
@@ -380,13 +412,13 @@ jQuery(function($){
              */
             checkAnswer : function(data) {
 		
-		if(player.turn)//made up variable
-		{
+		//if(player.turn)//made up variable
+		//{
 			//set board[location] = square[chosenSquare];//made up vairables
-			updateBoard();//doesn't exist yet
+		//	updateBoard();//doesn't exist yet
 			movePlayer();//doesn't exist yet
 				
-		}
+		//}
 
 
 
