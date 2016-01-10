@@ -244,8 +244,8 @@ jQuery(function($){
                 App.Host.numPlayersInRoom = 0;
 
                 App.Host.displayNewGameScreen();
-                // console.log("Game started with ID: " + App.gameId + ' by host: ' + App.mySocketId);
-            },
+                //console.log("Game started with ID: " + App.gameId + ' by host: ' + App.mySocketId);
+	     },
 
             /**
              * Show the Host screen containing the game URL and unique game ID
@@ -317,7 +317,15 @@ jQuery(function($){
 			// Set the Score section on screen to 0 for each player.
                 	//$('#player' + i  + 'Score').find('.score').attr('id',App.Host.players[i-1].mySocketId);
 		}
-               
+		//CODE BY BECKY - create board and display on page
+		App.Host.createBoard();
+
+                $('#board').append(App.Host.board);
+		
+		App.Host.addSquare(2, 2, 2);
+
+		$('#board').append(App.Host.board);
+		//END CODE BY BECKY
             },
 
             /**
@@ -333,7 +341,22 @@ jQuery(function($){
                 App.Host.currentCorrectAnswer = data.answer;
                 App.Host.currentRound = data.round;
             },
-		
+	    /***********Added by Becky**************/ 
+	    createBoard : function() {
+		App.Host.board = new Array(8); 
+		App.Host.square = [[6, 5, 4, 7, 2, 1, 0, 3], [4, 7, 6, 5, 0, 3, 2, 1], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
+		for (var i = 0; i < 8; i++) {
+			App.Host.board[i] = new Array(8);
+			for (var j = 0; j < 8; j++) {
+				App.Host.board[i][j] = null;
+			}
+		}
+            },
+
+           addSquare : function(x, y, squareNumber) {
+		App.Host.board[x][y] = App.Host.square[squareNumber]; 
+	   },		
+	
 	    /***********Added by Seth**************/
 	    movePlayer : function(newX, newY, player,board, square){
 		for(individual in player)
