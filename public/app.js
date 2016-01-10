@@ -29,6 +29,7 @@ jQuery(function($){
             IO.socket.on('beginNewGame', IO.beginNewGame );
             IO.socket.on('newWordData', IO.onNewWordData);
             IO.socket.on('hostCheckAnswer', IO.hostCheckAnswer);
+            IO.socket.on('hostMovePlayer', IO.hostMovePlayer);
             IO.socket.on('gameOver', IO.gameOver);
             IO.socket.on('error', IO.error );
         },
@@ -93,7 +94,13 @@ jQuery(function($){
                 App.Host.checkAnswer(data);
             }
         },
-
+	/*****ADDED BY BECKY*****/
+	hostMovePlayer : function(data) {
+            if(App.myRole === 'Host') {
+                App.Host.addSquare(1, 1, data);
+            }
+        },
+	/*****ADDED BY BECKY*****/
         /**
          * Let everyone know the game has ended.
          * @param data
@@ -307,14 +314,14 @@ jQuery(function($){
                     IO.socket.emit('hostCountdownFinished', App.gameId);
                 });
 
-		App.Host.player = [[0,2,4],
-				   [0,5,5],
-				   [7,3,1],
-				   [7,5,0],
-				   [2,0,2],
-				   [5,0,3],
-				   [2,7,6],
-			           [2,7,7]];
+		App.Host.player = [[2,0,4,'Becky'],
+				   [0,5,5,'Matt'],
+				   [7,3,1,'Nick'],
+				   [7,5,0,'Scott'],
+				   [2,0,2,'Seth'],
+				   [5,0,3,'Bob'],
+				   [2,7,6,'Sue'],
+			           [2,7,7,'Jim']];
                 // Display the players' names on screen
 		for(var i = 0; i < App.numOfPlayers; i++)
 		{ 
@@ -328,12 +335,38 @@ jQuery(function($){
 		//CODE BY BECKY - create board and display on page
 		App.Host.createBoard();
 
-                $('#board').append(App.Host.board);
+                $('#board').append(App.Host.board+'<br>');
 		
-		App.Host.addSquare(2, 2, 2);
+		App.Host.addSquare(2, 1, 2);
 
 		$('#board').append(App.Host.board);
+		App.Host.addSquare(2, 2, 2);
+		$('#board').append(App.Host.board+'<br>');
+                $('#board').append('Original Board <br>');
+		$('#board').append(App.Host.board[0] + '<br>');
+		$('#board').append(App.Host.board[1] + '<br>');
+                $('#board').append(App.Host.board[2] + '<br>');
+                $('#board').append(App.Host.board[3] + '<br>');
+                $('#board').append(App.Host.board[4] + '<br>');
+                $('#board').append(App.Host.board[5] + '<br>');
+                $('#board').append(App.Host.board[6] + '<br>');
+                $('#board').append(App.Host.board[7] + '<br>');		
+
+		App.Host.addSquare(2, 1, 2);
+                $('#board').append('Board after adding square <br>');
+                $('#board').append(App.Host.board[0] + '<br>');
+                $('#board').append(App.Host.board[1] + '<br>');
+                $('#board').append(App.Host.board[2] + '<br>');
+                $('#board').append(App.Host.board[3] + '<br>');
+                $('#board').append(App.Host.board[4] + '<br>');
+                $('#board').append(App.Host.board[5] + '<br>');
+                $('#board').append(App.Host.board[6] + '<br>');
+                $('#board').append(App.Host.board[7] + '<br>');
 		//END CODE BY BECKY
+
+		//TEMP CODE BY SETH
+		//App.Host.addSquare(2,1,1);
+		//TEMP CODE BY SETH END
             },
 
             /**
@@ -362,25 +395,37 @@ jQuery(function($){
             },
 
            addSquare : function(x, y, squareNumber) {
-		App.Host.board[x][y] = App.Host.square[squareNumber]; 
+		//if player[2] = 0 || 1 { newY = player[1]+1 } 
+		//if player[2] = 2 || 3 { newX = player[0]+1 }
+		//if player[2] = 4 || 5 { newY = player[1]-1 }
+		//if player[2] = 6 || 7 { newX = player[0]-1 }
+
+		App.Host.board[x][y] = squareNumber; 
+		$('#board').append(App.Host.board+'<br>');
+		App.Host.movePlayer(x,y);//Added by seth 
 	   },		
 	
 	    /***********Added by Seth**************/
-	    movePlayer : function(newX, newY,board, square){
+	    movePlayer : function(newX, newY){
+		var individual;
 		for(individual in App.Host.player)
 		{
 			var swapPosition = [5,4,7,6,1,0,3,2]; //swapPosition converts the position of old location into position of new location
-			if(checkForTouchingSquare(newX, newY, individual))
+			if(App.Host.checkForTouchingSquare(newX, newY, individual))
 			{
-				App.Host.player[individual][0] = newX;
-				App.Host.player[individual][1] = newY;
-				App.Host.player[individual][2] = square[  board[newX][newY]  ][  swapPosition[ App.Host.player[individual][2] ]  ];
+				App.Host.player[individual][0] = newX; //sets players x to x of new piece
+				App.Host.player[individual][1] = newY; //sets players y to y of new piece
+				App.Host.player[individual][2] = App.Host.square[  App.Host.board[newX][newY]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position
 			}
+			$('#board').append(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2] + "<br> ");
+			//print new player positions to screen 
 			console.log(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
+			//print new player positions to console
 		}
 	    },
 
 	    checkForTouchingSquare : function(newX, newY, individual){
+		//checks if player is in a touching square and also on the touching two positions of that square. If so then return true else false.
 		if((App.Host.player[individual][0] == newX && App.Host.player[individual][1] == newY+1 && (App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)) ||
 		(App.Host.player[individual][0] == newX-1 && App.Host.player[individual][1] == newY && (App.Host.player[individual][2] == 2 || App.Host.player[individual][2] == 3)) ||
 		(App.Host.player[individual][0] == newX && App.Host.player[individual][1] == newY-1 && (App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)) ||
@@ -392,16 +437,16 @@ jQuery(function($){
 	    },	
 
 
-	    turnSquare : function(turnRight, square){
+	    turnSquare : function(turnRight){
 		if(turnRight)
 		{    
-		    var swapSquare = [square.shift(), square.shift()];
-		    square[6] = swapSquare[0];
-		    square[7] = swapSquare[1];
+		    var swapSquare = [App.Host.square.shift(), App.Host.square.shift()];//set swap square to first two of square array
+		    App.Host.square[6] = swapSquare[0];//moves these two to the end of square array
+		    App.Host.square[7] = swapSquare[1];
 		}else
 		{
-		    var swapSquare = [square.pop(), square.pop()];
-		    square.unshift(swapSquare[1], swapSquare[0]);
+		    var swapSquare = [App.Host.square.pop(), App.Host.square.pop()];//sets swapSquare to last two of square array
+		    App.Host.square.unshift(swapSquare[1], swapSquare[0]);//adds the two swapSquare onto the front of the square array
 		}
 	    },
 	    /***********Added by Seth**************/
@@ -416,6 +461,7 @@ jQuery(function($){
 		//{
 			//set board[location] = square[chosenSquare];//made up vairables
 		//	updateBoard();//doesn't exist yet
+			addSquare(); //added by Becky
 			movePlayer();//doesn't exist yet
 				
 		//}
@@ -572,6 +618,10 @@ jQuery(function($){
                 // Set the appropriate properties for the current player.
                 App.myRole = 'Player';
                 App.Player.myName = data.playerName;
+		
+		/*******ADDED BY BECKY********/
+		App.Player.cards = [0, 1, 2, 3];
+		/*******ADDED BY BECKY********/
             },
 
             /**
@@ -638,11 +688,28 @@ jQuery(function($){
              */
             newWord : function(data) {
                 // Create an unordered list element
-                var $list = $('<ul/>').attr('id','ulAnswers');
+                //var $list = $('<ul/>').attr('id','ulAnswers');
 
+		/*******ADDED BY BECKY********/	
+		var $cardlist = $('<ul/>').attr('id','ulAnswers');
+		
+		for (var card in App.Player.cards) {
+		  var display = card + ' - ' + App.Host.square[card];
+		     $cardlist                                //  <ul> </ul>
+                        .append( $('<li/>')              //  <ul> <li> </li> </ul>
+                            .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
+                                .addClass('btnAnswer')   //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
+                                .addClass('btn')         //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
+                                .val(card)               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
+                                .html(display)              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
+                            )
+                        )
+		};	
+		
+		/*******ADDED BY BECKY********/
                 // Insert a list item for each word in the word list
                 // received from the server.
-                $.each(data.list, function(){
+                /*$.each(data.list, function(){
                     $list                                //  <ul> </ul>
                         .append( $('<li/>')              //  <ul> <li> </li> </ul>
                             .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
@@ -652,10 +719,11 @@ jQuery(function($){
                                 .html(this)              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
                             )
                         )
-                });
+                })*/;
 
                 // Insert the list onto the screen.
-                $('#gameArea').html($list);
+               // $('#gameArea').html($list);
+		$('#gameArea').append($cardlist);
             },
 
             /**
