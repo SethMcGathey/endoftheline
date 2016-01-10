@@ -336,10 +336,26 @@ jQuery(function($){
 		//CODE BY BECKY - create board and display on page
 		App.Host.createBoard();
 
-                $('#board').append(App.Host.board+'<br>');
-		
+                $('#board').append('Original Board <br>');
+		$('#board').append(App.Host.board[0] + '<br>');
+		$('#board').append(App.Host.board[1] + '<br>');
+                $('#board').append(App.Host.board[2] + '<br>');
+                $('#board').append(App.Host.board[3] + '<br>');
+                $('#board').append(App.Host.board[4] + '<br>');
+                $('#board').append(App.Host.board[5] + '<br>');
+                $('#board').append(App.Host.board[6] + '<br>');
+                $('#board').append(App.Host.board[7] + '<br>');		
+
 		App.Host.addSquare(2, 1, 2);
-		$('#board').append(App.Host.board+'<br>');
+                $('#board').append('Board after adding square <br>');
+                $('#board').append(App.Host.board[0] + '<br>');
+                $('#board').append(App.Host.board[1] + '<br>');
+                $('#board').append(App.Host.board[2] + '<br>');
+                $('#board').append(App.Host.board[3] + '<br>');
+                $('#board').append(App.Host.board[4] + '<br>');
+                $('#board').append(App.Host.board[5] + '<br>');
+                $('#board').append(App.Host.board[6] + '<br>');
+                $('#board').append(App.Host.board[7] + '<br>');
 		//END CODE BY BECKY
 
 		//TEMP CODE BY SETH
