@@ -338,14 +338,8 @@ jQuery(function($){
 
                 $('#board').append(App.Host.board+'<br>');
 		
-<<<<<<< HEAD
 		App.Host.addSquare(2, 1, 2);
-
-		$('#board').append(App.Host.board);
-=======
-		App.Host.addSquare(2, 2, 2);
 		$('#board').append(App.Host.board+'<br>');
->>>>>>> 3aa305bea6886aede05dda9a90ce36673fe6b7a0
 		//END CODE BY BECKY
 
 		//TEMP CODE BY SETH
@@ -379,17 +373,14 @@ jQuery(function($){
             },
 
            addSquare : function(x, y, squareNumber) {
-<<<<<<< HEAD
 		//if player[2] = 0 || 1 { newY = player[1]+1 } 
 		//if player[2] = 2 || 3 { newX = player[0]+1 }
 		//if player[2] = 4 || 5 { newY = player[1]-1 }
 		//if player[2] = 6 || 7 { newX = player[0]-1 }
-		App.Host.board[x][y] = App.Host.square[squareNumber];
 		App.Host.movePlayer(x,y);//Added by seth 
-=======
+
 		App.Host.board[x][y] = squareNumber; 
 		$('#board').append(App.Host.board+'<br>');
->>>>>>> 3aa305bea6886aede05dda9a90ce36673fe6b7a0
 	   },		
 	
 	    /***********Added by Seth**************/
