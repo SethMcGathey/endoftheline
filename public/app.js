@@ -699,8 +699,8 @@ jQuery(function($){
                             .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
                                 .addClass('btnAnswer')   //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
                                 .addClass('btn')         //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
-                                .val(card + " " + square[card])               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
-                                .html(card + " " + square[card])              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
+                                .val(card + " " + App.Host.square[card])               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
+                                .html(card + " " + App.Host.square[card])              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
                             )
                         )
 		};	
