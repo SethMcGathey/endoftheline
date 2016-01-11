@@ -97,7 +97,7 @@ jQuery(function($){
 	/*****ADDED BY BECKY*****/
 	hostMovePlayer : function(data) {
             if(App.myRole === 'Host') {
-                App.Host.addSquare(1, 1, data);
+                App.Host.addSquare(1, 1, data.answer);
             }
         },
 	/*****ADDED BY BECKY*****/
@@ -692,16 +692,14 @@ jQuery(function($){
 
 		/*******ADDED BY BECKY********/	
 		var $cardlist = $('<ul/>').attr('id','ulAnswers');
-		
 		for (var card in App.Player.cards) {
-		  var display = card + ' - ' + App.Host.square[card];
 		     $cardlist                                //  <ul> </ul>
                         .append( $('<li/>')              //  <ul> <li> </li> </ul>
                             .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
                                 .addClass('btnAnswer')   //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
                                 .addClass('btn')         //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
                                 .val(card)               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
-                                .html(display)              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
+                                .html(card)              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
                             )
                         )
 		};	
@@ -719,7 +717,7 @@ jQuery(function($){
                                 .html(this)              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
                             )
                         )
-                })*/;
+                });*/
 
                 // Insert the list onto the screen.
                // $('#gameArea').html($list);
