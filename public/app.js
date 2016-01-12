@@ -96,8 +96,21 @@ jQuery(function($){
         },
 	/*****ADDED BY BECKY*****/
 	hostMovePlayer : function(data) {
-	    var playerX = App.Host.player[App.currentRound][0];
-            var playerY = App.Host.player[App.currentRound][1];
+	    //move player to next square
+	    if (App.Host.player[App.currentRound][2] == 0 || App.Host.player[App.currentRound][2] == 1) {
+	    	var playerX = App.Host.player[App.currentRound][0];
+            	var playerY = App.Host.player[App.currentRound][1] + 1;
+	    }
+	    else if (App.Host.player[App.currentRound][2] == 2 || App.Host.player[App.currentRound][2] == 3) {     	      var playerX = App.Host.player[App.currentRound][0] + 1;
+                var playerY = App.Host.player[App.currentRound][1];
+            }
+	    else if (App.Host.player[App.currentRound][2] == 4 || App.Host.player[App.currentRound][2] == 5) {                var playerX = App.Host.player[App.currentRound][0];
+                var playerY = App.Host.player[App.currentRound][1] - 1;
+            }
+	    else if (App.Host.player[App.currentRound][2] == 6 || App.Host.player[App.currentRound][2] == 7) {                var playerX = App.Host.player[App.currentRound][0] - 1;
+                var playerY = App.Host.player[App.currentRound][1];
+            }
+
 	    if (App.currentRound < (App.Host.numPlayersInRoom - 1)) {
 		App.currentRound += 1;
             }
