@@ -337,10 +337,10 @@ jQuery(function($){
 
                 $('#board').append(App.Host.board+'<br>');
 		
-		App.Host.addSquare(2, 1, 2);
+	//	App.Host.addSquare(2, 1, 2);
 
 		$('#board').append(App.Host.board);
-		App.Host.addSquare(2, 2, 2);
+	//	App.Host.addSquare(2, 1, 2);
 		$('#board').append(App.Host.board+'<br>');
                 $('#board').append('Original Board <br>');
 		$('#board').append(App.Host.board[0] + '<br>');
