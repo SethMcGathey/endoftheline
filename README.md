@@ -2,8 +2,6 @@
 
 A multi-player, multi-screen game built to experiment with Socket.IO and Node.js.
 
-There is *sometimes* a working demo up at http://agx.terpstra.co:8888 - but no guarantees.
-
 ## To Install
 
 1. Ensure Node.js is installed
