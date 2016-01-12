@@ -97,20 +97,25 @@ jQuery(function($){
 	/*****ADDED BY BECKY*****/
 	hostMovePlayer : function(data) {
 	    //move player to next square
+	    var playerX;
+	    var playerY;
 	    if (App.Host.player[App.currentRound][2] == 0 || App.Host.player[App.currentRound][2] == 1) {
-	    	var playerX = App.Host.player[App.currentRound][0];
-            	var playerY = App.Host.player[App.currentRound][1] + 1;
+	    	playerX = App.Host.player[App.currentRound][0];
+            	playerY = App.Host.player[App.currentRound][1] - 1;
 	    }
-	    else if (App.Host.player[App.currentRound][2] == 2 || App.Host.player[App.currentRound][2] == 3) {     	      var playerX = App.Host.player[App.currentRound][0] + 1;
-                var playerY = App.Host.player[App.currentRound][1];
+	    else if (App.Host.player[App.currentRound][2] == 2 || App.Host.player[App.currentRound][2] == 3) {
+     	        playerX = App.Host.player[App.currentRound][0] + 1;
+                playerY = App.Host.player[App.currentRound][1];
             }
-	    else if (App.Host.player[App.currentRound][2] == 4 || App.Host.player[App.currentRound][2] == 5) {                var playerX = App.Host.player[App.currentRound][0];
-                var playerY = App.Host.player[App.currentRound][1] - 1;
+	    else if (App.Host.player[App.currentRound][2] == 4 || App.Host.player[App.currentRound][2] == 5) {
+                playerX = App.Host.player[App.currentRound][0];
+                playerY = (App.Host.player[App.currentRound][1]) + 1;
             }
-	    else if (App.Host.player[App.currentRound][2] == 6 || App.Host.player[App.currentRound][2] == 7) {                var playerX = App.Host.player[App.currentRound][0] - 1;
-                var playerY = App.Host.player[App.currentRound][1];
+	    else if (App.Host.player[App.currentRound][2] == 6 || App.Host.player[App.currentRound][2] == 7) {
+                playerX = (App.Host.player[App.currentRound][0]) - 1;
+                playerY = App.Host.player[App.currentRound][1];
             }
-
+	    //change turn
 	    if (App.currentRound < (App.Host.numPlayersInRoom - 1)) {
 		App.currentRound += 1;
             }
@@ -118,8 +123,8 @@ jQuery(function($){
 		App.currentRound = 0;
 	    }
             if(App.myRole === 'Host') {
-		console.log(data.answer);
-                App.Host.addSquare(1, 1, data.answer);
+		console.log('Player Turn: '+App.currentRound+', Answer: '+data.answer+', Player X: '+playerX+', Player Y: '+playerY+'. ');
+                App.Host.addSquare(playerX, playerY, data.answer);
             }
         },
 	/*****ADDED BY BECKY*****/
@@ -336,9 +341,9 @@ jQuery(function($){
                     IO.socket.emit('hostCountdownFinished', App.gameId);
                 });
 		App.Host.player = new Array(App.numOfPlayers);
-		var startingspots = [[1,0,4],
-				     [5,0,5],
-				     [3,7,1],
+		var startingspots = [[0,2,4],
+				     [0,5,5],
+				     [7,3,1],
 				     [5,7,0],
 				     [0,2,2],
 				     [0,5,3],
@@ -407,13 +412,15 @@ jQuery(function($){
             },
 
            addSquare : function(x, y, squareNumber) {
-		//if player[2] = 0 || 1 { newY = player[1]+1 } 
-		//if player[2] = 2 || 3 { newX = player[0]+1 }
-		//if player[2] = 4 || 5 { newY = player[1]-1 }
-		//if player[2] = 6 || 7 { newX = player[0]-1 }
-
 		App.Host.board[x][y] = squareNumber; 
-		$('#board').append(App.Host.board+'<br>');
+		$('#board').append(App.Host.board[0] + '<br>');
+                $('#board').append(App.Host.board[1] + '<br>');
+                $('#board').append(App.Host.board[2] + '<br>');
+                $('#board').append(App.Host.board[3] + '<br>');
+                $('#board').append(App.Host.board[4] + '<br>');
+                $('#board').append(App.Host.board[5] + '<br>');
+                $('#board').append(App.Host.board[6] + '<br>');
+                $('#board').append(App.Host.board[7] + '<br>');
 		App.Host.movePlayer(x,y);//Added by seth 
 	   },		
 	
