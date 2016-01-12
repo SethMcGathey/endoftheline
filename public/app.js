@@ -357,21 +357,7 @@ jQuery(function($){
                 $('#board').append(App.Host.board[6] + '<br>');
                 $('#board').append(App.Host.board[7] + '<br>');		
 
-		//App.Host.addSquare(2, 1, 2);
-                $('#board').append('Board after adding square <br>');
-                $('#board').append(App.Host.board[0] + '<br>');
-                $('#board').append(App.Host.board[1] + '<br>');
-                $('#board').append(App.Host.board[2] + '<br>');
-                $('#board').append(App.Host.board[3] + '<br>');
-                $('#board').append(App.Host.board[4] + '<br>');
-                $('#board').append(App.Host.board[5] + '<br>');
-                $('#board').append(App.Host.board[6] + '<br>');
-                $('#board').append(App.Host.board[7] + '<br>');
 		//END CODE BY BECKY
-
-		//TEMP CODE BY SETH
-		//App.Host.addSquare(2,1,1);
-		//TEMP CODE BY SETH END
             },
 
             /**
