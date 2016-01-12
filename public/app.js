@@ -97,6 +97,7 @@ jQuery(function($){
 	/*****ADDED BY BECKY*****/
 	hostMovePlayer : function(data) {
             if(App.myRole === 'Host') {
+		console.log(data.answer);
                 App.Host.addSquare(1, 1, data.answer);
             }
         },
@@ -314,21 +315,23 @@ jQuery(function($){
                     IO.socket.emit('hostCountdownFinished', App.gameId);
                 });
 
-		App.Host.player = [[1,0,4,'Becky'],
-				   [0,5,5,'Matt'],
-				   [7,3,1,'Nick'],
-				   [7,5,0,'Scott'],
-				   [2,0,2,'Seth'],
-				   [5,0,3,'Bob'],
-				   [2,7,6,'Sue'],
-			           [2,7,7,'Jim']];
+		var startingspots = [[1,0,4],
+				     [5,0,5],
+				     [3,7,1],
+				     [5,7,0],
+				     [0,2,2],
+				     [0,5,3],
+				     [7,2,6],
+			             [7,2,7]];
+		var innerPlayerArray = new Array(App.numOfPlayers);
                 // Display the players' names on screen
 		for(var i = 0; i < App.numOfPlayers; i++)
 		{ 
 		    $('#playerScores')
                     	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1)
 +' </span> </div>');
-			
+			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], "becky"];
+			App.Host.player.push(innerPlayerArray);	
 			
 			// Set the Score section on screen to 0 for each player.
                 	//$('#player' + i  + 'Score').find('.score').attr('id',App.Host.players[i-1].mySocketId);
@@ -420,8 +423,6 @@ jQuery(function($){
 			}
 			$('#board').append(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2] + "<br> ");
 			//print new player positions to screen 
-			console.log(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
-			//print new player positions to console
 		}
 	   //added by Becky
 		// Advance the round
