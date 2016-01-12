@@ -330,7 +330,7 @@ jQuery(function($){
 		    $('#playerScores')
                     	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1)
 +' </span> </div>');
-			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], "becky"];
+			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], "becky" + i];
 			App.Host.player.push(innerPlayerArray);	
 			
 			// Set the Score section on screen to 0 for each player.
