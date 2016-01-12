@@ -96,8 +96,17 @@ jQuery(function($){
         },
 	/*****ADDED BY BECKY*****/
 	hostMovePlayer : function(data) {
+	    var playerX = App.Host.player[App.currentRound][0];
+            var playerY = App.Host.player[App.currentRound][1];
+	    if (App.currentRound < (App.Host.numPlayersInRoom - 1)) {
+		App.currentRound += 1;
+            }
+	    else if (App.currentRound == (App.Host.numPlayersInRoom - 1)) {
+		App.currentRound = 0;
+	    }
             if(App.myRole === 'Host') {
-                App.Host.addSquare(1, 1, data.answer);
+                App.Host.addSquare(playerX, playerY, data.answer);
+		console.log(data.answer);
             }
         },
 	/*****ADDED BY BECKY*****/
@@ -314,20 +323,24 @@ jQuery(function($){
                     IO.socket.emit('hostCountdownFinished', App.gameId);
                 });
 
-		App.Host.player = [[2,0,4,'Becky'],
-				   [0,5,5,'Matt'],
-				   [7,3,1,'Nick'],
-				   [7,5,0,'Scott'],
-				   [2,0,2,'Seth'],
-				   [5,0,3,'Bob'],
-				   [2,7,6,'Sue'],
-			           [2,7,7,'Jim']];
+		var startingspots = [[1,0,4],
+				     [5,0,5],
+				     [3,7,1],
+				     [5,7,0],
+				     [0,2,2],
+				     [0,5,3],
+				     [7,2,6],
+			             [7,2,7]];
+		var innerPlayerArray = new Array(App.numOfPlayers);
                 // Display the players' names on screen
 		for(var i = 0; i < App.numOfPlayers; i++)
 		{ 
 		    $('#playerScores')
-                    	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1) + '</span></div>');
 			
+                    	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1)
++' </span> </div>');
+			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], "becky" + i];
+			App.Host.player.push(innerPlayerArray);	
 			
 			// Set the Score section on screen to 0 for each player.
                 	//$('#player' + i  + 'Score').find('.score').attr('id',App.Host.players[i-1].mySocketId);
@@ -352,7 +365,7 @@ jQuery(function($){
                 $('#board').append(App.Host.board[6] + '<br>');
                 $('#board').append(App.Host.board[7] + '<br>');		
 
-		App.Host.addSquare(2, 1, 2);
+		//App.Host.addSquare(2, 1, 2);
                 $('#board').append('Board after adding square <br>');
                 $('#board').append(App.Host.board[0] + '<br>');
                 $('#board').append(App.Host.board[1] + '<br>');
@@ -401,7 +414,7 @@ jQuery(function($){
 		//if player[2] = 6 || 7 { newX = player[0]-1 }
 
 		App.Host.board[x][y] = squareNumber; 
-		$('#board').append(App.Host.board+'<br>');
+		$('#board').append(App.Host.board+'<br>'+App.currentRound+'<br>'+App.Host.player[App.currentRound][0]+'<br>'+App.Host.player[App.currentRound][1]);
 		App.Host.movePlayer(x,y);//Added by seth 
 	   },		
 	
@@ -419,9 +432,21 @@ jQuery(function($){
 			}
 			$('#board').append(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2] + "<br> ");
 			//print new player positions to screen 
-			console.log(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
-			//print new player positions to console
 		}
+	   //added by Becky
+		// Advance the round
+                   /*     App.currentRound += 1;
+
+                        // Prepare data to send to the server
+                        var data = {
+                            gameId : App.gameId,
+                            round : App.currentRound
+                        }
+
+                        // Notify the server to start the next round.
+                        IO.socket.emit('hostNextRound',data); */
+	   //end added by Becky
+
 	    },
 
 	    checkForTouchingSquare : function(newX, newY, individual){
