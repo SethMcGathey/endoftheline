@@ -423,6 +423,20 @@ jQuery(function($){
 			console.log(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
 			//print new player positions to console
 		}
+	   //added by Becky
+		// Advance the round
+                   /*     App.currentRound += 1;
+
+                        // Prepare data to send to the server
+                        var data = {
+                            gameId : App.gameId,
+                            round : App.currentRound
+                        }
+
+                        // Notify the server to start the next round.
+                        IO.socket.emit('hostNextRound',data); */
+	   //end added by Becky
+
 	    },
 
 	    checkForTouchingSquare : function(newX, newY, individual){
