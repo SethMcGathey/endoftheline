@@ -96,17 +96,9 @@ jQuery(function($){
         },
 	/*****ADDED BY BECKY*****/
 	hostMovePlayer : function(data) {
-	    var playerX = App.Host.player[App.currentRound][0];
-            var playerY = App.Host.player[App.currentRound][1];
-	    if (App.currentRound < (App.Host.numPlayersInRoom - 1)) {
-		App.currentRound += 1;
-            }
-	    else if (App.currentRound == (App.Host.numPlayersInRoom - 1)) {
-		App.currentRound = 0;
-	    }
             if(App.myRole === 'Host') {
-                App.Host.addSquare(playerX, playerY, data.answer);
 		console.log(data.answer);
+                App.Host.addSquare(1, 1, data.answer);
             }
         },
 	/*****ADDED BY BECKY*****/
@@ -322,7 +314,7 @@ jQuery(function($){
                 App.countDown( $secondsLeft, 5, function(){
                     IO.socket.emit('hostCountdownFinished', App.gameId);
                 });
-
+		App.Host.player = new Array(App.numOfPlayers);
 		var startingspots = [[1,0,4],
 				     [5,0,5],
 				     [3,7,1],
@@ -330,8 +322,8 @@ jQuery(function($){
 				     [0,2,2],
 				     [0,5,3],
 				     [7,2,6],
-			             [7,2,7]];
-		var innerPlayerArray = new Array(App.numOfPlayers);
+			             [7,5,7]];
+		var innerPlayerArray = new Array(4);
                 // Display the players' names on screen
 		for(var i = 0; i < App.numOfPlayers; i++)
 		{ 
@@ -340,7 +332,7 @@ jQuery(function($){
                     	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1)
 +' </span> </div>');
 			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], "becky" + i];
-			App.Host.player.push(innerPlayerArray);	
+			App.Host.player[i] = innerPlayerArray;	
 			
 			// Set the Score section on screen to 0 for each player.
                 	//$('#player' + i  + 'Score').find('.score').attr('id',App.Host.players[i-1].mySocketId);
@@ -414,7 +406,7 @@ jQuery(function($){
 		//if player[2] = 6 || 7 { newX = player[0]-1 }
 
 		App.Host.board[x][y] = squareNumber; 
-		$('#board').append(App.Host.board+'<br>'+App.currentRound+'<br>'+App.Host.player[App.currentRound][0]+'<br>'+App.Host.player[App.currentRound][1]);
+		$('#board').append(App.Host.board+'<br>');
 		App.Host.movePlayer(x,y);//Added by seth 
 	   },		
 	
