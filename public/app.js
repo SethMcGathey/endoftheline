@@ -96,9 +96,17 @@ jQuery(function($){
         },
 	/*****ADDED BY BECKY*****/
 	hostMovePlayer : function(data) {
+	    var playerX = App.Host.player[App.currentRound][0];
+            var playerY = App.Host.player[App.currentRound][1];
+	    if (App.currentRound < (App.Host.numPlayersInRoom - 1)) {
+		App.currentRound += 1;
+            }
+	    else if (App.currentRound == (App.Host.numPlayersInRoom - 1)) {
+		App.currentRound = 0;
+	    }
             if(App.myRole === 'Host') {
+                App.Host.addSquare(playerX, playerY, data.answer);
 		console.log(data.answer);
-                App.Host.addSquare(1, 1, data.answer);
             }
         },
 	/*****ADDED BY BECKY*****/
@@ -405,7 +413,7 @@ jQuery(function($){
 		//if player[2] = 6 || 7 { newX = player[0]-1 }
 
 		App.Host.board[x][y] = squareNumber; 
-		$('#board').append(App.Host.board+'<br>');
+		$('#board').append(App.Host.board+'<br>'+App.currentRound+'<br>'+App.Host.player[App.currentRound][0]+'<br>'+App.Host.player[App.currentRound][1]);
 		App.Host.movePlayer(x,y);//Added by seth 
 	   },		
 	
