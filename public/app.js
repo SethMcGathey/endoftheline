@@ -425,7 +425,7 @@ jQuery(function($){
 	   },		
 	
 	    /***********Added by Seth**************/
-	    movePlayer : function(newX, newY){
+	    movePlayer : function(newY, newX){
 		var individual;
 		for(individual in App.Host.player)
 		{
