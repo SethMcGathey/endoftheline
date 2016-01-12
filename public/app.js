@@ -314,7 +314,7 @@ jQuery(function($){
                     IO.socket.emit('hostCountdownFinished', App.gameId);
                 });
 
-		App.Host.player = [[2,0,4,'Becky'],
+		App.Host.player = [[0,1,4,'Becky'],
 				   [0,5,5,'Matt'],
 				   [7,3,1,'Nick'],
 				   [7,5,0,'Scott'],
