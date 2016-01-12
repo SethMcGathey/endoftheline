@@ -349,6 +349,7 @@ jQuery(function($){
 		for(var i = 0; i < App.numOfPlayers; i++)
 		{ 
 		    $('#playerScores')
+			
                     	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1)
 +' </span> </div>');
 			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], "becky" + i];
@@ -377,21 +378,7 @@ jQuery(function($){
                 $('#board').append(App.Host.board[6] + '<br>');
                 $('#board').append(App.Host.board[7] + '<br>');		
 
-		//App.Host.addSquare(2, 1, 2);
-                $('#board').append('Board after adding square <br>');
-                $('#board').append(App.Host.board[0] + '<br>');
-                $('#board').append(App.Host.board[1] + '<br>');
-                $('#board').append(App.Host.board[2] + '<br>');
-                $('#board').append(App.Host.board[3] + '<br>');
-                $('#board').append(App.Host.board[4] + '<br>');
-                $('#board').append(App.Host.board[5] + '<br>');
-                $('#board').append(App.Host.board[6] + '<br>');
-                $('#board').append(App.Host.board[7] + '<br>');
 		//END CODE BY BECKY
-
-		//TEMP CODE BY SETH
-		//App.Host.addSquare(2,1,1);
-		//TEMP CODE BY SETH END
             },
 
             /**
