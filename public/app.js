@@ -123,7 +123,7 @@ jQuery(function($){
 		App.currentRound = 0;
 	    }
             if(App.myRole === 'Host') {
-		console.log('Player Turn: '+App.currentRound+', Answer: '+data.answer+', Player Y: '+playerY+', Player X: '+playerX+'. ');
+		//console.log('Player Turn: '+App.currentRound+', Answer: '+data.answer+', Player Y: '+playerY+', Player X: '+playerX+'. ');
                 App.Host.addSquare(playerY, playerX, data.answer);
             }
         },
@@ -341,8 +341,9 @@ jQuery(function($){
                     IO.socket.emit('hostCountdownFinished', App.gameId);
                 });
 		App.Host.player = new Array(App.numOfPlayers);
+		//[7,5,0] player 2
 		var startingspots = [[0,2,4],
-				     [7,5,0],
+				     [7,2,1],
 				     [5,0,2],
 				     [2,7,6],
 				     [7,3,1],
@@ -357,9 +358,10 @@ jQuery(function($){
 			
                     	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1)
 +' </span> </div>');
-			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], App.Player.myName];
+			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], i + "becky"];
+			//innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], App.Player.myName];
 			App.Host.player[i] = innerPlayerArray;	
-			console.log("entered player " + startingspots[i][0] + " " +  startingspots[i][1] + " " + startingspots[i][2] + " " + App.Player.myName);
+			//console.log("entered player " + startingspots[i][0] + " " +  startingspots[i][1] + " " + startingspots[i][2] + " " + App.Player.myName);
 			// Set the Score section on screen to 0 for each player.
                 	//$('#player' + i  + 'Score').find('.score').attr('id',App.Host.players[i-1].mySocketId);
 		}
@@ -397,11 +399,12 @@ jQuery(function($){
 	    /***********Added by Becky**************/ 
 	    createBoard : function() {
 		App.Host.board = new Array(8); 
-		App.Host.square = [[6, 5, 4, 7, 2, 1, 0, 3], [4, 7, 6, 5, 0, 3, 2, 1], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
+		//App.Host.square = [[6, 5, 4, 7, 2, 1, 0, 3], [4, 7, 6, 5, 0, 3, 2, 1], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
+		App.Host.square = [[5, 4, 7, 6, 1, 0, 3, 2], [6, 3, 5, 1, 7, 2, 0, 4], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
 		for (var i = 0; i < 8; i++) {
 			App.Host.board[i] = new Array(8);
 			for (var j = 0; j < 8; j++) {
-				App.Host.board[i][j] = "|" + i + " " + j + "|";
+				App.Host.board[i][j] = null;
 			}
 		}
            	var c = document.getElementById("myCanvas");
@@ -492,7 +495,7 @@ jQuery(function($){
                 $('#board').append(App.Host.board[5] + ' <br>');
                 $('#board').append(App.Host.board[6] + ' <br>');
                 $('#board').append(App.Host.board[7] + ' <br>');
-		console.log("Current round" + App.currentRound + " ");
+		//console.log("Current round" + App.currentRound + " ");
 		App.Host.movePlayer(y,x);//Added by seth 
 	   },		
 	
@@ -509,6 +512,7 @@ jQuery(function($){
 				App.Host.player[individual][2] = App.Host.square[  App.Host.board[newY][newX]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position
 			}
 			$('#board').append(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2] + "<br> ");
+			console.log(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
 			//print new player positions to screen 
 		}
 	   //added by Becky
@@ -527,18 +531,60 @@ jQuery(function($){
 
 	    },
 
+         movePlayerIfTouchingSquare : function(){
+                var individual;
+                for(individual in App.Host.player)
+                {
+                        playerY = App.Host.player[0];
+                        playerX = App.Host.player[1];
+                        var swapPosition = [5,4,7,6,1,0,3,2]; //swapPosition converts the position of old location into position of new location
+                        if(App.Host.checkForTouchingSquareMultiplePlaces(playerY, playerX, individual))
+                        {
+                                App.Host.player[individual][0] = playerY; //sets players y to y of new piece
+                                App.Host.player[individual][1] = playerX; //sets players x to x of new piece
+                                App.Host.player[individual][2] = App.Host.square[  App.Host.board[playerY][playerX]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position
+                        }
+                        $('#board').append(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2] + "<br> ");
+                        console.log(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
+                        //print new player positions to screen 
+                        movePlayerIfTouchingSquare();
+                }
+	},
+
 	    checkForTouchingSquare : function(newY, newX, individual){
 		//checks if player is in a touching square and also on the touching two positions of that square. If so then return true else false.
-		if((App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX+1 && (App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)) ||
-		(App.Host.player[individual][0] == newY-1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 2 || App.Host.player[individual][2] == 3)) ||
-		(App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX-1 && (App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)) ||
-		(App.Host.player[individual][0] == newY+1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)))
+		if((App.Host.player[individual][0] == newY+1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)) ||
+		(App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX-1 && (App.Host.player[individual][2] == 2 || App.Host.player[individual][2] == 3)) ||
+		(App.Host.player[individual][0] == newY-1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)) ||
+		(App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX+1 && (App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)))
 		{	
 			return true;
 		}
 		return false;
 	    },	
 
+	     checkForTouchingSquareMultiplePlaces : function(newY, newX, individual){
+                //checks if player is in a touching square and also on the touching two positions of that square. If so then return true else false.
+                if((App.Host.player[individual][0] == newY+1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)) ||
+                (App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX-1 && (App.Host.player[individual][2] == 2 || App.Host.player[individual][2] == 3)) ||
+                (App.Host.player[individual][0] == newY-1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)) ||
+                (App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX+1 && (App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)))
+                {
+                        return true;
+                }else
+		{
+			newY = newY-1;
+			if((App.Host.player[individual][0] == newY+1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)) ||
+                	(App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX-1 && (App.Host.player[individual][2] == 2 || App.Host.player[individual][2] == 3)) ||
+                	(App.Host.player[individual][0] == newY-1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)) ||
+                	(App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX+1 && (App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)))
+                	{
+                        	return true;
+                	}
+		}
+
+                return false;
+            },
 
 	    turnSquare : function(turnRight){
 		if(turnRight)
