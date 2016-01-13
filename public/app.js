@@ -100,20 +100,20 @@ jQuery(function($){
 	    var playerX;
 	    var playerY;
 	    if (App.Host.player[App.currentRound][2] == 0 || App.Host.player[App.currentRound][2] == 1) {
-	    	playerX = App.Host.player[App.currentRound][0];
-            	playerY = App.Host.player[App.currentRound][1] - 1;
+	    	playerX = App.Host.player[App.currentRound][1];
+            	playerY = App.Host.player[App.currentRound][0] - 1;
 	    }
 	    else if (App.Host.player[App.currentRound][2] == 2 || App.Host.player[App.currentRound][2] == 3) {
-     	        playerX = App.Host.player[App.currentRound][0] + 1;
-                playerY = App.Host.player[App.currentRound][1];
+     	        playerX = App.Host.player[App.currentRound][1] + 1;
+                playerY = App.Host.player[App.currentRound][0];
             }
 	    else if (App.Host.player[App.currentRound][2] == 4 || App.Host.player[App.currentRound][2] == 5) {
-                playerX = App.Host.player[App.currentRound][0];
-                playerY = (App.Host.player[App.currentRound][1]) + 1;
+                playerX = App.Host.player[App.currentRound][1];
+                playerY = (App.Host.player[App.currentRound][0]) + 1;
             }
 	    else if (App.Host.player[App.currentRound][2] == 6 || App.Host.player[App.currentRound][2] == 7) {
-                playerX = (App.Host.player[App.currentRound][0]) - 1;
-                playerY = App.Host.player[App.currentRound][1];
+                playerX = (App.Host.player[App.currentRound][1]) - 1;
+                playerY = App.Host.player[App.currentRound][0];
             }
 	    //change turn
 	    if (App.currentRound < (App.Host.numPlayersInRoom - 1)) {
