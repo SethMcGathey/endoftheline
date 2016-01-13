@@ -365,7 +365,7 @@ jQuery(function($){
 		}
 		//CODE BY BECKY - create board and display on page
 		App.Host.createBoard();
-
+		App.Host.drawBoard(6);
 	//	App.Host.addSquare(2, 1, 2);
 	/*	$('#board').append(App.Host.board+'<br>');
                 $('#board').append('Original Board <br>');
@@ -394,6 +394,27 @@ jQuery(function($){
                 App.Host.currentCorrectAnswer = data.answer;
                 App.Host.currentRound = data.round;
             },
+	    //DRAW GAMEBOARD **MC**
+	    drawBoard : function(size) { 
+				var c = document.getElementById("myCanvas");
+                        	var ctx = c.getContext("2d");
+				ctx.strokeStyle = 'black';
+				ctx.lineWidth = 2;
+				//vertical line generator
+				for(var i = 1; i < size; i++){
+					ctx.beginPath();
+					ctx.moveTo((i * 100), 0);
+					ctx.lineTo((i * 100), (size * 100));
+					ctx.stroke();
+				}
+				//horizontal line generator
+				for(var i = 1; i < size; i++){
+					ctx.beginPath();
+					ctx.moveTo(0, (i * 100));
+					ctx.lineTo((size * 100), (i * 100));
+					ctx.stroke();
+				}
+		         } , 	
 	    /***********Added by Becky**************/ 
 	    createBoard : function() {
 		App.Host.board = new Array(8); 
@@ -406,81 +427,8 @@ jQuery(function($){
 		}
            	var c = document.getElementById("myCanvas");
 		var ctx = c.getContext("2d");
-		//game grid
-		//Vertical Lines
-		ctx.moveTo(0, 0);
-		ctx.lineTo(0,600);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(100, 0);
-		ctx.lineTo(100,600);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-
-		ctx.moveTo(200, 0);
-		ctx.lineTo(200,600);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(300, 0);
-		ctx.lineTo(300,600);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(400, 0);
-		ctx.lineTo(400,600);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(500, 0);
-		ctx.lineTo(500,600);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(600, 0);
-		ctx.lineTo(600,600);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-
-		//Horizontal Grid
-		ctx.moveTo(0, 0);
-		ctx.lineTo(600,0);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(0, 100);
-		ctx.lineTo(600,100);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(0, 200);
-		ctx.lineTo(600,200);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(0, 300);
-		ctx.lineTo(600,300);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(0, 400);
-		ctx.lineTo(600,400);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(0, 500);
-		ctx.lineTo(600,500);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(0, 600);
-		ctx.lineTo(600,600);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
+	
+		
 		App.Host.boardCoordinates = [];
 		var boardsize = 6; //8x8
 
@@ -523,7 +471,7 @@ jQuery(function($){
        		 }
        			 column.push(row);
     		}
-   		 boardCoordinates.push(column);
+   		App.Host.boardCoordinates.push(column);
 		}
 	    },
 

@@ -252,6 +252,10 @@ p {
     right: 0;
 }
 
+#myCanvas {
+    background-color: #F4EBCE;
+
+}
 #hostWord {
     height: 100%;
     width: 100%;
