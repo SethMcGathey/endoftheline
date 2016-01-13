@@ -367,7 +367,7 @@ jQuery(function($){
 		}
 		//CODE BY BECKY - create board and display on page
 		App.Host.createBoard();
-
+		App.Host.drawBoard(6);
 	//	App.Host.addSquare(2, 1, 2);
 	/*	$('#board').append(App.Host.board+'<br>');
                 $('#board').append('Original Board <br>');
@@ -396,6 +396,27 @@ jQuery(function($){
                 App.Host.currentCorrectAnswer = data.answer;
                 App.Host.currentRound = data.round;
             },
+	    //DRAW GAMEBOARD **MC**
+	    drawBoard : function(size) { 
+				var c = document.getElementById("myCanvas");
+                        	var ctx = c.getContext("2d");
+				ctx.strokeStyle = 'black';
+				ctx.lineWidth = 2;
+				//vertical line generator
+				for(var i = 1; i < size; i++){
+					ctx.beginPath();
+					ctx.moveTo((i * 100), 0);
+					ctx.lineTo((i * 100), (size * 100));
+					ctx.stroke();
+				}
+				//horizontal line generator
+				for(var i = 1; i < size; i++){
+					ctx.beginPath();
+					ctx.moveTo(0, (i * 100));
+					ctx.lineTo((size * 100), (i * 100));
+					ctx.stroke();
+				}
+		         } , 	
 	    /***********Added by Becky**************/ 
 	    createBoard : function() {
 		App.Host.board = new Array(8); 
@@ -409,80 +430,52 @@ jQuery(function($){
 		}
            	var c = document.getElementById("myCanvas");
 		var ctx = c.getContext("2d");
-		//game grid
-		//Vertical Lines
-		ctx.moveTo(0, 0);
-		ctx.lineTo(0,600);
-		ctx.lineWidth=4;
-		ctx.stroke();
+	
+		
+		App.Host.boardCoordinates = [];
+		var boardsize = 6; //8x8
 
-		ctx.moveTo(100, 0);
-		ctx.lineTo(100,600);
-		ctx.lineWidth=4;
-		ctx.stroke();
+		for(var by = 0 ; by < boardsize; by ++) {
+    			var column = [];
+    		for(var xy = 0 ; xy < boardsize; xy ++) {
+        		var row = [];
+        	for(var sq = 0 ; sq < 8; sq ++) {
+            		// adding ticks
+           		 var tick = [];
+            	if(sq == 0){
+            		tick.push((xy * 100) + 33);
+            		tick.push(by * 100);
+           	 } else if (sq == 1){
+            		tick.push((xy * 100) + 66);
+            		tick.push(by * 100);
+           	 } else if (sq == 2){
+            		tick.push((xy * 100) + 100);
+            		tick.push((by * 100) + 33);
+           	 } else if (sq == 3){
+            		tick.push((xy * 100) + 100);
+          	  	tick.push((by * 100) + 66);
+           	 } else if (sq == 4){
+            		tick.push((xy * 100) + 66);
+            		tick.push((by * 100) + 100);
+           	 } else if (sq == 5){
+            		tick.push((xy * 100) + 33);
+            		tick.push((by * 100) + 100);
+           	 } else if (sq == 6){
+            		tick.push(xy * 100);
+            		tick.push((by * 100) + 66);
+           	 } else if (sq == 7){
+            		tick.push(xy * 100);
+            		tick.push((by * 100) + 33);
+           	 } 
+           	 // tick.push("x"); // calulate number
+           	 // tick.push("y"); // calulate number
 
-
-		ctx.moveTo(200, 0);
-		ctx.lineTo(200,600);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(300, 0);
-		ctx.lineTo(300,600);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(400, 0);
-		ctx.lineTo(400,600);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(500, 0);
-		ctx.lineTo(500,600);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(600, 0);
-		ctx.lineTo(600,600);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-
-		//Horizontal Grid
-		ctx.moveTo(0, 0);
-		ctx.lineTo(600,0);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(0, 100);
-		ctx.lineTo(600,100);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(0, 200);
-		ctx.lineTo(600,200);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(0, 300);
-		ctx.lineTo(600,300);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(0, 400);
-		ctx.lineTo(600,400);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(0, 500);
-		ctx.lineTo(600,500);
-		ctx.lineWidth=4;
-		ctx.stroke();
-
-		ctx.moveTo(0, 600);
-		ctx.lineTo(600,600);
-		ctx.lineWidth=4;
-		ctx.stroke();
+           		 row.push(tick);
+       		 }
+       			 column.push(row);
+    		}
+   		App.Host.boardCoordinates.push(column);
+		}
 	    },
 
            addSquare : function(y, x, squareNumber) {
