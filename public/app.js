@@ -485,6 +485,51 @@ jQuery(function($){
 		ctx.lineTo(600,600);
 		ctx.lineWidth=4;
 		ctx.stroke();
+
+		App.Host.boardCoordinates = [];
+		var boardsize = 6; //8x8
+
+		for(var by = 0 ; by < boardsize; by ++) {
+    			var column = [];
+    		for(var xy = 0 ; xy < boardsize; xy ++) {
+        		var row = [];
+        	for(var sq = 0 ; sq < 8; sq ++) {
+            		// adding ticks
+           		 var tick = [];
+            	if(sq == 0){
+            		tick.push((xy * 100) + 33);
+            		tick.push(by * 100);
+           	 } else if (sq == 1){
+            		tick.push((xy * 100) + 66);
+            		tick.push(by * 100);
+           	 } else if (sq == 2){
+            		tick.push((xy * 100) + 100);
+            		tick.push((by * 100) + 33);
+           	 } else if (sq == 3){
+            		tick.push((xy * 100) + 100);
+          	  	tick.push((by * 100) + 66);
+           	 } else if (sq == 4){
+            		tick.push((xy * 100) + 66);
+            		tick.push((by * 100) + 100);
+           	 } else if (sq == 5){
+            		tick.push((xy * 100) + 33);
+            		tick.push((by * 100) + 100);
+           	 } else if (sq == 6){
+            		tick.push(xy * 100);
+            		tick.push((by * 100) + 66);
+           	 } else if (sq == 7){
+            		tick.push(xy * 100);
+            		tick.push((by * 100) + 33);
+           	 } 
+           	 // tick.push("x"); // calulate number
+           	 // tick.push("y"); // calulate number
+
+           		 row.push(tick);
+       		 }
+       			 column.push(row);
+    		}
+   		 boardCoordinates.push(column);
+		}
 	    },
 
            addSquare : function(x, y, squareNumber) {
