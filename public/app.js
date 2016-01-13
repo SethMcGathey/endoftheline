@@ -123,8 +123,8 @@ jQuery(function($){
 		App.currentRound = 0;
 	    }
             if(App.myRole === 'Host') {
-		console.log('Player Turn: '+App.currentRound+', Answer: '+data.answer+', Player X: '+playerX+', Player Y: '+playerY+'. ');
-                App.Host.addSquare(playerX, playerY, data.answer);
+		console.log('Player Turn: '+App.currentRound+', Answer: '+data.answer+', Player Y: '+playerY+', Player X: '+playerX+'. ');
+                App.Host.addSquare(playerY, playerX, data.answer);
             }
         },
 	/*****ADDED BY BECKY*****/
@@ -342,13 +342,13 @@ jQuery(function($){
                 });
 		App.Host.player = new Array(App.numOfPlayers);
 		var startingspots = [[0,2,4],
-				     [0,5,5],
+				     [7,5,0],
+				     [5,0,2],
+				     [2,7,6],
 				     [7,3,1],
-				     [5,7,0],
-				     [0,2,2],
-				     [0,5,3],
-				     [7,2,6],
-			             [7,5,7]];
+				     [0,4,5],
+				     [4,7,7],
+			             [3,0,3]];
 		var innerPlayerArray = new Array(4);
                 // Display the players' names on screen
 		for(var i = 0; i < App.numOfPlayers; i++)
@@ -359,20 +359,15 @@ jQuery(function($){
 +' </span> </div>');
 			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], App.Player.myName];
 			App.Host.player[i] = innerPlayerArray;	
-			
+			console.log("entered player " + startingspots[i][0] + " " +  startingspots[i][1] + " " + startingspots[i][2] + " " + App.Player.myName);
 			// Set the Score section on screen to 0 for each player.
                 	//$('#player' + i  + 'Score').find('.score').attr('id',App.Host.players[i-1].mySocketId);
 		}
 		//CODE BY BECKY - create board and display on page
 		App.Host.createBoard();
 
-                $('#board').append(App.Host.board+'<br>');
-		
 	//	App.Host.addSquare(2, 1, 2);
-
-		$('#board').append(App.Host.board);
-	//	App.Host.addSquare(2, 1, 2);
-		$('#board').append(App.Host.board+'<br>');
+	/*	$('#board').append(App.Host.board+'<br>');
                 $('#board').append('Original Board <br>');
 		$('#board').append(App.Host.board[0] + '<br>');
 		$('#board').append(App.Host.board[1] + '<br>');
@@ -382,7 +377,7 @@ jQuery(function($){
                 $('#board').append(App.Host.board[5] + '<br>');
                 $('#board').append(App.Host.board[6] + '<br>');
                 $('#board').append(App.Host.board[7] + '<br>');		
-
+*/
 		//END CODE BY BECKY
             },
 
@@ -406,35 +401,36 @@ jQuery(function($){
 		for (var i = 0; i < 8; i++) {
 			App.Host.board[i] = new Array(8);
 			for (var j = 0; j < 8; j++) {
-				App.Host.board[i][j] = null;
+				App.Host.board[i][j] = "|" + i + " " + j + "|";
 			}
 		}
             },
 
-           addSquare : function(x, y, squareNumber) {
-		App.Host.board[x][y] = squareNumber; 
-		$('#board').append(App.Host.board[0] + '<br>');
-                $('#board').append(App.Host.board[1] + '<br>');
-                $('#board').append(App.Host.board[2] + '<br>');
-                $('#board').append(App.Host.board[3] + '<br>');
-                $('#board').append(App.Host.board[4] + '<br>');
-                $('#board').append(App.Host.board[5] + '<br>');
-                $('#board').append(App.Host.board[6] + '<br>');
-                $('#board').append(App.Host.board[7] + '<br>');
-		App.Host.movePlayer(x,y);//Added by seth 
+           addSquare : function(y, x, squareNumber) {
+		App.Host.board[y][x] = squareNumber; 
+		$('#board').append(App.Host.board[0] + ' <br>');
+                $('#board').append(App.Host.board[1] + ' <br>');
+                $('#board').append(App.Host.board[2] + ' <br>');
+                $('#board').append(App.Host.board[3] + ' <br>');
+                $('#board').append(App.Host.board[4] + ' <br>');
+                $('#board').append(App.Host.board[5] + ' <br>');
+                $('#board').append(App.Host.board[6] + ' <br>');
+                $('#board').append(App.Host.board[7] + ' <br>');
+		console.log("Current round" + App.currentRound + " ");
+		App.Host.movePlayer(y,x);//Added by seth 
 	   },		
 	
 	    /***********Added by Seth**************/
-	    movePlayer : function(newX, newY){
+	    movePlayer : function(newY, newX){
 		var individual;
 		for(individual in App.Host.player)
 		{
 			var swapPosition = [5,4,7,6,1,0,3,2]; //swapPosition converts the position of old location into position of new location
-			if(App.Host.checkForTouchingSquare(newX, newY, individual))
+			if(App.Host.checkForTouchingSquare(newY, newX, individual))
 			{
-				App.Host.player[individual][0] = newX; //sets players x to x of new piece
-				App.Host.player[individual][1] = newY; //sets players y to y of new piece
-				App.Host.player[individual][2] = App.Host.square[  App.Host.board[newX][newY]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position
+				App.Host.player[individual][0] = newY; //sets players y to y of new piece
+				App.Host.player[individual][1] = newX; //sets players x to x of new piece
+				App.Host.player[individual][2] = App.Host.square[  App.Host.board[newY][newX]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position
 			}
 			$('#board').append(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2] + "<br> ");
 			//print new player positions to screen 
@@ -455,12 +451,12 @@ jQuery(function($){
 
 	    },
 
-	    checkForTouchingSquare : function(newX, newY, individual){
+	    checkForTouchingSquare : function(newY, newX, individual){
 		//checks if player is in a touching square and also on the touching two positions of that square. If so then return true else false.
-		if((App.Host.player[individual][0] == newX && App.Host.player[individual][1] == newY+1 && (App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)) ||
-		(App.Host.player[individual][0] == newX-1 && App.Host.player[individual][1] == newY && (App.Host.player[individual][2] == 2 || App.Host.player[individual][2] == 3)) ||
-		(App.Host.player[individual][0] == newX && App.Host.player[individual][1] == newY-1 && (App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)) ||
-		(App.Host.player[individual][0] == newX+1 && App.Host.player[individual][1] == newY && (App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)))
+		if((App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX+1 && (App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)) ||
+		(App.Host.player[individual][0] == newY-1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 2 || App.Host.player[individual][2] == 3)) ||
+		(App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX-1 && (App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)) ||
+		(App.Host.player[individual][0] == newY+1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)))
 		{	
 			return true;
 		}
@@ -492,8 +488,8 @@ jQuery(function($){
 		//{
 			//set board[location] = square[chosenSquare];//made up vairables
 		//	updateBoard();//doesn't exist yet
-			addSquare(); //added by Becky
-			movePlayer();//doesn't exist yet
+			//addSquare(); //added by Becky
+			//movePlayer();//doesn't exist yet
 				
 		//}
 
