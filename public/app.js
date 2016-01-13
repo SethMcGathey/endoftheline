@@ -404,7 +404,83 @@ jQuery(function($){
 				App.Host.board[i][j] = "|" + i + " " + j + "|";
 			}
 		}
-            },
+           	var c = document.getElementById("myCanvas");
+		var ctx = c.getContext("2d");
+		//game grid
+		//Vertical Lines
+		ctx.moveTo(0, 0);
+		ctx.lineTo(0,600);
+		ctx.lineWidth=4;
+		ctx.stroke();
+
+		ctx.moveTo(100, 0);
+		ctx.lineTo(100,600);
+		ctx.lineWidth=4;
+		ctx.stroke();
+
+
+		ctx.moveTo(200, 0);
+		ctx.lineTo(200,600);
+		ctx.lineWidth=4;
+		ctx.stroke();
+
+		ctx.moveTo(300, 0);
+		ctx.lineTo(300,600);
+		ctx.lineWidth=4;
+		ctx.stroke();
+
+		ctx.moveTo(400, 0);
+		ctx.lineTo(400,600);
+		ctx.lineWidth=4;
+		ctx.stroke();
+
+		ctx.moveTo(500, 0);
+		ctx.lineTo(500,600);
+		ctx.lineWidth=4;
+		ctx.stroke();
+
+		ctx.moveTo(600, 0);
+		ctx.lineTo(600,600);
+		ctx.lineWidth=4;
+		ctx.stroke();
+
+
+		//Horizontal Grid
+		ctx.moveTo(0, 0);
+		ctx.lineTo(600,0);
+		ctx.lineWidth=4;
+		ctx.stroke();
+
+		ctx.moveTo(0, 100);
+		ctx.lineTo(600,100);
+		ctx.lineWidth=4;
+		ctx.stroke();
+
+		ctx.moveTo(0, 200);
+		ctx.lineTo(600,200);
+		ctx.lineWidth=4;
+		ctx.stroke();
+
+		ctx.moveTo(0, 300);
+		ctx.lineTo(600,300);
+		ctx.lineWidth=4;
+		ctx.stroke();
+
+		ctx.moveTo(0, 400);
+		ctx.lineTo(600,400);
+		ctx.lineWidth=4;
+		ctx.stroke();
+
+		ctx.moveTo(0, 500);
+		ctx.lineTo(600,500);
+		ctx.lineWidth=4;
+		ctx.stroke();
+
+		ctx.moveTo(0, 600);
+		ctx.lineTo(600,600);
+		ctx.lineWidth=4;
+		ctx.stroke();
+	    },
 
            addSquare : function(y, x, squareNumber) {
 		App.Host.board[y][x] = squareNumber; 
