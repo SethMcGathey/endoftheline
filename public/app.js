@@ -173,6 +173,7 @@ jQuery(function($){
          */
         currentRound: 0,
 
+
         /* *************************************
          *                Setup                *
          * *********************************** */
@@ -340,6 +341,7 @@ jQuery(function($){
                 App.countDown( $secondsLeft, 5, function(){
                     IO.socket.emit('hostCountdownFinished', App.gameId);
                 });
+
 		App.Host.player = new Array(App.numOfPlayers);
 		//[7,5,0] player 2
 		var startingspots = [[0,2,4],
@@ -356,8 +358,7 @@ jQuery(function($){
 		{ 
 		    $('#playerScores')
 			
-                    	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1)
-+' </span> </div>');
+                    	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1)+ '</span> </div>');
 			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], i + "becky"];
 			//innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], App.Player.myName];
 			App.Host.player[i] = innerPlayerArray;	
@@ -422,6 +423,7 @@ jQuery(function($){
 		App.Host.board = new Array(8); 
 		//App.Host.square = [[6, 5, 4, 7, 2, 1, 0, 3], [4, 7, 6, 5, 0, 3, 2, 1], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
 		App.Host.square = [[5, 4, 7, 6, 1, 0, 3, 2], [6, 3, 5, 1, 7, 2, 0, 4], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
+		App.Host.playerCards = [[0, 1, 2, 3], [3, 2, 1, 0], [1, 3, 2, 0], [2, 1, 0, 3]];
 		for (var i = 0; i < 8; i++) {
 			App.Host.board[i] = new Array(8);
 			for (var j = 0; j < 8; j++) {
@@ -742,7 +744,7 @@ jQuery(function($){
              * The player's name entered on the 'Join' screen.
              */
             myName: '',
-
+	    
             /**
              * Click handler for the 'JOIN' button
              */
@@ -772,7 +774,6 @@ jQuery(function($){
                 // Set the appropriate properties for the current player.
                 App.myRole = 'Player';
                 App.Player.myName = data.playerName;
-		
 		/*******ADDED BY BECKY********/
 		App.Player.cards = [0, 1, 2, 3];
 		/*******ADDED BY BECKY********/
@@ -876,7 +877,7 @@ jQuery(function($){
                 // Insert the list onto the screen.
                // $('#gameArea').html($list);
 		$('#gameArea').html($cardlist);
-		$('#gameArea').append(App.Player.hostSocketId);
+		$('#gameArea').append(App.Player.myName);
             },
 
             /**
