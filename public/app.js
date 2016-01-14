@@ -491,6 +491,7 @@ jQuery(function($){
                 $('#board').append(App.Host.board[6] + ' <br>');
                 $('#board').append(App.Host.board[7] + ' <br>');
 		//console.log("Current round" + App.currentRound + " ");
+		console.log(" ");
 		App.Host.movePlayer(y,x);//Added by seth 
 	   },		
 	
@@ -530,15 +531,16 @@ jQuery(function($){
                 var individual;
                 for(individual in App.Host.player)
                 {
-                        App.Host.playerY = App.Host.player[0];
-                        App.Host.playerX = App.Host.player[1];
+                        App.Host.playerY = App.Host.player[individual][0];
+                        App.Host.playerX = App.Host.player[individual][1];
                         var swapPosition = [5,4,7,6,1,0,3,2]; //swapPosition converts the position of old location into position of new location
-                        if(App.Host.checkForTouchingSquareMultiplePlaces(App.Host.playerY, App.Host.playerX, individual))
+console.log("position in movePlayer " + App.Host.player[individual][2]);
+                        if(App.Host.checkForTouchingSquare(App.Host.playerY, App.Host.playerX, App.Host.player[individual][2]))
                         {
                                 App.Host.player[individual][0] = App.Host.playerY; //sets players y to y of new piece
                                 App.Host.player[individual][1] = App.Host.playerX; //sets players x to x of new piece
                                 App.Host.player[individual][2] = App.Host.square[  App.Host.board[App.Host.playerY][App.Host.playerX]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position
-                        	movePlayerIfTouchingSquare();
+                        	App.Host.movePlayer();
 			}
                         $('#board').append(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2] + "<br> ");
                         console.log(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
@@ -547,19 +549,75 @@ jQuery(function($){
                 }
 	},
 
-	    checkForTouchingSquare : function(newY, newX, individual){
+	   /* checkForTouchingSquare : function(newY, newX, position){
 		//checks if player is in a touching square and also on the touching two positions of that square. If so then return true else false.
-		if((App.Host.player[individual][0] == newY+1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)) ||
-		(App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX-1 && (App.Host.player[individual][2] == 2 || App.Host.player[individual][2] == 3)) ||
-		(App.Host.player[individual][0] == newY-1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)) ||
-		(App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX+1 && (App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)))
+		if(App.Host.board[ newY-1 ][ newX ] != 'null' && position == 0 || position == 1)
 		{	
+			App.Host.playerY = newY-1;
+			return true;
+		}else if(App.Host.board[ newY ][ newX+1 ] != 'null' && position == 2 || position == 3)
+		{
+			App.Host.playerX = newX+1;
+                        return true;
+		}else if(App.Host.board[ newY+1 ][ newX]  != 'null' && position == 4 || position == 5)
+		{
+			App.Host.playerY = newY+1;
+                        return true;
+		}else if(App.Host.board[ newY ][ newX-1 ] != 'null' && position == 6 || position == 7)
+		{
+			App.Host.playerX = newX-1;
 			return true;
 		}
 		return false;
-	    },	
+	    },*/
 
-	     checkForTouchingSquareMultiplePlaces : function(newY, newX, individual){
+	     checkForTouchingSquare : function(newY, newX, position){
+                //checks if player is in a touching square and also on the touching two positions of that square. If so then return true else false.
+console.log("this was called");
+console.log("position " + position);
+                if(position == 0 || position == 1)
+              	{
+console.log("position 0 1");
+              		if(App.Host.board[ newY-1 ][ newX ] != 'null')
+                	{       console.log("1 playerY before switch " + App.Host.playerY);
+                        	App.Host.playerY = newY-1;
+				 console.log("playerY after switch " + App.Host.playerY);
+                       		return true;
+                	}
+              	}else if(position == 2 || position == 3)
+              	{
+console.log("position 2 3");
+              		if(App.Host.board[ newY ][ newX+1 ] != 'null')
+                	{
+				console.log("1 playerX before switch " + App.Host.playerX);
+                        	App.Host.playerX = newX+1;
+				console.log("playerX after switch " + App.Host.playerX);
+                        	return true;
+                    	}
+              	}else if(position == 4 || position == 5)
+              	{
+console.log("position 4 5");
+              		if(App.Host.board[ newY+1 ][ newX]  != 'null')
+                	{
+				console.log("1 playerY before switch " + App.Host.playerY);
+                        	App.Host.playerY = newY+1;
+				console.log("playerY after switch " + App.Host.playerY);
+                	        return true;
+                	}
+              	}else if(position == 6 || position == 7)
+              	{
+console.log("position 6 7");
+			if(App.Host.board[ newY ][ newX-1 ] != 'null')
+                	{
+				console.log("1 playerX before switch " + App.Host.playerX);
+	                        App.Host.playerX = newX-1;
+				console.log("playerX after switch " + App.Host.playerX);
+        	                return true;
+                	}
+              	}
+            },	
+
+	    /* checkForTouchingSquareMultiplePlaces : function(newY, newX, individual){
                 //checks if player is in a touching square and also on the touching two positions of that square. If so then return true else false.
                 if((App.Host.player[individual][0] == newY+1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)))
 		{
@@ -576,6 +634,28 @@ jQuery(function($){
 		}else if((App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX+1 && (App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)))
                 {
 			App.Host.playerX = newX + 1;
+                        return true;
+                }
+                return false;
+            },*/
+
+	    checkForTouchingSquareMultiplePlaces : function(newY, newX, individual){
+                //checks if player is in a touching square and also on the touching two positions of that square. If so then return true else false.
+                if((App.Host.player[individual][0] == newY+1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)))
+                {
+                        App.Host.playerY = newY + 1;
+                        return true;
+                }else if((App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX-1 && (App.Host.player[individual][2] == 2 || App.Host.player[individual][2] == 3)))
+                {
+                        App.Host.playerX = newX - 1;
+                        return true;
+                }else if((App.Host.player[individual][0] == newY-1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)))
+                {
+                        App.Host.playerY = newY - 1;
+                        return true;
+                }else if((App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX+1 && (App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)))
+                {
+                        App.Host.playerX = newX + 1;
                         return true;
                 }
                 return false;
