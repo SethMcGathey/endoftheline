@@ -480,7 +480,28 @@ jQuery(function($){
     			}
    			App.Host.boardCoordinates.push(column);
 		}
+		console.log(App.Host.boardCoordinates);
 	    },
+	   squareMaker : function(brdy, brdx, squareArr){
+		var c = document.getElementById("myCanvas");
+                var ctx = c.getContext("2d");
+		var boardTile = App.Host.boardCoordinates[brdy][brdx];
+		ctx.lineWidth = 7;
+		ctx.strokeStyle = 'red';
+		var newArr = [];
+
+		for(var i = 0; i < squareArr.length; i++){
+			ctx.beginPath();
+			ctx.moveTo(boardTile[i][0], boardTile[i][1]);
+			ctx.lineTo(boardTile[squareArr[i]][0], boardTile[squareArr[i]][1]);
+			ctx.stroke();
+			newArr.push(boardTile[squareArr[i]])
+		
+
+		}
+			console.log(newArr);
+
+	},	
 
            addSquare : function(y, x, squareNumber) {
 		App.Host.board[y][x] = squareNumber; 
@@ -494,7 +515,8 @@ jQuery(function($){
                 $('#board').append(App.Host.board[7] + ' <br>');
 		//console.log("Current round" + App.currentRound + " ");
 	$('#board').append(' <br>');
-		App.Host.movePlayer(y,x);//Added by seth 
+		App.Host.movePlayer(y,x);//Added by seth
+		App.Host.squareMaker(5,3,App.Host.square[1] ); 
 	   },		
 	
 	    /***********Added by Seth**************/
