@@ -437,44 +437,46 @@ jQuery(function($){
 
 		for(var by = 0 ; by < boardsize; by ++) {
     			var column = [];
-    		for(var xy = 0 ; xy < boardsize; xy ++) {
-        		var row = [];
-        	for(var sq = 0 ; sq < 8; sq ++) {
-            		// adding ticks
-           		 var tick = [];
-            	if(sq == 0){
-            		tick.push((xy * 100) + 33);
-            		tick.push(by * 100);
-           	 } else if (sq == 1){
-            		tick.push((xy * 100) + 66);
-            		tick.push(by * 100);
-           	 } else if (sq == 2){
-            		tick.push((xy * 100) + 100);
-            		tick.push((by * 100) + 33);
-           	 } else if (sq == 3){
-            		tick.push((xy * 100) + 100);
-          	  	tick.push((by * 100) + 66);
-           	 } else if (sq == 4){
-            		tick.push((xy * 100) + 66);
-            		tick.push((by * 100) + 100);
-           	 } else if (sq == 5){
-            		tick.push((xy * 100) + 33);
-            		tick.push((by * 100) + 100);
-           	 } else if (sq == 6){
-            		tick.push(xy * 100);
-            		tick.push((by * 100) + 66);
-           	 } else if (sq == 7){
-            		tick.push(xy * 100);
-            		tick.push((by * 100) + 33);
-           	 } 
-           	 // tick.push("x"); // calulate number
-           	 // tick.push("y"); // calulate number
+    			
+			for(var xy = 0 ; xy < boardsize; xy ++) {
+        			var row = [];
+        			
+				for(var sq = 0 ; sq < 8; sq ++) {
+            				// adding ticks
+           		 		var tick = [];
+            				if(sq == 0){
+            					tick.push((xy * 100) + 33);
+            					tick.push(by * 100);
+           				} else if (sq == 1){
+            					tick.push((xy * 100) + 66);
+            					tick.push(by * 100);
+           				} else if (sq == 2){
+            					tick.push((xy * 100) + 100);
+            					tick.push((by * 100) + 33);
+           				} else if (sq == 3){
+            					tick.push((xy * 100) + 100);
+          	  				tick.push((by * 100) + 66);
+           	 			} else if (sq == 4){
+            					tick.push((xy * 100) + 66);
+            					tick.push((by * 100) + 100);
+           				} else if (sq == 5){
+            					tick.push((xy * 100) + 33);
+            					tick.push((by * 100) + 100);
+           				} else if (sq == 6){
+            					tick.push(xy * 100);
+            					tick.push((by * 100) + 66);
+           				} else if (sq == 7){
+            					tick.push(xy * 100);
+            					tick.push((by * 100) + 33);
+           	 			}	 
+           				// tick.push("x"); // calulate number
+           	 			// tick.push("y"); // calulate number
 
-           		 row.push(tick);
-       		 }
-       			 column.push(row);
-    		}
-   		App.Host.boardCoordinates.push(column);
+           		 		row.push(tick);
+       		 		}
+       				 column.push(row);
+    			}
+   			App.Host.boardCoordinates.push(column);
 		}
 	    },
 
@@ -493,7 +495,7 @@ jQuery(function($){
 	   },		
 	
 	    /***********Added by Seth**************/
-	    movePlayer : function(newY, newX){
+	    movePlayer2 : function(newY, newX){
 		var individual;
 		for(individual in App.Host.player)
 		{
@@ -524,23 +526,24 @@ jQuery(function($){
 
 	    },
 
-         movePlayerIfTouchingSquare : function(){
+         movePlayer : function(){
                 var individual;
                 for(individual in App.Host.player)
                 {
-                        playerY = App.Host.player[0];
-                        playerX = App.Host.player[1];
+                        App.Host.playerY = App.Host.player[0];
+                        App.Host.playerX = App.Host.player[1];
                         var swapPosition = [5,4,7,6,1,0,3,2]; //swapPosition converts the position of old location into position of new location
-                        if(App.Host.checkForTouchingSquareMultiplePlaces(playerY, playerX, individual))
+                        if(App.Host.checkForTouchingSquareMultiplePlaces(App.Host.playerY, App.Host.playerX, individual))
                         {
-                                App.Host.player[individual][0] = playerY; //sets players y to y of new piece
-                                App.Host.player[individual][1] = playerX; //sets players x to x of new piece
-                                App.Host.player[individual][2] = App.Host.square[  App.Host.board[playerY][playerX]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position
-                        }
+                                App.Host.player[individual][0] = App.Host.playerY; //sets players y to y of new piece
+                                App.Host.player[individual][1] = App.Host.playerX; //sets players x to x of new piece
+                                App.Host.player[individual][2] = App.Host.square[  App.Host.board[App.Host.playerY][App.Host.playerX]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position
+                        	movePlayerIfTouchingSquare();
+			}
                         $('#board').append(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2] + "<br> ");
                         console.log(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
                         //print new player positions to screen 
-                        movePlayerIfTouchingSquare();
+                       // movePlayerIfTouchingSquare();
                 }
 	},
 
@@ -558,38 +561,47 @@ jQuery(function($){
 
 	     checkForTouchingSquareMultiplePlaces : function(newY, newX, individual){
                 //checks if player is in a touching square and also on the touching two positions of that square. If so then return true else false.
-                if((App.Host.player[individual][0] == newY+1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)) ||
-                (App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX-1 && (App.Host.player[individual][2] == 2 || App.Host.player[individual][2] == 3)) ||
-                (App.Host.player[individual][0] == newY-1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)) ||
-                (App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX+1 && (App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)))
-                {
-                        return true;
-                }else
+                if((App.Host.player[individual][0] == newY+1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)))
 		{
-			newY = newY-1;
-			if((App.Host.player[individual][0] == newY+1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)) ||
-                	(App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX-1 && (App.Host.player[individual][2] == 2 || App.Host.player[individual][2] == 3)) ||
-                	(App.Host.player[individual][0] == newY-1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)) ||
-                	(App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX+1 && (App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)))
-                	{
-                        	return true;
-                	}
-		}
-
+			App.Host.playerY = newY + 1;
+                        return true;
+		}else if((App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX-1 && (App.Host.player[individual][2] == 2 || App.Host.player[individual][2] == 3)))
+                {
+			App.Host.playerX = newX - 1;
+                        return true;
+		}else if((App.Host.player[individual][0] == newY-1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)))
+                {
+			App.Host.playerY = newY - 1;
+                        return true;
+		}else if((App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX+1 && (App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)))
+                {
+			App.Host.playerX = newX + 1;
+                        return true;
+                }
                 return false;
             },
 
-	    turnSquare : function(turnRight){
-		if(turnRight)
+	    turnSquare : function(/*turnRight*/){
+		/*if(turnRight)
 		{    
 		    var swapSquare = [App.Host.square.shift(), App.Host.square.shift()];//set swap square to first two of square array
 		    App.Host.square[6] = swapSquare[0];//moves these two to the end of square array
 		    App.Host.square[7] = swapSquare[1];
 		}else
+		{*/
+		var swapSquare = [App.Host.square.pop(), App.Host.square.pop()];//sets swapSquare to last two of square array
+		App.Host.square.unshift(swapSquare[1], swapSquare[0]);//adds the two swapSquare onto the front of the square array
+		//}
+		for(var i = 0; i <= 7; i++)
 		{
-		    var swapSquare = [App.Host.square.pop(), App.Host.square.pop()];//sets swapSquare to last two of square array
-		    App.Host.square.unshift(swapSquare[1], swapSquare[0]);//adds the two swapSquare onto the front of the square array
+			App.Host.square[i] = (App.Host.square[i] + 2)%8;
+			
 		}
+                /*for(var i = 0; i <= 7; i++)
+                {
+                        App.Host.square[i] = (App.Host.square[i] - 2)%8;
+                        
+                }*/
 	    },
 	    /***********Added by Seth**************/
 
