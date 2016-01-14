@@ -817,7 +817,8 @@ jQuery(function($){
 
                 // Insert the list onto the screen.
                // $('#gameArea').html($list);
-		$('#gameArea').append($cardlist);
+		$('#gameArea').html($cardlist);
+		$('#gameArea').append(App.Player.hostSocketId);
             },
 
             /**
