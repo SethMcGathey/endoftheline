@@ -516,9 +516,9 @@ jQuery(function($){
                 $('#board').append(App.Host.board[6] + ' <br>');
                 $('#board').append(App.Host.board[7] + ' <br>');
 		//console.log("Current round" + App.currentRound + " ");
-	$('#board').append(' <br>');
-		App.Host.movePlayer(y,x);//Added by seth
-		App.Host.squareMaker(y,x,App.Host.square[squareNumber] ); 
+		$('#board').append(' <br>');
+		App.Host.movePlayerRecursive() //Added by seth
+		App.Host.squareMaker(5,3,App.Host.square[1] ); 
 	   },		
 	
 	    /***********Added by Seth**************/
@@ -537,6 +537,60 @@ jQuery(function($){
 			//print new player positions to screen 
 		}
 	   },
+
+
+	movePlayerRecursive : function()
+	{
+		//checks if player is in a touching square and also on the touching two positions of that square. If so then return true else false.
+		var individual;
+		var swapPosition = [5,4,7,6,1,0,3,2]; //swapPosition converts the position of old location into position of new location
+		for(individual in App.Host.player)
+		{
+			if(App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)
+			{
+				if(App.Host.board[ App.Host.player[individual][0]-1 ][ App.Host.player[individual][1] ] != 'null')
+				{
+					App.Host.player[individual][0] = App.Host.player[individual][0]-1; //sets players y to y of new piece
+					App.Host.player[individual][2] = square[  App.Host.board[App.Host.player[individual][0]][App.Host.player[individual][1]]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position
+					App.Host.movePlayerRecursive();
+
+				}
+			}else if(App.Host.player[individual][2] == 2 || App.Host.player[individual][2] == 3)
+			{
+				if(App.Host.board[ App.Host.player[individual][0] ][ App.Host.player[individual][1]+1 ] != 'null')
+				{
+					App.Host.player[individual][1] = App.Host.player[individual][1]+1; //sets players x to x of new piece	
+					App.Host.player[individual][2] = App.Host.square[  App.Host.board[App.Host.player[individual][0]][App.Host.player[individual][1]]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position		
+					App.Host.movePlayerRecursive();	
+				}
+			}else if(App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)
+			{
+				if(App.Host.board[ App.Host.player[individual][0]+1 ][ App.Host.player[individual][1] ] != 'null')
+				{
+					App.Host.player[individual][0] = App.Host.player[individual][0]+1; //sets players y to y of new piece	
+					App.Host.player[individual][2] = App.Host.square[  App.Host.board[App.Host.player[individual][0]][App.Host.player[individual][1]]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position		
+					App.Host.movePlayerRecursive();
+				}
+			}else if(App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)
+			{
+				if(App.Host.board[ App.Host.player[individual][0] ][ App.Host.player[individual][1]-1 ] != 'null')
+				{
+					App.Host.player[individual][1] = App.Host.player[individual][1]-1; //sets players x to x of new piece
+					App.Host.player[individual][2] = App.Host.square[  App.Host.board[App.Host.player[individual][0]][App.Host.player[individual][1]]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position		
+					App.Host.movePlayerRecursive();			
+				}
+			}
+		}
+		console.log(App.Host.board[0]);
+	        console.log(App.Host.board[1]);
+	        console.log(App.Host.board[2]);
+	        console.log(App.Host.board[3]);
+	        console.log(App.Host.board[4]);
+	        console.log(App.Host.board[5]);
+	        console.log(App.Host.board[6]);
+	        console.log(App.Host.board[7]);
+		console.log(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
+},
 /*
 	    movePlayer : function(newY, newX){
 		var individual;
