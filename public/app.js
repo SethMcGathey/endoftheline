@@ -435,7 +435,7 @@ jQuery(function($){
 	
 		
 		App.Host.boardCoordinates = [];
-		var boardsize = 6; //8x8
+		var boardsize = 8; //8x8
 
 		for(var by = 0 ; by < boardsize; by ++) {
     			var column = [];
@@ -484,21 +484,23 @@ jQuery(function($){
 	    },
 	/*****Added by MC*****/
 	   squareMaker : function(brdy, brdx, squareArr){
-		var c = document.getElementById("myCanvas");
-                var ctx = c.getContext("2d");
-		var boardTile = App.Host.boardCoordinates[brdy][brdx];
-		ctx.lineWidth = 7;
-		ctx.strokeStyle = '#'+Math.random().toString(16).substr(-6);
-		var newArr = [];
+		if (App.Host.boardCoordinates[brdy][brdx] == undefined){
+			console.log("Dead");
+		}else{
+			var c = document.getElementById("myCanvas");
+         	       var ctx = c.getContext("2d");
+			var boardTile = App.Host.boardCoordinates[brdy][brdx];
+			ctx.lineWidth = 7;
+			ctx.strokeStyle = '#'+Math.random().toString(16).substr(-6);
+			var newArr = [];
 
-		for(var i = 0; i < squareArr.length; i++){
-			ctx.beginPath();
-			ctx.moveTo(boardTile[i][0], boardTile[i][1]);
-			ctx.lineTo(boardTile[squareArr[i]][0], boardTile[squareArr[i]][1]);
-			ctx.stroke();
-			newArr.push(boardTile[squareArr[i]])
-		
-
+			for(var i = 0; i < squareArr.length; i++){
+				ctx.beginPath();
+				ctx.moveTo(boardTile[i][0], boardTile[i][1]);
+				ctx.lineTo(boardTile[squareArr[i]][0], boardTile[squareArr[i]][1]);
+				ctx.stroke();
+				newArr.push(boardTile[squareArr[i]])
+			}
 		}
 			console.log(newArr);
 
