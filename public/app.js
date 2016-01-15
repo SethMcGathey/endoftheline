@@ -482,12 +482,13 @@ jQuery(function($){
 		}
 		console.log(App.Host.boardCoordinates);
 	    },
+	/*****Added by MC*****/
 	   squareMaker : function(brdy, brdx, squareArr){
 		var c = document.getElementById("myCanvas");
                 var ctx = c.getContext("2d");
 		var boardTile = App.Host.boardCoordinates[brdy][brdx];
 		ctx.lineWidth = 7;
-		ctx.strokeStyle = 'red';
+		ctx.strokeStyle = '#'+Math.random().toString(16).substr(-6);
 		var newArr = [];
 
 		for(var i = 0; i < squareArr.length; i++){
@@ -501,7 +502,8 @@ jQuery(function($){
 		}
 			console.log(newArr);
 
-	},	
+	},
+	/*****End Added by MC*****/	
 
            addSquare : function(y, x, squareNumber) {
 		App.Host.board[y][x] = squareNumber; 
@@ -515,8 +517,8 @@ jQuery(function($){
                 $('#board').append(App.Host.board[7] + ' <br>');
 		//console.log("Current round" + App.currentRound + " ");
 		$('#board').append(' <br>');
-		console.log(App.Host.player[0]);
-		console.log(App.Host.player[1]);
+		//console.log(App.Host.player[0]);
+		//console.log(App.Host.player[1]);
 		App.Host.movePlayerRecursive(); //Added by seth
 		App.Host.squareMaker(5,3,App.Host.square[1] ); 
 	   },		
