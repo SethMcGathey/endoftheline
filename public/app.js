@@ -358,7 +358,7 @@ jQuery(function($){
 		{ 
 		    $('#playerScores')
 			
-                    	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1)+ '</span> </div>');
+                    	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1) +   '</span> </div>');
 			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], i + "becky"];
 			//innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], App.Player.myName];
 			App.Host.player[i] = innerPlayerArray;	
@@ -482,12 +482,13 @@ jQuery(function($){
 		}
 		console.log(App.Host.boardCoordinates);
 	    },
+	/*****Added by MC*****/
 	   squareMaker : function(brdy, brdx, squareArr){
 		var c = document.getElementById("myCanvas");
                 var ctx = c.getContext("2d");
 		var boardTile = App.Host.boardCoordinates[brdy][brdx];
 		ctx.lineWidth = 7;
-		ctx.strokeStyle = 'red';
+		ctx.strokeStyle = '#'+Math.random().toString(16).substr(-6);
 		var newArr = [];
 
 		for(var i = 0; i < squareArr.length; i++){
@@ -501,7 +502,8 @@ jQuery(function($){
 		}
 			console.log(newArr);
 
-	},	
+	},
+	/*****End Added by MC*****/	
 
            addSquare : function(y, x, squareNumber) {
 		App.Host.board[y][x] = squareNumber; 
@@ -516,7 +518,7 @@ jQuery(function($){
 		//console.log("Current round" + App.currentRound + " ");
 	$('#board').append(' <br>');
 		App.Host.movePlayer(y,x);//Added by seth
-		App.Host.squareMaker(5,3,App.Host.square[1] ); 
+		App.Host.squareMaker(y,x,App.Host.square[squareNumber] ); 
 	   },		
 	
 	    /***********Added by Seth**************/
