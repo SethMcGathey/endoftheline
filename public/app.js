@@ -342,6 +342,8 @@ jQuery(function($){
                     IO.socket.emit('hostCountdownFinished', App.gameId);
                 });
 
+		console.log(App.Host.players[0].playerName.toString());	
+	
 		App.Host.player = new Array(App.numOfPlayers);
 		//[7,5,0] player 2
 		var startingspots = [[0,2,4],
