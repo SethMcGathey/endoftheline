@@ -515,7 +515,7 @@ jQuery(function($){
                 $('#board').append(App.Host.board[7] + ' <br>');
 		//console.log("Current round" + App.currentRound + " ");
 		$('#board').append(' <br>');
-		App.Host.movePlayerRcursive() //Added by seth
+		App.Host.movePlayerRecursive() //Added by seth
 		App.Host.squareMaker(5,3,App.Host.square[1] ); 
 	   },		
 	
