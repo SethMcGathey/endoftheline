@@ -342,8 +342,6 @@ jQuery(function($){
                     IO.socket.emit('hostCountdownFinished', App.gameId);
                 });
 
-		console.log(App.Host.players[0].playerName.toString());	
-	
 		App.Host.player = new Array(App.numOfPlayers);
 		//[7,5,0] player 2
 		var startingspots = [[0,2,4],
@@ -360,7 +358,7 @@ jQuery(function($){
 		{ 
 		    $('#playerScores')
 			
-                    	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1)+ '</span> </div>');
+                    	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">'+App.Host.players[i].playerName+'</span> </div>');
 			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], i + "becky"];
 			//innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], App.Player.myName];
 			App.Host.player[i] = innerPlayerArray;	
