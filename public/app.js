@@ -358,7 +358,7 @@ jQuery(function($){
 		{ 
 		    $('#playerScores')
 			
-                    	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">Player' + (i+1) +   '</span> </div>');
+                    	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">'+App.Host.players[i].playerName+'</span> </div>');
 			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], i + "becky"];
 			//innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], App.Player.myName];
 			App.Host.player[i] = innerPlayerArray;	
