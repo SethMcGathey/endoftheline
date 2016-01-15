@@ -519,8 +519,8 @@ jQuery(function($){
 		$('#board').append(' <br>');
 		//console.log(App.Host.player[0]);
 		//console.log(App.Host.player[1]);
+		App.Host.squareMaker(y-1,x-1,App.Host.square[squareNumber] );
 		App.Host.movePlayerRecursive(); //Added by seth
-		App.Host.squareMaker(5,3,App.Host.square[1] ); 
 	   },		
 	
 	    /***********Added by Seth**************/
