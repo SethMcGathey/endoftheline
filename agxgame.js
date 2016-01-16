@@ -199,7 +199,7 @@ function getSquareData(i){
 //	var deck = shuffle(i);
 	var squareData = {
 	    round : i,
-	    square : deck[0]
+	    square : deck[i]
 	};
 console.log(squareData);  
   return squareData;
