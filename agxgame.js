@@ -92,6 +92,7 @@ function hostNextRound(data) {
  * the gameId entered by the player.
  * @param data Contains data entered via player's input - playerName and gameId.
  */
+var clients = [];
 function playerJoinGame(data) {
     //console.log('Player ' + data.playerName + 'attempting to join game: ' + data.gameId );
 
@@ -108,18 +109,24 @@ function playerJoinGame(data) {
 
         // Join the room
         sock.join(data.gameId);
-
+	clients.push([data.mySocketId,data.gameId]);
+	var clientsInGame = 0;
+	for (var c in clients) {
+		if(clients[c][1] == data.gameId) {
+			clientsInGame++;
+		}
+	}
+	var playerCount = (clientsInGame - 1);
         //console.log('Player ' + data.playerName + ' joining game: ' + data.gameId );
-
         // Emit an event notifying the clients that the player has joined the room.
         io.sockets.in(data.gameId).emit('playerJoinedRoom', data);
+	this.emit('sendPlayerCount', playerCount);
 
     } else {
         // Otherwise, send an error message back to the player.
         this.emit('error',{message: "This room does not exist."} );
     }
 }
-
 /**
  * A player has tapped a word in the word list.
  * @param data gameId
