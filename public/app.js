@@ -549,14 +549,14 @@ jQuery(function($){
 
            addSquare : function(y, x, squareNumber) {
 		App.Host.board[y][x] = squareNumber; 
-		$('#board').append(App.Host.board[0] + ' <br>');
+		/*$('#board').append(App.Host.board[0] + ' <br>');
                 $('#board').append(App.Host.board[1] + ' <br>');
                 $('#board').append(App.Host.board[2] + ' <br>');
                 $('#board').append(App.Host.board[3] + ' <br>');
                 $('#board').append(App.Host.board[4] + ' <br>');
                 $('#board').append(App.Host.board[5] + ' <br>');
                 $('#board').append(App.Host.board[6] + ' <br>');
-                $('#board').append(App.Host.board[7] + ' <br>');
+                $('#board').append(App.Host.board[7] + ' <br>');*/
 		//console.log("Current round" + App.currentRound + " ");
 		$('#board').append(' <br>');
 		//console.log(App.Host.player[0]);
@@ -566,24 +566,8 @@ jQuery(function($){
 		//App.Host.movePlayerRecursive(); //Added by seth
 	   },		
 	
+
 	    /***********Added by Seth**************/
-/*	   movePlayer : function(newY, newX){
-		var individual;
-		for(individual in App.Host.player)
-		{
-			var swapPosition = [5,4,7,6,1,0,3,2]; //swapPosition converts the position of old location into position of new location
-			if(App.Host.checkForTouchingSquare(newY, newX, individual))
-			{
-				App.Host.player[individual][0] = newY; //sets players y to y of new piece
-				App.Host.player[individual][1] = newX; //sets players x to x of new piece
-				App.Host.player[individual][2] = App.Host.square[  App.Host.board[newY][newX]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position
-			}
-			$('#board').append(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2] + "<br> ");
-			//print new player positions to screen 
-		}
-	   },*/
-
-
 	movePlayerRecursive : function()
 	{
 		//checks if player is in a touching square and also on the touching two positions of that square. If so then return true else false.
@@ -655,16 +639,7 @@ console.log( App.Host.square[4] );
 					}
 				}
 			}
-/*			console.log(App.Host.board[0]);
-	        	console.log(App.Host.board[1]);
-		        console.log(App.Host.board[2]);
-		        console.log(App.Host.board[3]);
-	        	console.log(App.Host.board[4]);
-		        console.log(App.Host.board[5]);
-		        console.log(App.Host.board[6]);
-	        	console.log(App.Host.board[7]);
-			console.log(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
-*/		}
+		}
 		if(playersLeft[0] == 1)
 		{
 			//playersLeft[1] will be equal to the number to access the winning player;
@@ -686,42 +661,6 @@ console.log( App.Host.square[4] );
 	   //end added by Becky
 
 //	    },
-
-         movePlayer2 : function(){
-                var individual;
-                for(individual in App.Host.player)
-                {
-                        App.Host.playerY = App.Host.player[individual][0];
-                        App.Host.playerX = App.Host.player[individual][1];
-                        var swapPosition = [5,4,7,6,1,0,3,2]; //swapPosition converts the position of old location into position of new location
-//console.log("position in movePlayer " + App.Host.player[individual][2]);
-                        if(App.Host.checkForTouchingSquare(App.Host.playerY, App.Host.playerX, App.Host.player[individual][2]))
-                        {
-                                App.Host.player[individual][0] = App.Host.playerY; //sets players y to y of new piece
-                                App.Host.player[individual][1] = App.Host.playerX; //sets players x to x of new piece
-                                App.Host.player[individual][2] = App.Host.square[  App.Host.board[App.Host.playerY][App.Host.playerX]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position
-			console.log(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
-				App.Host.movePlayer();
-			}
-                        $('#board').append(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2] + "<br> ");
-                        console.log(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
-                        //print new player positions to screen 
-                       // movePlayerIfTouchingSquare();
-                }
-	},
-
-
-	    checkForTouchingSquare : function(newY, newX, individual){
-		//checks if player is in a touching square and also on the touching two positions of that square. If so then return true else false.
-		if((App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX+1 && (App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)) ||
-		(App.Host.player[individual][0] == newY-1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 2 || App.Host.player[individual][2] == 3)) ||
-		(App.Host.player[individual][0] == newY && App.Host.player[individual][1] == newX-1 && (App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)) ||
-		(App.Host.player[individual][0] == newY+1 && App.Host.player[individual][1] == newX && (App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)))
-		{	
-			return true;
-		}
-		return false;
-	    },
 
 	    turnSquare : function(/*turnRight*/){
 		/*if(turnRight)
