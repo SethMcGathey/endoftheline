@@ -1,7 +1,6 @@
 ;
 jQuery(function($){    
     'use strict';
-
     /**
      * All the code relevant to Socket.IO is collected in the IO namespace.
      *
@@ -26,6 +25,7 @@ jQuery(function($){
             IO.socket.on('connected', IO.onConnected );
             IO.socket.on('newGameCreated', IO.onNewGameCreated );
             IO.socket.on('playerJoinedRoom', IO.playerJoinedRoom );
+	    IO.socket.on('sendPlayerCount', IO.sendPlayerCount );
             IO.socket.on('beginNewGame', IO.beginNewGame );
             IO.socket.on('newWordData', IO.onNewWordData);
             IO.socket.on('hostCheckAnswer', IO.hostCheckAnswer);
@@ -64,6 +64,11 @@ jQuery(function($){
             // And on the player's browser, App.Player.updateWaitingScreen is called.
             App[App.myRole].updateWaitingScreen(data);
         },
+	
+	sendPlayerCount : function(playerCount) {
+		App.Player.assignPlayerCount(playerCount);
+	
+	},
 
         /**
          * Both players have joined the game.
@@ -591,7 +596,7 @@ jQuery(function($){
 			if(App.Host.player[individual][3])
 			{
 				console.log("Made it here");
-                                console.log("Player " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] " " + App.Host.player[individual][2] + " " + swapPosition[App.Host.player[individual][2]]);
+                                //console.log("Player " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] " " + App.Host.player[individual][2] + " " + swapPosition[App.Host.player[individual][2]]);
 				playersLeft[0]++;
 				playersLeft[1] = individual;
 				if(App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)
@@ -601,8 +606,7 @@ jQuery(function($){
 					{
 						App.Host.player[individual][0] = App.Host.player[individual][0]-1; //sets players y to y of new piece
 						App.Host.player[individual][2] = App.Host.square[  App.Host.board[  App.Host.player[ individual ][ 0 ]  ][ App.Host.player[ individual ][ 1 ] ]  ][ swapPosition[ App.Host.player[ individual ][ 2 ] ]  ]; //maps players position to new position
-                                                console.log("Player " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] " " + App.Host.player[individual][2] + " " + swapPosition[App.
-Host.player[individual][2]]);
+                                               // console.log("Player " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] " " + App.Host.player[individual][2] + " " + swapPosition[App.Host.player[individual][2]]);
 						App.Host.movePlayerRecursive();
 	
 					}
@@ -613,8 +617,7 @@ console.log("Made it here 2 3");
 					{
 						App.Host.player[individual][1] = App.Host.player[individual][1]+1; //sets players x to x of new piece	
 						App.Host.player[individual][2] = App.Host.square[  App.Host.board[App.Host.player[individual][0]][App.Host.player[individual][1]]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position
-                                               console.log("Player " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] " " + App.Host.player[individual][2] + " " + swapPosition[App.
-Host.player[individual][2]]);
+                                               //console.log("Player " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] " " + App.Host.player[individual][2] + " " + swapPosition[App.Host.player[individual][2]]);
 						App.Host.movePlayerRecursive();	
 					}
 				}else if(App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)
@@ -624,8 +627,7 @@ console.log("Made it here 4 5");
 					{
 						App.Host.player[individual][0] = App.Host.player[individual][0]+1; //sets players y to y of new piece	
 					//	App.Host.player[individual][2] = App.Host.square[  App.Host.board[App.Host.player[individual][0]][App.Host.player[individual][1]]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position		
-                                                console.log("Player " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] " " + App.Host.player[individual][2] + " " + swapPosition[App.
-Host.player[individual][2]]);
+                                                //console.log("Player " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] " " + App.Host.player[individual][2] + " " + swapPosition[App.Host.player[individual][2]]);
 						App.Host.movePlayerRecursive();
 					}
 				}else if(App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)
@@ -635,8 +637,7 @@ console.log("Made it here 6 7");
 					{
 						App.Host.player[individual][1] = App.Host.player[individual][1]-1; //sets players x to x of new piece
 						App.Host.player[individual][2] = App.Host.square[  App.Host.board[App.Host.player[individual][0]][App.Host.player[individual][1]]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position		
-console.log("Player " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] " " + App.Host.player[individual][2] + " " + swapPosition[App.
-Host.player[individual][2]]);
+//console.log("Player " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] " " + App.Host.player[individual][2] + " " + swapPosition[App.Host.player[individual][2]]);
 						App.Host.movePlayerRecursive();			
 					}
 				}
@@ -870,7 +871,7 @@ Host.player[individual][2]]);
              * The player's name entered on the 'Join' screen.
              */
             myName: '',
-	   
+	
 	    myID: 0,
  
             /**
@@ -887,24 +888,30 @@ Host.player[individual][2]]);
              * The player entered their name and gameId (hopefully)
              * and clicked Start.
              */
+		
             onPlayerStartClick: function() {
                 // console.log('Player clicked "Start"');
-
                 // collect data to send to the server
                 var data = {
                     gameId : +($('#inputGameId').val()),
-                    playerName : $('#inputPlayerName').val() || 'anon',
-                };
+                    playerName : $('#inputPlayerName').val() || 'Jarvis'
+		    //myID : App.Player.myID
+               };
                 // Send the gameId and playerName to the server
                 IO.socket.emit('playerJoinGame', data);
-
                 // Set the appropriate properties for the current player.
                 App.myRole = 'Player';
                 App.Player.myName = data.playerName;
 		/*******ADDED BY BECKY********/
-		App.Player.cards = [[0, 1, 2, 3],[2, 0, 1, 3]];
+		App.Player.cards = [[0, 1, 2, 3],[11, 27, 5, 9],[4, 10, 11, 9], [15, 20, 1, 0], [9, 10, 3, 19], [20, 32, 7, 4], [2, 17, 23, 24], [34, 6, 13, 19]];
+
 		/*******ADDED BY BECKY********/
+		//App.Player.getPlayerCount();
             },
+
+	    assignPlayerCount: function(playerCount) {
+		App.Player.myID = playerCount;
+	    },
 
             /**
              *  Click handler for the Player hitting a word in the word list.
@@ -971,7 +978,6 @@ Host.player[individual][2]]);
             newWord : function(data) {
                 // Create an unordered list element
                 //var $list = $('<ul/>').attr('id','ulAnswers');
-
 		/*******ADDED BY BECKY********/	
 		var $cardlist = $('<ul/>').attr('id','ulAnswers');
 		for (var card in App.Player.cards[App.Player.myID]) {
@@ -1044,7 +1050,7 @@ Host.player[individual][2]]);
             // console.log('Starting Countdown...');
 
             // Start a 1 second timer
-            var timer = setInterval(countItDown,500);
+            var timer = setInterval(countItDown,50);
 
             // Decrement the displayed timer value on each 'tick'
             function countItDown(){
@@ -1087,5 +1093,4 @@ Host.player[individual][2]]);
 
     IO.init();
     App.init();
-
 }($));
