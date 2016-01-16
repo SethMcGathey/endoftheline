@@ -72,7 +72,7 @@ function hostStartGame(gameId) {
  * @param data Sent from the client. Contains the current round and gameId (room)
  */
 function hostNextRound(data) {
-    if(data.round < wordPool.length ){
+    if(data.round < deck.length ){
         // Send a new set of words back to the host and players.
         sendWord(data.round, data.gameId);
     } else {
@@ -156,8 +156,12 @@ function playerRestart(data) {
  * @param wordPoolIndex
  * @param gameId The room identifier
  */
-function sendWord(wordPoolIndex, gameId) {
-    var data = getWordData(wordPoolIndex);
+//function sendWord(wordPoolIndex, gameId) {
+//    var data = getWordData(wordPoolIndex);
+//    io.sockets.in(data.gameId).emit('newWordData', data);
+//}
+function sendWord(deckIndex, gameId) {
+    var data = getSquareData(deckIndex);
     io.sockets.in(data.gameId).emit('newWordData', data);
 }
 
@@ -168,21 +172,21 @@ function sendWord(wordPoolIndex, gameId) {
  * @param i The index of the wordPool.
  * @returns {{round: *, word: *, answer: *, list: Array}}
  */
-function getWordData(i){
+//function getWordData(i){
     // Randomize the order of the available words.
     // The first element in the randomized array will be displayed on the host screen.
     // The second element will be hidden in a list of decoys as the correct answer
-    var words = shuffle(wordPool[i].words);
+  //  var words = shuffle(wordPool[i].words);
 
     // Randomize the order of the decoy words and choose the first 5
-    var decoys = shuffle(wordPool[i].decoys).slice(0,5);
+   // var decoys = shuffle(wordPool[i].decoys).slice(0,5);
 
     // Pick a random spot in the decoy list to put the correct answer
-    var rnd = Math.floor(Math.random() * 5);
-    decoys.splice(rnd, 0, words[1]);
+   // var rnd = Math.floor(Math.random() * 5);
+   // decoys.splice(rnd, 0, words[1]);
 
     // Package the words into a single object.
-    var wordData = {
+  /*  var wordData = {
         round: i,
         word : words[0],   // Displayed Word
         answer : words[1], // Correct Answer
@@ -190,8 +194,17 @@ function getWordData(i){
     };
 
     return wordData;
+}*/
+function getSquareData(i){
+//	var deck = shuffle(i);
+	var squareData = {
+	    round : i,
+	    square : deck[0]
+	};
+console.log(squareData);  
+  return squareData;
 }
-
+//getSquareData();
 /*
  * Javascript implementation of Fisher-Yates shuffle algorithm
  * http://stackoverflow.com/questions/2450954/how-to-randomize-a-javascript-array
@@ -213,7 +226,6 @@ function shuffle(array) {
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
-
     return array;
 }
 
@@ -226,13 +238,157 @@ function shuffle(array) {
  *
  * @type {Array}
  */
-var wordPool = [
+
+console.log(deck);
+	var deck  = [
+		{ 
+			"pattern" : [1,0,3,2,5,4,7,6],
+			"isDealt" : false
+		},
+		{		 
+			"pattern" : [4,5,6,7,0,1,2,3],
+			"isDealt" : false
+		},	
+		{ 
+			"pattern" : [1,0,7,5,6,3,4,2],
+			"isDealt" : false
+		},	
+		{ 
+			"pattern" : [1,0,5,7,6,2,4,3],
+			"isDealt" : false
+		},	
+		{ 
+			"pattern" : [1,0,6,7,5,4,2,3],
+			"isDealt" : false
+		},	
+		{ 
+			"pattern" : [1,0,7,4,3,6,5,2],
+			"isDealt" : false
+		},	
+		{ 
+			"pattern" : [1,0,5,6,7,2,3,4],
+			"isDealt" : false
+		},		
+		{ 
+			"pattern" : [2,4,0,5,1,3,7,6],
+			"isDealt" : false
+		},	
+		{ 
+			"pattern" : [2,3,0,1,5,4,7,6],
+			"isDealt" : false
+		},	
+		{ 
+			"pattern" : [2,4,0,6,1,5,6,5],
+			"isDealt" : false
+		},	
+		{ 
+			"pattern" : [2,5,0,6,7,1,3,4],
+			"isDealt" : false
+		},	
+		{ 
+			"pattern" : [2,4,0,7,1,6,5,3],
+			"isDealt" : false
+		},	
+		{ 
+			"pattern" : [2,5,0,7,6,1,4,3],
+			"isDealt" : false
+		},	
+		{ 
+			"pattern" : [3,7,4,0,2,6,5,1],
+			"isDealt" : false
+		},	
+		{ 
+			"pattern" : [3,5,6,0,7,1,2,4],
+			"isDealt" : false
+		},	
+		{ 
+			"pattern" : [3,2,1,0,5,4,7,6],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [3,6,5,0,7,2,1,4],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [4,6,3,2,0,7,1,5],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [4,7,6,5,0,3,2,1],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [4,6,7,5,0,3,1,2],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [5,4,7,6,1,0,3,2],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [5,4,3,2,1,0,7,6],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [5,4,6,7,1,0,2,3],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [5,7,6,4,3,0,2,1],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [5,2,1,6,7,0,3,4],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [6,3,4,1,2,7,0,5],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [6,7,5,4,3,2,0,1],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [6,3,5,1,7,2,0,4],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [6,7,4,5,2,3,0,1],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [7,5,6,4,3,1,2,0],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [7,5,3,2,6,1,4,0],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [7,6,5,4,3,2,1,0],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [7,2,1,4,3,6,5,0],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [7,3,4,1,2,6,5,0],
+			"isDealt" : false
+		},
+		{ 
+			"pattern" : [7,3,6,1,5,4,2,0],
+			"isDealt" : false
+		}
+	];
+/*var wordPool = [
     {
         "words"  : [ "sale","seal","ales","leas" ],
         "decoys" : [ "lead","lamp","seed","eels","lean","cels","lyse","sloe","tels","self" ]
     }
 
-  /*  {
+    {
         "words"  : [ "item","time","mite","emit" ],
         "decoys" : [ "neat","team","omit","tame","mate","idem","mile","lime","tire","exit" ]
     },
@@ -276,4 +432,4 @@ var wordPool = [
         "words"  : [ "stone","tones","steno","onset" ],
         "decoys" : [ "snout","tongs","stent","tense","terns","santo","stony","toons","snort","stint" ]
     }*/
-]
+//];
