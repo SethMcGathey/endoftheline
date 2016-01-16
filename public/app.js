@@ -316,7 +316,6 @@ jQuery(function($){
 
                 // Increment the number of players in the room
                 App.Host.numPlayersInRoom += 1;
-
                 // If two players have joined, start the game!
 				
                 if (App.Host.numPlayersInRoom == App.numOfPlayers) {
@@ -422,6 +421,8 @@ jQuery(function($){
 	    createBoard : function() {
 		App.Host.board = new Array(8); 
 		//App.Host.square = [[6, 5, 4, 7, 2, 1, 0, 3], [4, 7, 6, 5, 0, 3, 2, 1], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
+		//App.Host.square = [[5, 4, 7, 6, 1, 0, 3, 2], [6, 3, 5, 1, 7, 2, 0, 4], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
+		//App.Host.playerCards = [[0, 1, 2, 3], [3, 2, 1, 0], [1, 3, 2, 0], [2, 1, 0, 3]];
 		App.Host.square =[[1,0,3,2,5,4,7,6],
 				 [4,5,6,7,0,1,2,3],
 				 [1,0,7,5,6,3,4,2],
@@ -869,7 +870,9 @@ Host.player[individual][2]]);
              * The player's name entered on the 'Join' screen.
              */
             myName: '',
-	    
+	   
+	    myID: 0,
+ 
             /**
              * Click handler for the 'JOIN' button
              */
@@ -890,9 +893,8 @@ Host.player[individual][2]]);
                 // collect data to send to the server
                 var data = {
                     gameId : +($('#inputGameId').val()),
-                    playerName : $('#inputPlayerName').val() || 'anon'
+                    playerName : $('#inputPlayerName').val() || 'anon',
                 };
-
                 // Send the gameId and playerName to the server
                 IO.socket.emit('playerJoinGame', data);
 
@@ -900,7 +902,7 @@ Host.player[individual][2]]);
                 App.myRole = 'Player';
                 App.Player.myName = data.playerName;
 		/*******ADDED BY BECKY********/
-		App.Player.cards = [0, 1, 2, 3];
+		App.Player.cards = [[0, 1, 2, 3],[2, 0, 1, 3]];
 		/*******ADDED BY BECKY********/
             },
 
@@ -972,18 +974,19 @@ Host.player[individual][2]]);
 
 		/*******ADDED BY BECKY********/	
 		var $cardlist = $('<ul/>').attr('id','ulAnswers');
-		for (var card in App.Player.cards) {
+		for (var card in App.Player.cards[App.Player.myID]) {
 		     $cardlist                                //  <ul> </ul>
                         .append( $('<li/>')              //  <ul> <li> </li> </ul>
                             .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
                                 .addClass('btnAnswer')   //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
                                 .addClass('btn')         //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
-                                .val(card)               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
-                                .html(card)              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
+                                .val(App.Player.cards[App.Player.myID][card])               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
+                                .html(App.Player.cards[App.Player.myID][card])              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
                             )
                         )
 		};	
-		
+		console.log('MyID: '+App.Player.myID);
+		console.log('MyName: '+App.Player.myName);
 		/*******ADDED BY BECKY********/
                 // Insert a list item for each word in the word list
                 // received from the server.
@@ -1002,7 +1005,6 @@ Host.player[individual][2]]);
                 // Insert the list onto the screen.
                // $('#gameArea').html($list);
 		$('#gameArea').html($cardlist);
-		$('#gameArea').append(App.Player.myName);
             },
 
             /**
@@ -1042,7 +1044,7 @@ Host.player[individual][2]]);
             // console.log('Starting Countdown...');
 
             // Start a 1 second timer
-            var timer = setInterval(countItDown,1000);
+            var timer = setInterval(countItDown,500);
 
             // Decrement the displayed timer value on each 'tick'
             function countItDown(){
