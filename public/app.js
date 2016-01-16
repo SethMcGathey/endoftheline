@@ -359,7 +359,7 @@ jQuery(function($){
 		    $('#playerScores')
 			
                     	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">'+App.Host.players[i].playerName+'</span> </div>');
-			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], i + "becky"];
+			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], 1];
 			//innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], App.Player.myName];
 			App.Host.player[i] = innerPlayerArray;	
 			//console.log("entered player " + startingspots[i][0] + " " +  startingspots[i][1] + " " + startingspots[i][2] + " " + App.Player.myName);
@@ -550,6 +550,11 @@ jQuery(function($){
 		var swapPosition = [5,4,7,6,1,0,3,2]; //swapPosition converts the position of old location into position of new location
 		for(individual in App.Host.player)
 		{
+		var playersLeft = [0,0];
+		if(!App.Host.player[individual][3])
+		{
+			playersLeft[0]++;
+			playersLeft[1] = individual;
 			if(App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)
 			{
 				if(App.Host.board[ App.Host.player[individual][0]-1 ][ App.Host.player[individual][1] ] != '_')
@@ -598,6 +603,11 @@ jQuery(function($){
 	        console.log(App.Host.board[6]);
 	        console.log(App.Host.board[7]);
 		console.log(App.Host.player[individual][3] + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
+}
+if(playersLeft[0] == 1)
+{
+	//playersLeft[1] will be equal to the number to access the winning player;
+}
 },
 
    //added by Becky
