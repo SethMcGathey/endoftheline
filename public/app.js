@@ -26,6 +26,7 @@ jQuery(function($){
             IO.socket.on('newGameCreated', IO.onNewGameCreated );
             IO.socket.on('playerJoinedRoom', IO.playerJoinedRoom );
 	    IO.socket.on('sendPlayerCount', IO.sendPlayerCount );
+	    IO.socket.on('sendLoseMessage', IO.sendLoseMessage );
             IO.socket.on('beginNewGame', IO.beginNewGame );
             IO.socket.on('newWordData', IO.onNewWordData);
             IO.socket.on('hostCheckAnswer', IO.hostCheckAnswer);
@@ -69,6 +70,11 @@ jQuery(function($){
 		App.Player.assignPlayerCount(playerCount);
 	
 	},
+
+	sendLoseMessage : function() {
+                App.Player.youLose();
+
+        },
 
         /**
          * Both players have joined the game.
@@ -123,15 +129,25 @@ jQuery(function($){
 	    //change turn
 	    if (App.currentRound < (App.Host.numPlayersInRoom - 1)) {
 		App.currentRound += 1;
+		IO.checkIfOut(App.currentRound);
             }
 	    else if (App.currentRound == (App.Host.numPlayersInRoom - 1)) {
 		App.currentRound = 0;
+		IO.checkIfOut(App.currentRound);
 	    }
+
             if(App.myRole === 'Host') {
 		//console.log('Player Turn: '+App.currentRound+', Answer: '+data.answer+', Player Y: '+playerY+', Player X: '+playerX+'. ');
                 App.Host.addSquare(playerY, playerX, data.answer);
             }
         },
+
+	checkIfOut : function(player) {
+		if(App.Host.player[player][3] == 0) {
+			App.currentRound += 1;
+			IO.checkIfOut(App.currentRound);
+		}
+	},
 	/*****ADDED BY BECKY*****/
         /**
          * Let everyone know the game has ended.
@@ -370,8 +386,8 @@ jQuery(function($){
                 	//$('#player' + i  + 'Score').find('.score').attr('id',App.Host.players[i-1].mySocketId);
 		}
 		//CODE BY BECKY - create board and display on page
-		App.Host.createBoard();
-		App.Host.drawBoard(6);
+		//App.Host.createBoard();
+		//App.Host.drawBoard(6);
 		//for (var player in App.Host.player) {
 			//App.Host.showPlayer(App.Host.player[player][1]-1, App.Host.player[player][0]-1,App.Host.player[player][2]);
 
@@ -400,6 +416,11 @@ jQuery(function($){
                 // Insert the new word into the DOM
                 $('#hostWord').text(data.word);
                 App.doTextFit('#hostWord');
+		//ADDED BY BECKY
+		$('#wordArea').html('<canvas id="myCanvas" width="600" height="600"></canvas>');
+		App.Host.createBoard();
+		App.Host.drawBoard(6);
+		//ADDED BY BECKY
 
                 // Update the data for the current round
                 App.Host.currentCorrectAnswer = data.answer;
@@ -1112,6 +1133,11 @@ console.log( App.Host.square[4] );
                     .html('<div class="gameOver">Get Ready!</div>');
             },
 
+	    youLose : function() {
+                $('#gameArea')
+                    .html('<div class="gameOver">Bummer, you lose!</div>');
+            },
+
             /**
              * Show the list of words for the current round.
              * @param data{{round: *, word: *, answer: *, list: Array}}
@@ -1194,7 +1220,7 @@ console.log( App.Host.square[4] );
             // console.log('Starting Countdown...');
 
             // Start a 1 second timer
-            var timer = setInterval(countItDown,50);
+            var timer = setInterval(countItDown,1000);
 
             // Decrement the displayed timer value on each 'tick'
             function countItDown(){
