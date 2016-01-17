@@ -208,7 +208,7 @@ function getSquareData(i){
 	    round : i,
 	    square : deck[i]
 	};
-console.log(squareData);  
+//console.log(squareData);  
   return squareData;
 }
 //getSquareData();
