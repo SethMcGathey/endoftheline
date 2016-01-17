@@ -347,14 +347,14 @@ jQuery(function($){
 
 		App.Host.player = new Array(App.numOfPlayers);
 		//[7,5,0] player 2
-		var startingspots = [[0,2,4],
-				     [7,2,1],
-				     [5,0,2],
-				     [2,7,6],
-				     [7,3,1],
-				     [0,4,5],
-				     [4,7,7],
-			             [3,0,3]];
+		var startingspots = [[0,2,4, '#900000'],
+				     [7,2,1, '#003366'],
+				     [5,0,2, '#006600'],
+				     [2,7,6, '#660099'],
+				     [7,3,1, '#FFCC33'],
+				     [0,4,5, '#000000'],
+				     [4,7,7, '#FFFFFF'],
+			             [3,0,3, '#33FFFF']];
 		var innerPlayerArray = new Array(4);
                 // Display the players' names on screen
 		for(var i = 0; i < App.numOfPlayers; i++)
@@ -362,7 +362,7 @@ jQuery(function($){
 		    $('#playerScores')
 			
                     	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">'+App.Host.players[i].playerName+'</span> </div>');
-			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], 1];
+			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], 1, startingspots[i][3]];
 			//innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], App.Player.myName];
 			App.Host.player[i] = innerPlayerArray;	
 			//console.log("entered player " + startingspots[i][0] + " " +  startingspots[i][1] + " " + startingspots[i][2] + " " + App.Player.myName);
@@ -372,6 +372,10 @@ jQuery(function($){
 		//CODE BY BECKY - create board and display on page
 		App.Host.createBoard();
 		App.Host.drawBoard(6);
+		//for (var player in App.Host.player) {
+			//App.Host.showPlayer(App.Host.player[player][1]-1, App.Host.player[player][0]-1,App.Host.player[player][2]);
+
+		//}
 	//	App.Host.addSquare(2, 1, 2);
 	/*	$('#board').append(App.Host.board+'<br>');
                 $('#board').append('Original Board <br>');
@@ -428,7 +432,8 @@ jQuery(function($){
 		//App.Host.square = [[6, 5, 4, 7, 2, 1, 0, 3], [4, 7, 6, 5, 0, 3, 2, 1], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
 		//App.Host.square = [[5, 4, 7, 6, 1, 0, 3, 2], [6, 3, 5, 1, 7, 2, 0, 4], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
 		//App.Host.playerCards = [[0, 1, 2, 3], [3, 2, 1, 0], [1, 3, 2, 0], [2, 1, 0, 3]];
-		App.Host.square =[[1,0,3,2,5,4,7,6],
+//testing	
+	App.Host.square =[[1,0,3,2,5,4,7,6],
 				 [4,5,6,7,0,1,2,3],
 				 [1,0,7,5,6,3,4,2],
 				 [1,0,5,7,6,2,4,3],
@@ -547,6 +552,39 @@ jQuery(function($){
 	},
 	/*****End Added by MC*****/	
 
+	showPlayer : function (x,y,playerposition, color) {
+		if(playerposition == 0){
+			var brdx =((x * 100) + 33);
+			var brdy = (y * 100);
+		} else if (playerposition == 1){
+			var brdx =((x * 100) + 66);
+			var brdy = (y * 100);
+		} else if (playerposition == 2){
+			var brdx =((x * 100) + 85);
+			var brdy = ((y * 100) + 33);
+		} else if (playerposition == 3){
+			var brdx =((x * 100) + 85);
+			var brdy = ((y * 100) + 66);
+		} else if (playerposition == 4){
+			var brdx =((x * 100) + 66);
+			var brdy = ((y * 100) + 85);
+		} else if (playerposition == 5){
+			var brdx =((x * 100) + 33);
+			var brdy = ((y * 100) + 85);
+		} else if (playerposition == 6){
+			var brdx =(x * 100);
+			var brdy = ((y * 100) + 66);
+		} else if (playerposition == 7){
+			var brdx =(x * 100);
+			var brdy = ((y * 100) + 33);
+		}
+		var c = document.getElementById("myCanvas");
+		var ctx = c.getContext("2d");
+		ctx.fillStyle = color;
+		ctx.fillRect(brdx,brdy,15,15);
+	},
+
+
            addSquare : function(y, x, squareNumber) {
 		App.Host.board[y][x] = squareNumber; 
 		/*$('#board').append(App.Host.board[0] + ' <br>');
@@ -592,6 +630,7 @@ console.log( App.Host.square[1] );
 console.log( App.Host.square[2] );
 console.log( App.Host.square[3] );
 console.log( App.Host.square[4] );
+App.Host.showPlayer(App.Host.player[individual][1]-1, App.Host.player[individual][0]-1,App.Host.player[individual][2], App.Host.player[individual][4]);
 						App.Host.movePlayerRecursive();
 	
 					}
@@ -607,6 +646,7 @@ console.log( App.Host.square[1] );
 console.log( App.Host.square[2] );
 console.log( App.Host.square[3] );
 console.log( App.Host.square[4] );
+App.Host.showPlayer(App.Host.player[individual][1]-1, App.Host.player[individual][0]-1,App.Host.player[individual][2], App.Host.player[individual][4]);
 						App.Host.movePlayerRecursive();	
 					}
 				}else if(App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5)
@@ -621,6 +661,7 @@ console.log( App.Host.square[1] );
 console.log( App.Host.square[2] );
 console.log( App.Host.square[3] );
 console.log( App.Host.square[4] );
+App.Host.showPlayer(App.Host.player[individual][1]-1, App.Host.player[individual][0]-1,App.Host.player[individual][2], App.Host.player[individual][4]);
 						App.Host.movePlayerRecursive();
 					}
 				}else if(App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7)
@@ -634,7 +675,8 @@ console.log( App.Host.square[0] );
 console.log( App.Host.square[1] );
 console.log( App.Host.square[2] );
 console.log( App.Host.square[3] );
-console.log( App.Host.square[4] );					
+console.log( App.Host.square[4] );
+App.Host.showPlayer(App.Host.player[individual][1]-1, App.Host.player[individual][0]-1,App.Host.player[individual][2], App.Host.player[individual][4]);					
 	App.Host.movePlayerRecursive();			
 					}
 				}
