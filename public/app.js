@@ -867,6 +867,8 @@ App.Host.showPlayer(App.Host.player[individual][1]-1, App.Host.player[individual
             myName: '',
 	
 	    myID: 0,
+	    
+	    totalPlayerCount: 0,
  
             /**
              * Click handler for the 'JOIN' button
@@ -905,6 +907,7 @@ App.Host.showPlayer(App.Host.player[individual][1]-1, App.Host.player[individual
 
 	    assignPlayerCount: function(playerCount) {
 		App.Player.myID = playerCount;
+		App.Player.totalPlayerCount = playerCount +1;
 	    },
 
             /**
