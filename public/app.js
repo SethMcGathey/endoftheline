@@ -26,6 +26,7 @@ jQuery(function($){
             IO.socket.on('newGameCreated', IO.onNewGameCreated );
             IO.socket.on('playerJoinedRoom', IO.playerJoinedRoom );
 	    IO.socket.on('sendPlayerCount', IO.sendPlayerCount );
+	    IO.socket.on('sendLoseMessage', IO.sendLoseMessage );
             IO.socket.on('beginNewGame', IO.beginNewGame );
             IO.socket.on('newWordData', IO.onNewWordData);
             IO.socket.on('hostCheckAnswer', IO.hostCheckAnswer);
@@ -69,6 +70,11 @@ jQuery(function($){
 		App.Player.assignPlayerCount(playerCount);
 	
 	},
+
+	sendLoseMessage : function() {
+                App.Player.youLose();
+
+        },
 
         /**
          * Both players have joined the game.
@@ -123,15 +129,25 @@ jQuery(function($){
 	    //change turn
 	    if (App.currentRound < (App.Host.numPlayersInRoom - 1)) {
 		App.currentRound += 1;
+		IO.checkIfOut(App.currentRound);
             }
 	    else if (App.currentRound == (App.Host.numPlayersInRoom - 1)) {
 		App.currentRound = 0;
+		IO.checkIfOut(App.currentRound);
 	    }
+
             if(App.myRole === 'Host') {
 		//console.log('Player Turn: '+App.currentRound+', Answer: '+data.answer+', Player Y: '+playerY+', Player X: '+playerX+'. ');
                 App.Host.addSquare(playerY, playerX, data.answer);
             }
         },
+
+	checkIfOut : function(player) {
+		if(App.Host.player[player][3] == 0) {
+			App.currentRound += 1;
+			IO.checkIfOut(App.currentRound);
+		}
+	},
 	/*****ADDED BY BECKY*****/
         /**
          * Let everyone know the game has ended.
@@ -347,6 +363,9 @@ jQuery(function($){
 
 		App.Host.player = new Array(App.numOfPlayers);
 		//[7,5,0] player 2
+
+		App.Host.playersLeft = [App.numOfPlayers, 0]; //keeps track of players still in the game;
+
 		var startingspots = [[0,2,4, '#900000'],
 				     [7,5,1, '#003366'],
 				     [5,0,2, '#006600'],
@@ -370,8 +389,8 @@ jQuery(function($){
                 	//$('#player' + i  + 'Score').find('.score').attr('id',App.Host.players[i-1].mySocketId);
 		}
 		//CODE BY BECKY - create board and display on page
-		App.Host.createBoard();
-		App.Host.drawBoard(6);
+		//App.Host.createBoard();
+		//App.Host.drawBoard(6);
 		//for (var player in App.Host.player) {
 			//App.Host.showPlayer(App.Host.player[player][1]-1, App.Host.player[player][0]-1,App.Host.player[player][2]);
 
@@ -400,6 +419,11 @@ jQuery(function($){
                 // Insert the new word into the DOM
                 $('#hostWord').text(data.word);
                 App.doTextFit('#hostWord');
+		//ADDED BY BECKY
+		$('#wordArea').html('<canvas id="myCanvas" width="600" height="600"></canvas>');
+		App.Host.createBoard();
+		App.Host.drawBoard(6);
+		//ADDED BY BECKY
 
                 // Update the data for the current round
                 App.Host.currentCorrectAnswer = data.answer;
@@ -609,6 +633,20 @@ jQuery(function($){
 		App.Host.squareMaker(y-1,x-1,App.Host.square[squareNumber] );
 		//App.Host.movePlayerRecursive(); //Added by seth
 	   },		
+
+	playerKilled : function(individual)
+	{
+		console.log("Individual " + individual + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2]);
+		if( (App.Host.player[individual][0] == 1 && (App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)) 
+		||  (App.Host.player[individual][0] == 6 && (App.Host.player[individual][2] == 4 || App.Host.player[individual][2] == 5))
+		||  (App.Host.player[individual][1] == 1 && (App.Host.player[individual][2] == 6 || App.Host.player[individual][2] == 7))
+		||  (App.Host.player[individual][1] == 6 && (App.Host.player[individual][2] == 2 || App.Host.player[individual][2] == 3)) )
+		{
+			console.log("Player died");
+			App.Host.player[individual][3] = 0; //player not Alive
+			App.Host.playersLeft[0] = App.Host.playersLeft[0] - 1;
+		}
+	},
 	
 
 	   /***********Added by Seth**************/
@@ -617,14 +655,15 @@ jQuery(function($){
 		//checks if player is in a touching square and also on the touching two positions of that square. If so then return true else false.
 		var individual;
 		var swapPosition = [5,4,7,6,1,0,3,2]; //swapPosition converts the position of old location into position of new location
+		//App.Host.playersLeft = [0, App.numOfPlayers]; //keeps track of players still in the game;
 		for(individual in App.Host.player)
 		{
-			App.Host.playersLeft = [0,0]; //keeps track of players still in the game;
+			App.Host.playerKilled(individual);
 			if(App.Host.player[individual][3])
-			{
-				App.Host.playersLeft[0]++;
-				App.Host.playersLeft[1] = individual;
-console.log(App.Host.playersLeft[0]);
+			{	
+				//App.Host.playersLeft[0]++;
+				App.Host.playersLeft[1] = individual;//stores the last living player 
+				console.log("Players left " + App.Host.playersLeft[0] + " Player who is left " + App.Host.playersLeft[1] + " Player life status " + App.Host.player[individual][3]);
 				if(App.Host.player[individual][2] == 0 || App.Host.player[individual][2] == 1)
 				{
 					if(App.Host.board[ App.Host.player[individual][0]-1 ][ App.Host.player[individual][1] ] != '_')
@@ -632,11 +671,6 @@ console.log(App.Host.playersLeft[0]);
 						App.Host.player[individual][0] = App.Host.player[individual][0]-1; //sets players y to y of new piece
 						App.Host.player[individual][2] = App.Host.square[  App.Host.board[  App.Host.player[ individual ][ 0 ]  ][ App.Host.player[ individual ][ 1 ] ]  ][ swapPosition[ App.Host.player[ individual ][ 2 ] ]  ]; //maps players position to new position
                                                 console.log("Player" + individual + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2] + " " + swapPosition[App.Host.player[individual][2]]);
-console.log( App.Host.square[0] );
-console.log( App.Host.square[1] );
-console.log( App.Host.square[2] );
-console.log( App.Host.square[3] );
-console.log( App.Host.square[4] );
 App.Host.showPlayer(App.Host.player[individual][1]-1, App.Host.player[individual][0]-1,App.Host.player[individual][2], App.Host.player[individual][4]);
 						App.Host.movePlayerRecursive();
 	
@@ -647,12 +681,7 @@ App.Host.showPlayer(App.Host.player[individual][1]-1, App.Host.player[individual
 					{
 						App.Host.player[individual][1] = App.Host.player[individual][1]+1; //sets players x to x of new piece	
 						App.Host.player[individual][2] = App.Host.square[  App.Host.board[App.Host.player[individual][0]][App.Host.player[individual][1]]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position
-                                               console.log("Player" + individual + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2] + " " + swapPosition[App.Host.player[individual][2]]);
-console.log( App.Host.square[0] );
-console.log( App.Host.square[1] );
-console.log( App.Host.square[2] );
-console.log( App.Host.square[3] );
-console.log( App.Host.square[4] );
+                                                console.log("Player" + individual + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2] + " " + swapPosition[App.Host.player[individual][2]]);
 App.Host.showPlayer(App.Host.player[individual][1]-1, App.Host.player[individual][0]-1,App.Host.player[individual][2], App.Host.player[individual][4]);
 						App.Host.movePlayerRecursive();	
 					}
@@ -663,11 +692,6 @@ App.Host.showPlayer(App.Host.player[individual][1]-1, App.Host.player[individual
 						App.Host.player[individual][0] = App.Host.player[individual][0]+1; //sets players y to y of new piece	
 						App.Host.player[individual][2] = App.Host.square[  App.Host.board[App.Host.player[individual][0]][App.Host.player[individual][1]]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position		
                                                 console.log("Player" + individual + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2] + " " + swapPosition[App.Host.player[individual][2]]);
-console.log( App.Host.square[0] );
-console.log( App.Host.square[1] );
-console.log( App.Host.square[2] );
-console.log( App.Host.square[3] );
-console.log( App.Host.square[4] );
 App.Host.showPlayer(App.Host.player[individual][1]-1, App.Host.player[individual][0]-1,App.Host.player[individual][2], App.Host.player[individual][4]);
 						App.Host.movePlayerRecursive();
 					}
@@ -677,14 +701,9 @@ App.Host.showPlayer(App.Host.player[individual][1]-1, App.Host.player[individual
 					{
 						App.Host.player[individual][1] = App.Host.player[individual][1]-1; //sets players x to x of new piece
 						App.Host.player[individual][2] = App.Host.square[  App.Host.board[App.Host.player[individual][0]][App.Host.player[individual][1]]  ][  swapPosition[ App.Host.player[individual][2] ]  ]; //maps players position to new position		
-console.log("Player" + individual + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2] + " " + swapPosition[App.Host.player[individual][2]]);
-console.log( App.Host.square[0] );
-console.log( App.Host.square[1] );
-console.log( App.Host.square[2] );
-console.log( App.Host.square[3] );
-console.log( App.Host.square[4] );
+						console.log("Player" + individual + " " + App.Host.player[individual][0] + " " + App.Host.player[individual][1] + " " + App.Host.player[individual][2] + " " + swapPosition[App.Host.player[individual][2]]);
 App.Host.showPlayer(App.Host.player[individual][1]-1, App.Host.player[individual][0]-1,App.Host.player[individual][2], App.Host.player[individual][4]);					
-	App.Host.movePlayerRecursive();			
+						App.Host.movePlayerRecursive();			
 					}
 				}
 			}
@@ -692,6 +711,7 @@ App.Host.showPlayer(App.Host.player[individual][1]-1, App.Host.player[individual
 		if(App.Host.playersLeft[0] == 1)
 		{
 			//playersLeft[1] will be equal to the number to access the winning player;
+			$('#playerScores').append('<div id="playerScore" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">'+App.Host.players[App.Host.playersLeft[1]].playerName+'Is the Winner! </span> </div>');
 		}
 	},
 
@@ -1031,6 +1051,11 @@ App.Host.showPlayer(App.Host.player[individual][1]-1, App.Host.player[individual
                     .html('<div class="gameOver">Get Ready!</div>');
             },
 
+	    youLose : function() {
+                $('#gameArea')
+                    .html('<div class="gameOver">Bummer, you lose!</div>');
+            },
+
             /**
              * Show the list of words for the current round.
              * @param data{{round: *, word: *, answer: *, list: Array}}
@@ -1113,7 +1138,7 @@ App.Host.showPlayer(App.Host.player[individual][1]-1, App.Host.player[individual
             // console.log('Starting Countdown...');
 
             // Start a 1 second timer
-            var timer = setInterval(countItDown,50);
+            var timer = setInterval(countItDown,1000);
 
             // Decrement the displayed timer value on each 'tick'
             function countItDown(){
