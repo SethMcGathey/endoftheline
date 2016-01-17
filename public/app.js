@@ -405,7 +405,7 @@ jQuery(function($){
 	    drawBoard : function(size) { 
 				var c = document.getElementById("myCanvas");
                         	var ctx = c.getContext("2d");
-				ctx.strokeStyle = 'black';
+				ctx.strokeStyle = 'rgba(0,0,0,.2)';
 				ctx.lineWidth = 2;
 				//vertical line generator
 				for(var i = 1; i < size; i++){
@@ -428,8 +428,8 @@ jQuery(function($){
 		//App.Host.square = [[6, 5, 4, 7, 2, 1, 0, 3], [4, 7, 6, 5, 0, 3, 2, 1], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
 		//App.Host.square = [[5, 4, 7, 6, 1, 0, 3, 2], [6, 3, 5, 1, 7, 2, 0, 4], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
 		//App.Host.playerCards = [[0, 1, 2, 3], [3, 2, 1, 0], [1, 3, 2, 0], [2, 1, 0, 3]];
-//testing	
-	App.Host.square =[[1,0,3,2,5,4,7,6],
+	
+	       App.Host.square =[[1,0,3,2,5,4,7,6],
 				 [4,5,6,7,0,1,2,3],
 				 [1,0,7,5,6,3,4,2],
 				 [1,0,5,7,6,2,4,3],
@@ -531,8 +531,8 @@ jQuery(function($){
 			var c = document.getElementById("myCanvas");
          	       var ctx = c.getContext("2d");
 			var boardTile = App.Host.boardCoordinates[brdy][brdx];
-			ctx.lineWidth = 7;
-			ctx.strokeStyle = '#'+Math.random().toString(16).substr(-6);
+			ctx.lineWidth = 5;
+			ctx.strokeStyle = '#584D58';
 			var newArr = [];
 
 			for(var i = 0; i < squareArr.length; i++){
