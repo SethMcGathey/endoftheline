@@ -560,17 +560,17 @@ jQuery(function($){
 			var brdx =((x * 100) + 66);
 			var brdy = (y * 100);
 		} else if (playerposition == 2){
-			var brdx =((x * 100) + 85);
+			var brdx =((x * 100) + 100);
 			var brdy = ((y * 100) + 33);
 		} else if (playerposition == 3){
-			var brdx =((x * 100) + 85);
+			var brdx =((x * 100) + 100);
 			var brdy = ((y * 100) + 66);
 		} else if (playerposition == 4){
 			var brdx =((x * 100) + 66);
-			var brdy = ((y * 100) + 85);
+			var brdy = ((y * 100) + 100);
 		} else if (playerposition == 5){
 			var brdx =((x * 100) + 33);
-			var brdy = ((y * 100) + 85);
+			var brdy = ((y * 100) + 100);
 		} else if (playerposition == 6){
 			var brdx =(x * 100);
 			var brdy = ((y * 100) + 66);
@@ -580,8 +580,14 @@ jQuery(function($){
 		}
 		var c = document.getElementById("myCanvas");
 		var ctx = c.getContext("2d");
+		ctx.beginPath();
 		ctx.fillStyle = color;
-		ctx.fillRect(brdx,brdy,15,15);
+     		ctx.arc(brdx, brdy, 7, 0, 2 * Math.PI, false);
+		ctx.fill();
+       		ctx.lineWidth = 2;
+		ctx.stroke();
+
+//		ctx.fillRect(brdx,brdy,15,15);
 	},
 
 
