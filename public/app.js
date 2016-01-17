@@ -995,10 +995,30 @@ console.log( App.Host.square[4] );
 
 
             dealCards: function() {
-                App.Player.cards = new Array(App.numOfPlayers);
+
+		App.Player.cards[j][i] = [i+totalPlayerCount,i+totalPlayerCount+1,i+totoalPlayerCount+2,i+totalPlayerCount+3];
+                App.Player.cards = new Array(App.Player.totalPlayerCount);
                 for(var i = 0; i < 4; i++)
                 {
-                        for(var j = 0; j < App.numOfPlayers; j++)
+                	App.Player.cards[j][i] = [i, i, i, i];
+                }
+                console.log(App.Player.cards[0]);
+                console.log(App.Player.cards[1]);
+                console.log(App.Player.cards[2]);
+                console.log(App.Player.cards[3]);
+                console.log(App.Player.cards[4]);
+                console.log(App.Player.cards[5]);
+                console.log(App.Player.cards[6]);
+                console.log(App.Player.cards[7]);
+
+            },
+
+
+            dealCards2: function() {
+                App.Player.cards = new Array(App.Player.totalPlayerCount);
+                for(var i = 0; i < 4; i++)
+                {
+                        for(var j = 0; j < App.Player.totalPlayerCount; j++)
                         {
                                 if(i == 0)
                                 {
@@ -1006,7 +1026,7 @@ console.log( App.Host.square[4] );
                                         App.Player.cards[j] = tempArray;
                                         console.log(tempArray);
                                 }
-                                App.Player.cards[j][i] = (i * App.numOfPlayers) + j;
+                                App.Player.cards[j][i] = (i * App.Player.totalPlayerCount) + j;
                         }
                 }
                 console.log(App.Player.cards[0]);
@@ -1093,6 +1113,9 @@ console.log( App.Host.square[4] );
             newWord : function(data) {
                 // Create an unordered list element
                 //var $list = $('<ul/>').attr('id','ulAnswers');
+		//App.Player.dealCards();
+		App.Player.cards[App.Player.myID] = [App.Player.myID * 4 + 0, App.Player.myID * 4 + 1, App.Player.myID * 4 + 2, App.Player.myID * 4 + 3];
+		console.log(App.Player.cards[App.Player.myID]);
 		/*******ADDED BY BECKY********/	
 		var $cardlist = $('<ul/>').attr('id','ulAnswers');
 		for (var card in App.Player.cards[App.Player.myID]) {
