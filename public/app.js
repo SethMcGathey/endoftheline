@@ -565,9 +565,7 @@ jQuery(function($){
 	    },
 	/*****Added by MC*****/
 	   squareMaker : function(brdy, brdx, squareArr){
-		if (App.Host.boardCoordinates[brdy][brdx] == undefined){
-			console.log("Dead");
-		}else{
+		
 			var c = document.getElementById("myCanvas");
          	       var ctx = c.getContext("2d");
 			var boardTile = App.Host.boardCoordinates[brdy][brdx];
@@ -582,7 +580,7 @@ jQuery(function($){
 				ctx.stroke();
 				newArr.push(boardTile[squareArr[i]])
 			}
-		}
+	
 //			console.log(newArr);
 
 	},
