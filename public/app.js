@@ -143,11 +143,17 @@ jQuery(function($){
         },
 
 	checkIfOut : function(player) {
-/*		if(App.Host.player[player][3] == 0) {
-			App.currentRound += 1;
-			IO.checkIfOut(App.currentRound);
+		if(App.Host.player[player][3] == 0) {
+			if (App.currentRound < (App.Host.numPlayersInRoom - 1)) {
+                		App.currentRound += 1;
+                		IO.checkIfOut(App.currentRound);
+            		}
+            		else if (App.currentRound == (App.Host.numPlayersInRoom - 1)) {
+                		App.currentRound = 0;
+               			 IO.checkIfOut(App.currentRound);
+            		}
 		}
-*/	},
+	},
 	/*****ADDED BY BECKY*****/
         /**
          * Let everyone know the game has ended.
