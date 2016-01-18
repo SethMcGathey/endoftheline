@@ -18,6 +18,7 @@ exports.initGame = function(sio, socket){
     gameSocket.on('hostCountdownFinished', hostStartGame);
     gameSocket.on('hostNextRound', hostNextRound);
     gameSocket.on('playerLost', playerLost);
+    gameSocket.on('playerWin', playerWin);
 
     // Player Events
     gameSocket.on('playerJoinGame', playerJoinGame);
@@ -70,6 +71,10 @@ function hostStartGame(gameId) {
 
 function playerLost(data) {
     io.sockets.in(data.gameId).emit('sendLoseMessage', data.player);
+};
+
+function playerWin(data) {
+    io.sockets.in(data.gameId).emit('sendWinMessage', data.player);
 };
 
 /**

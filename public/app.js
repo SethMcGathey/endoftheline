@@ -27,6 +27,7 @@ jQuery(function($){
             IO.socket.on('playerJoinedRoom', IO.playerJoinedRoom );
 	    IO.socket.on('sendPlayerCount', IO.sendPlayerCount );
 	    IO.socket.on('sendLoseMessage', IO.sendLoseMessage );
+	    IO.socket.on('sendWinMessage', IO.sendWinMessage );
             IO.socket.on('beginNewGame', IO.beginNewGame );
             IO.socket.on('newWordData', IO.onNewWordData);
             IO.socket.on('hostCheckAnswer', IO.hostCheckAnswer);
@@ -73,6 +74,11 @@ jQuery(function($){
 
 	sendLoseMessage : function(player) {
                 App.Player.youLose(player);
+
+        },
+
+	sendWinMessage : function(player) {
+                App.Player.youWin(player);
 
         },
 
@@ -750,8 +756,14 @@ jQuery(function($){
 
 		if(App.Host.playersLeft[0] <= 1)
 		{
+			var data =  {
+                                gameId: App.gameId,
+                                player: App.Host.playersLeft[1]
+                        }
+			console.log(App.Host.playersLeft[1]);
+                        IO.socket.emit('playerWin',data);
 			//playersLeft[1] will be equal to the number to access the winning player;
-			$('#playerScores').append('<div id="playerScore" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">'+App.Host.players[App.Host.playersLeft[1]].playerName+'Is the Winner! </span> </div>');
+			$('#playerScores').html('<div class="youWon">'+App.Host.players[App.Host.playersLeft[1]].playerName+' Is the Winner!</div>');
 		}
 	},
 
@@ -1050,6 +1062,13 @@ jQuery(function($){
                     		.html('<div class="gameOver">Bummer, you lose!</div>');
             	}
 	    },
+
+	    youWin : function(player) {
+                if (App.Player.myID == player && App.myRole == 'Player') {
+                        $('#gameArea')
+                                .html('<div class="gameOver">Awesome, you won!</div>');
+                }
+             },
 
             /**
              * Show the list of words for the current round.
