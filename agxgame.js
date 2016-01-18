@@ -68,8 +68,8 @@ function hostStartGame(gameId) {
     sendWord(0,gameId);
 };
 
-function playerLost(player) {
-    io.sockets.connected[clients[player][0]].emit('sendLoseMessage');
+function playerLost(data) {
+    io.sockets.in(data.gameId).emit('sendLoseMessage', data.player);
 };
 
 /**
