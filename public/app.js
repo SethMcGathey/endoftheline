@@ -668,6 +668,11 @@ jQuery(function($){
 		{
 			console.log("Player died");
 			App.Host.player[individual][3] = 0; //player not Alive
+			var data =  {
+        			gameId: App.gameId,
+        			player: individual
+    			}
+    			IO.socket.emit('playerLost',data);
 			App.Host.playersLeft[0] = App.Host.playersLeft[0] - 1;
 		}
 	},
@@ -1040,7 +1045,7 @@ jQuery(function($){
             },
 
 	    youLose : function(player) {
-		if (App.Player.myID == player) {
+		if (App.Player.myID == player && App.myRole == 'Player') {
                 	$('#gameArea')
                     		.html('<div class="gameOver">Bummer, you lose!</div>');
             	}
