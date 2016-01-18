@@ -431,7 +431,9 @@ jQuery(function($){
 		App.Host.drawBoard(6);
 		var displayPlayerStartingPoints = [[1, 0, 1], [4, 5, 4], [0, 4, 7], [5, 1, 3], [2, 5, 4], [3, 0, 0], [5, 3, 2], [0, 2, 6]]; 
 		for (var player in displayPlayerStartingPoints) {
+			if (player < App.Host.numPlayersInRoom) {
                         App.Host.showPlayer(displayPlayerStartingPoints[player][0], displayPlayerStartingPoints[player][1],displayPlayerStartingPoints[player][2], App.Host.player[player][4]);
+			}
 		}
 		//ADDED BY BECKY
 
@@ -732,7 +734,7 @@ jQuery(function($){
 				}
 			}
 		}
-                console.log(" ");
+                /*console.log(" ");
                 console.log("Individual 0 Y " + App.Host.player[0][0] + " X " + App.Host.player[0][1] + " P " + App.Host.player[0][2] + " isAlive " + App.Host.player[0][3]);
                 console.log("Individual 1 Y " + App.Host.player[1][0] + " X " + App.Host.player[1][1] + " P " + App.Host.player[1][2] + " isAlive " + App.Host.player[1][3]);
                 console.log("Individual 2 Y " + App.Host.player[2][0] + " X " + App.Host.player[2][1] + " P " + App.Host.player[2][2] + " isAlive " + App.Host.player[2][3]);
@@ -741,7 +743,7 @@ jQuery(function($){
                 console.log("Individual 5 Y " + App.Host.player[5][0] + " X " + App.Host.player[5][1] + " P " + App.Host.player[5][2] + " isAlive " + App.Host.player[5][3]);
                 console.log("Individual 6 Y " + App.Host.player[6][0] + " X " + App.Host.player[6][1] + " P " + App.Host.player[6][2] + " isAlive " + App.Host.player[6][3]);
                 console.log("Individual 7 Y " + App.Host.player[7][0] + " X " + App.Host.player[7][1] + " P " + App.Host.player[7][2] + " isAlive " + App.Host.player[7][3]);
-                console.log("Players left " + App.Host.playersLeft[0]);
+                console.log("Players left " + App.Host.playersLeft[0]);*/
 
 		if(App.Host.playersLeft[0] <= 1)
 		{
