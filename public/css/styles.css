@@ -259,6 +259,7 @@ p {
 #hostWord {
     height: 100%;
     width: 100%;
+    color: #F4EBCE;
 }
 
 #hostWord h2, #btnPlayerRestart h3 {
@@ -323,6 +324,7 @@ p {
     height: 20%;
     padding-top: 10%;
     font-size: 2em;
+    color: #F4EBCE;
 }
 
 .btnGameOver {

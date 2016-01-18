@@ -71,8 +71,8 @@ jQuery(function($){
 	
 	},
 
-	sendLoseMessage : function() {
-                App.Player.youLose();
+	sendLoseMessage : function(player) {
+                App.Player.youLose(player);
 
         },
 
@@ -423,6 +423,10 @@ jQuery(function($){
 		$('#wordArea').html('<canvas id="myCanvas" width="600" height="600"></canvas>');
 		App.Host.createBoard();
 		App.Host.drawBoard(6);
+		var displayPlayerStartingPoints = [[1, 0, 1], [4, 5, 4], [0, 4, 7], [5, 1, 3], [2, 5, 4], [3, 0, 0], [5, 3, 2], [0, 2, 6]]; 
+		for (var player in displayPlayerStartingPoints) {
+                        App.Host.showPlayer(displayPlayerStartingPoints[player][0], displayPlayerStartingPoints[player][1],displayPlayerStartingPoints[player][2], App.Host.player[player][4]);
+		}
 		//ADDED BY BECKY
 
                 // Update the data for the current round
@@ -1051,10 +1055,12 @@ App.Host.showPlayer(App.Host.player[individual][1]-1, App.Host.player[individual
                     .html('<div class="gameOver">Get Ready!</div>');
             },
 
-	    youLose : function() {
-                $('#gameArea')
-                    .html('<div class="gameOver">Bummer, you lose!</div>');
-            },
+	    youLose : function(player) {
+		if (App.Player.myID == player) {
+                	$('#gameArea')
+                    		.html('<div class="gameOver">Bummer, you lose!</div>');
+            	}
+	    },
 
             /**
              * Show the list of words for the current round.
