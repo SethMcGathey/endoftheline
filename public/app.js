@@ -1082,6 +1082,7 @@ jQuery(function($){
 		console.log(App.Player.cards[App.Player.myID]);
 		/*******ADDED BY BECKY********/	
 		var $cardlist = $('<ul/>').attr('id','ulAnswers');
+		var n = 0;
 		for (var card in App.Player.cards[App.Player.myID]) {
 		     $cardlist                                //  <ul> </ul>
                         .append( $('<li/>')              //  <ul> <li> </li> </ul>
@@ -1089,9 +1090,10 @@ jQuery(function($){
                                 .addClass('btnAnswer')   //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
                                 .addClass('btn')         //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
                                 .val(App.Player.cards[App.Player.myID][card])               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
-                                .html(App.Player.cards[App.Player.myID][card])              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
+                                .html('<canvas id="playerCanvas'+App.Player.myID+n+'" width="100" height="100"></canvas>')              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
                             )
                         )
+		      n += 1;
 		};	
 		console.log('MyID: '+App.Player.myID);
 		console.log('MyName: '+App.Player.myName);
