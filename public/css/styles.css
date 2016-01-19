@@ -231,6 +231,14 @@ p {
     color: #AE37B2;
 }
 
+.refresh {
+    width: 100%;
+    text-align: center;
+    color: #F4EBCE;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
+    font-size: 3em;
+}
 
 
 /* ******************************

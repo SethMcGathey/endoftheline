@@ -26,6 +26,7 @@ jQuery(function($){
             IO.socket.on('newGameCreated', IO.onNewGameCreated );
             IO.socket.on('playerJoinedRoom', IO.playerJoinedRoom );
 	    IO.socket.on('sendPlayerCount', IO.sendPlayerCount );
+	    IO.socket.on('receiveSquare', IO.receiveSquare );
 	    IO.socket.on('sendLoseMessage', IO.sendLoseMessage );
 	    IO.socket.on('sendWinMessage', IO.sendWinMessage );
             IO.socket.on('beginNewGame', IO.beginNewGame );
@@ -79,6 +80,11 @@ jQuery(function($){
 
 	sendWinMessage : function(player) {
                 App.Player.youWin(player);
+
+        },
+
+	receiveSquare : function(square) {
+                App.Player.playerStoreSquare(square);
 
         },
 
@@ -250,6 +256,7 @@ jQuery(function($){
 	    App.$doc.on('click', '#btnJoinGame', App.Player.onJoinClick);
             App.$doc.on('click', '#btnStart',App.Player.onPlayerStartClick);
             App.$doc.on('click', '.btnAnswer',App.Player.onPlayerAnswerClick);
+	    App.$doc.on('click', '.btnRotate',App.Player.onRotateClick);
             App.$doc.on('click', '#btnPlayerRestart', App.Player.onPlayerRestart);
         },
 
@@ -512,6 +519,11 @@ jQuery(function($){
 				 [7,2,1,4,3,6,5,0],
 				 [7,3,4,1,2,6,5,0],
 				 [7,3,6,1,5,4,2,0]];
+		var data = {
+			square: App.Host.square,
+			gameId: App.gameId
+		}
+		IO.socket.emit('sendSquare',data);
 		App.Host.playerCards = [[0, 1, 2, 3], [3, 2, 1, 0], [1, 3, 2, 0], [2, 1, 0, 3]];
 		for (var i = 0; i < 8; i++) {
 			App.Host.board[i] = new Array(8);
@@ -953,6 +965,7 @@ jQuery(function($){
 	    
 	    totalPlayerCount: 0,
  
+	    square: [],
             /**
              * Click handler for the 'JOIN' button
              */
@@ -999,6 +1012,33 @@ jQuery(function($){
 		App.Player.totalPlayerCount = playerCount +1;
 	    },
 
+	    onRotateClick: function() {
+		
+
+	    },
+
+	     turnSquare : function(/*turnRight*/){
+                /*if(turnRight)
+                {    
+                    var swapSquare = [App.Host.square.shift(), App.Host.square.shift()];//set swap square to first two of square array
+                    App.Host.square[6] = swapSquare[0];//moves these two to the end of square array
+                    App.Host.square[7] = swapSquare[1];
+                }else
+                {*/
+                var swapSquare = [App.Host.square.pop(), App.Host.square.pop()];//sets swapSquare to last two of square array
+                App.Host.square.unshift(swapSquare[1], swapSquare[0]);//adds the two swapSquare onto the front of the square array
+                //}
+                for(var i = 0; i <= 7; i++)
+                {
+                        App.Host.square[i] = (App.Host.square[i] + 2)%8;
+
+                }
+                /*for(var i = 0; i <= 7; i++)
+                {
+                        App.Host.square[i] = (App.Host.square[i] - 2)%8;
+                        
+                }*/
+            },
 
             /**
              *  Click handler for the Player hitting a word in the word list.
@@ -1011,11 +1051,11 @@ jQuery(function($){
                 // Send the player info and tapped word to the server so
                 // the host can check the answer.
                 var data = {
-                gameId: App.gameId,
-                playerId: App.mySocketId,
-                answer: answer,
-		playerOrderId: App.Player.myID,
-                round: App.currentRound
+                	gameId: App.gameId,
+                	playerId: App.mySocketId,
+                	answer: answer,
+			playerOrderId: App.Player.myID,
+                	round: App.currentRound
                 }
                 IO.socket.emit('playerAnswer',data);
             },
@@ -1073,6 +1113,13 @@ jQuery(function($){
                 }
              },
 
+	     playerStoreSquare : function(square) {
+	     if (App.myRole == 'Player') {
+		App.Player.square = square;
+	     }
+             },
+
+
             /**
              * Show the list of words for the current round.
              * @param data{{round: *, word: *, answer: *, list: Array}}
@@ -1096,6 +1143,7 @@ jQuery(function($){
                             )
                         )
 		      n += 1;
+		      $cardlist.append('<div class="refresh"><i class="fa fa-repeat"></i></div>');
 		};	
 		console.log('MyID: '+App.Player.myID);
 		console.log('MyName: '+App.Player.myName);
