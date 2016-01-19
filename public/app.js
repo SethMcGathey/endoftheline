@@ -113,6 +113,7 @@ jQuery(function($){
         },
 	/*****ADDED BY BECKY*****/
 	hostMovePlayer : function(data) {
+	    if (App.currentRound == data.playerOrderId) {
 	    //move player to next square
 	    var playerX;
 	    var playerY;
@@ -146,6 +147,7 @@ jQuery(function($){
 		//console.log('Player Turn: '+App.currentRound+', Answer: '+data.answer+', Player Y: '+playerY+', Player X: '+playerX+'. ');
                 App.Host.addSquare(playerY, playerX, data.answer);
             }
+	    }
         },
 
 	checkIfOut : function(player) {
@@ -1009,10 +1011,11 @@ jQuery(function($){
                 // Send the player info and tapped word to the server so
                 // the host can check the answer.
                 var data = {
-                    gameId: App.gameId,
-                    playerId: App.mySocketId,
-                    answer: answer,
-                    round: App.currentRound
+                gameId: App.gameId,
+                playerId: App.mySocketId,
+                answer: answer,
+		playerOrderId: App.Player.myID,
+                round: App.currentRound
                 }
                 IO.socket.emit('playerAnswer',data);
             },
@@ -1079,7 +1082,6 @@ jQuery(function($){
                 //var $list = $('<ul/>').attr('id','ulAnswers');
 		//App.Player.dealCards();
 		App.Player.cards[App.Player.myID] = [App.Player.myID * 4 + 0, App.Player.myID * 4 + 1, App.Player.myID * 4 + 2, App.Player.myID * 4 + 3];
-		console.log(App.Player.cards[App.Player.myID]);
 		/*******ADDED BY BECKY********/	
 		var $cardlist = $('<ul/>').attr('id','ulAnswers');
 		var n = 0;
