@@ -622,7 +622,7 @@ jQuery(function($){
 					ctx.lineTo(boardTile[squareArr[i]][0], boardTile[squareArr[i]][1]);
 				}
 				ctx.stroke();
-				newArr.push(boardTile[squareArr[i]])
+				newArr.push(boardTile[squareArr[i]]);
 			}
 	
 //			console.log(newArr);
@@ -1101,14 +1101,30 @@ jQuery(function($){
 	    },
 	    squareMaker2: function(context, squareArr){ 
 		var pboard = [[33,0],[66,0],[100,33],[100,66],[66,100],[33,100],[0,66],[0,33]];
-		context.lineWidth = 7;
-		context.strokeStyle = 'black';
+		context.lineWidth = 5;
+		context.strokeStyle = '#584D58';
 
 		for(var i = 0; i < squareArr.length; i++){
 			context.beginPath();
 			
 			context.moveTo(pboard[i][0], pboard[i][1]);
+			if ((i == 0 && squareArr[i] == 1) || (i == 1 && squareArr[i] == 0)) {
+	                context.bezierCurveTo(pboard[i][0],(pboard[i][1]+20),pboard[squareArr[i]][0],(pboard[squareArr[i]][1]+20),pboard[squareArr[i]][0],pboard[squareArr[i]][1]);
 			context.lineTo(pboard[squareArr[i]][0], pboard[squareArr[i]][1]);
+			}
+			else if ((i == 2 && squareArr[i] == 3) || (i == 3 && squareArr[i] == 2)) {
+	                context.bezierCurveTo(pboard[i][0]-20,pboard[i][1],pboard[squareArr[i]][0]-20,pboard[squareArr[i]][1],pboard[squareArr[i]][0],pboard[squareArr[i]][1]);
+	        }
+	        else if ((i == 4 && squareArr[i] == 5) || (i == 5 && squareArr[i] == 4)) {
+	                context.bezierCurveTo(pboard[i][0],pboard[i][1]-20,pboard[squareArr[i]][0],pboard[squareArr[i]][1]-20,pboard[squareArr[i]][0],pboard[squareArr[i]][1]);
+	        }
+	        else if ((i == 6 && squareArr[i] == 7) || (i == 7 && squareArr[i] == 6)) {
+	                context.bezierCurveTo(pboard[i][0]+20,pboard[i][1],pboard[squareArr[i]][0]+20,pboard[squareArr[i]][1],pboard[squareArr[i]][0],pboard[squareArr[i]][1]);
+	        }
+	        else {
+	                context.lineTo(pboard[squareArr[i]][0], pboard[squareArr[i]][1]);
+	        }
+			//context.lineTo(pboard[squareArr[i]][0], pboard[squareArr[i]][1]);
 			context.stroke();
 		}
 	    },
@@ -1127,15 +1143,17 @@ jQuery(function($){
                 for(var i = 0; i <= 7; i++)
                 {
                       App.Player.square[card][i] = (App.Player.square[card][i] + 2)%8;
-
-                }
-                /*for(var i = 0; i <= 7; i++)
-                {
-                        App.Host.square[i] = (App.Host.square[i] - 2)%8;
-                        
-                }*/
+		}
+		App.Player.clearCard()
             },
-
+			
+	    clearCard : function(){
+		//Clears existing canvas on player and calls createPlayerCanvas to redraw square
+                for(var n = 0; n < 4; n++){
+                	 App.Player.pCctx[n].clearRect(0, 0, App.Player.pC[n].width, App.Player.pC[n].height);
+                }	
+		App.Player.createPlayerCanvas();
+            },
             /**
              *  Click handler for the Player hitting a word in the word list.
              */
@@ -1242,16 +1260,6 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
 	     }
              },
 	     createPlayerCanvas : function(){
-		//playerCanvascontext
-                        for (var i = 0; i<4; i++){
-                                App.Player.pC.push(document.getElementById('playerCanvas'+i));
-                        }
-                console.log(App.Player.pC);
-                for(var i = 0; i <App.Player.pC.length; i++){
-                        App.Player.pCctx.push(App.Player.pC[i].getContext("2d"));
-                }
-                console.log(App.Player.pCctx);
-
 		var n = 0;
                 for (var card in App.Player.cards[App.Player.myID]) {
                        // console.log(App.Player.square);
@@ -1286,7 +1294,7 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
                                 .addClass('btnAnswer')   //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
                                 .addClass('btn')         //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
                                .val(cardNumber)               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
-                                .html(cardNumber+'<canvas id="playerCanvas'+App.Player.myID+n+'" width="100" height="100"></canvas>')              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
+                                .html('<canvas id="playerCanvas'+n+'" width="100" height="100"></canvas>')              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
                             )
                         )
 		      n += 1;
@@ -1312,6 +1320,16 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
                // $('#gameArea').html($list);
 		//$('#gameArea').html(topBox);
 		$('#gameArea').html($cardlist);
+		//Create Player Canvas and Context
+		//pC----Player Canvas, pCctx----Player Canvas Context
+                        for (var i = 0; i < 4; i++){
+                                App.Player.pC.push(document.getElementById('playerCanvas'+i));
+                        }
+                console.log(App.Player.pC);
+                for(var i = 0; i <App.Player.pC.length; i++){
+                        App.Player.pCctx.push(App.Player.pC[i].getContext("2d"));
+                }
+                console.log(App.Player.pCctx);
 
 
 		console.log('MyID: '+App.Player.myID);
