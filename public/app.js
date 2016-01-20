@@ -1142,11 +1142,14 @@ jQuery(function($){
 		App.Player.cards[App.Player.myID] = [App.Player.myID * 4 + 0, App.Player.myID * 4 + 1, App.Player.myID * 4 + 2, App.Player.myID * 4 + 3];
 		/*******ADDED BY BECKY********/	
 		//var topBox = '<div class="topBox">'+App.Player.myName+'</div>';
-		var $cardlist = $('<ul/>').attr('id','ulAnswers');
+		//var $cardlist = $('<ul/>').attr('id','ulAnswers');
+		//var $cardlist = $('<div/>').addClass('col-lg-10 col-md-10 col-sm-10 col-xs-10');
 		var n = 0;
 		for (var card in App.Player.cards[App.Player.myID]) {
 		    var cardNumber = App.Player.cards[App.Player.myID][card];
 		     $cardlist                                //  <ul> </ul>
+			.append( $('<ul/>')
+			.attr('id','ulAnswers')
                         .append( $('<li/>')              //  <ul> <li> </li> </ul>
                             .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
                                 .addClass('btnAnswer')   //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
@@ -1155,6 +1158,7 @@ jQuery(function($){
                                 .html(cardNumber+'<canvas id="playerCanvas'+App.Player.myID+n+'" width="100" height="100"></canvas>')              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
                             )
                         )
+		 	)
 		      n += 1;
 		      $cardlist.append('<div class="rotate"><button value='+cardNumber+' class="btnRotate"><i class="fa fa-repeat"></i></button></div>');
 		};	
