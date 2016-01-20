@@ -460,8 +460,8 @@ jQuery(function($){
 	    drawBoard : function(size) { 
 				var c = document.getElementById("myCanvas");
                         	var ctx = c.getContext("2d");
-				ctx.strokeStyle = 'rgba(0,0,0,.2)';
-				ctx.lineWidth = 2;
+				ctx.strokeStyle = 'rgba(0,0,0,.1)';
+				ctx.lineWidth = 4;
 				//vertical line generator
 				for(var i = 1; i < size; i++){
 					ctx.beginPath();
@@ -969,6 +969,11 @@ jQuery(function($){
             /**
              * Click handler for the 'JOIN' button
              */
+	    /**
+	    *gathering player Canvas and player Cnavas context
+	    */	
+	    pC : [],
+	    pCctx : [],	
             onJoinClick: function () {
                 // console.log('Clicked "Join A Game"');
 
@@ -1016,7 +1021,19 @@ jQuery(function($){
 		
 
 	    },
+	    squareMaker2: function(context, squareArr){ 
+		var pboard = [[33,0],[66,0],[100,33],[100,66],[66,100],[33,100],[0,66],[0,33]];
+		context.lineWidth = 7;
+		context.strokeStyle = 'black';
 
+		for(var i = 0; i < squareArr.length; i++){
+			context.beginPath();
+			
+			context.moveTo(pboard[i][0], pboard[i][1]);
+			context.lineTo(pboard[squareArr[i]][0], pboard[squareArr[i]][1]);
+			context.stroke();
+		}
+	    },
 	     turnSquare : function(/*turnRight*/){
                 /*if(turnRight)
                 {    
@@ -1116,8 +1133,28 @@ jQuery(function($){
 	     playerStoreSquare : function(square) {
 	     if (App.myRole == 'Player') {
 		App.Player.square = square;
+		App.Player.createPlayerCanvas();
 	     }
              },
+	     createPlayerCanvas : function(){
+		//playerCanvascontext
+                        for (var i = 0; i<4; i++){
+                                App.Player.pC.push(document.getElementById('playerCanvas'+i));
+                        }
+                console.log(App.Player.pC);
+                for(var i = 0; i <App.Player.pC.length; i++){
+                        App.Player.pCctx.push(App.Player.pC[i].getContext("2d"));
+                }
+                console.log(App.Player.pCctx);
+
+		var n = 0;
+                for (var card in App.Player.cards[App.Player.myID]) {
+                       // console.log(App.Player.square);
+                       // console.log([App.Player.cards[App.Player.myID][card]]);
+                        App.Player.squareMaker2(App.Player.pCctx[n],App.Player.square[App.Player.cards[App.Player.myID][card]]);
+               		n += 1;
+		 }
+	     },	
 
 
             /**
@@ -1127,7 +1164,6 @@ jQuery(function($){
             newWord : function(data) {
                 // Create an unordered list element
                 //var $list = $('<ul/>').attr('id','ulAnswers');
-		//App.Player.dealCards();
 		App.Player.cards[App.Player.myID] = [App.Player.myID * 4 + 0, App.Player.myID * 4 + 1, App.Player.myID * 4 + 2, App.Player.myID * 4 + 3];
 		/*******ADDED BY BECKY********/	
 		var $cardlist = $('<ul/>').attr('id','ulAnswers');
@@ -1139,16 +1175,14 @@ jQuery(function($){
                                 .addClass('btnAnswer')   //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
                                 .addClass('btn')         //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
                                 .val(App.Player.cards[App.Player.myID][card])               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
-                                .html('<canvas id="playerCanvas'+App.Player.myID+n+'" width="100" height="100"></canvas>')              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
+                                .html('<canvas id="playerCanvas' + n + '" width="100" height="100"></canvas>')              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
                             )
                         )
 		      n += 1;
 		      $cardlist.append('<div class="refresh"><i class="fa fa-repeat"></i></div>');
-		};	
-		console.log('MyID: '+App.Player.myID);
-		console.log('MyName: '+App.Player.myName);
-		/*******ADDED BY BECKY********/
-                // Insert a list item for each word in the word list
+		
+		};
+		//App.Player.dealCards();
                 // received from the server.
                 /*$.each(data.list, function(){
                     $list                                //  <ul> </ul>
@@ -1165,7 +1199,11 @@ jQuery(function($){
                 // Insert the list onto the screen.
                // $('#gameArea').html($list);
 		$('#gameArea').html($cardlist);
-            },
+
+
+		console.log('MyID: '+App.Player.myID);
+                console.log('MyName: '+App.Player.myName);  
+	  },
 
             /**
              * Show the "Game Over" screen.
