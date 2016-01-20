@@ -35,6 +35,7 @@ jQuery(function($){
             IO.socket.on('hostMovePlayer', IO.hostMovePlayer);
             IO.socket.on('gameOver', IO.gameOver);
             IO.socket.on('error', IO.error );
+	    IO.socket.on('passedNewCard', IO.passedNewCard);
         },
 
         /**
@@ -118,6 +119,8 @@ jQuery(function($){
         },
 	/*****ADDED BY BECKY*****/
 	hostMovePlayer : function(data) {
+	    console.log("Data within hostMovePlayer myID " + data.myID + " answer " +  data.answer + " playerCardIndex " +  data.playerCardIndex);
+	    App.Host.drawCard(data.myID, data.answer, data.playerCardIndex);
 	    if (App.currentRound == data.playerOrderId) {
 	    //move player to next square
 	    var playerX;
@@ -183,7 +186,12 @@ jQuery(function($){
          */
         error : function(data) {
             alert(data.message);
-        }
+        },
+
+
+	passedNewCard : function(data) {
+		App.Player.passedNewCard(data);
+	}
 
     };
 
@@ -462,8 +470,8 @@ jQuery(function($){
 	    drawBoard : function(size) { 
 				var c = document.getElementById("myCanvas");
                         	var ctx = c.getContext("2d");
-				ctx.strokeStyle = 'rgba(0,0,0,.2)';
-				ctx.lineWidth = 2;
+				ctx.strokeStyle = 'rgba(0,0,0,.1)';
+				ctx.lineWidth = 4;
 				//vertical line generator
 				for(var i = 1; i < size; i++){
 					ctx.beginPath();
@@ -485,7 +493,7 @@ jQuery(function($){
 		//App.Host.square = [[6, 5, 4, 7, 2, 1, 0, 3], [4, 7, 6, 5, 0, 3, 2, 1], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
 		//App.Host.square = [[5, 4, 7, 6, 1, 0, 3, 2], [6, 3, 5, 1, 7, 2, 0, 4], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
 		//App.Host.playerCards = [[0, 1, 2, 3], [3, 2, 1, 0], [1, 3, 2, 0], [2, 1, 0, 3]];
-	
+	       App.Host.deal();	
 	       App.Host.square =[[1,0,3,2,5,4,7,6],
 				 [4,5,6,7,0,1,2,3],
 				 [1,0,7,5,6,3,4,2],
@@ -589,7 +597,7 @@ jQuery(function($){
 	   squareMaker : function(brdy, brdx, squareArr){
 		
 			var c = document.getElementById("myCanvas");
-         	       var ctx = c.getContext("2d");
+         	        var ctx = c.getContext("2d");
 			var boardTile = App.Host.boardCoordinates[brdy][brdx];
 			ctx.lineWidth = 5;
 			ctx.strokeStyle = '#584D58';
@@ -614,7 +622,7 @@ jQuery(function($){
 					ctx.lineTo(boardTile[squareArr[i]][0], boardTile[squareArr[i]][1]);
 				}
 				ctx.stroke();
-				newArr.push(boardTile[squareArr[i]])
+				newArr.push(boardTile[squareArr[i]]);
 			}
 	
 //			console.log(newArr);
@@ -797,7 +805,55 @@ jQuery(function($){
 		}
 	},
 
+	deal : function()
+	{	
+		App.Host.isDealt = new Array(36);
+		for(var i = 0; i < 36; i++)
+		{
+			App.Host.isDealt[i] = 0;
+		}
 
+		App.Host.cards = new Array(App.numOfPlayers);
+		var cardArray;
+		for(cardArray in App.Host.player)
+		{
+			App.Host.cards[cardArray] = [cardArray * 4 + 0, cardArray * 4 + 1, cardArray * 4 + 2, cardArray * 4 + 3];		
+		}
+		
+		for(var i = 0; i < App.numOfPlayers * 4; i++)
+		{
+			App.Host.isDealt[i] = 1;
+		}
+	},
+
+	//draw a card from the deck
+	drawCard : function(myID, cardID, playerCardIndex)
+	{
+		console.log("Inside drawCard myID " + myID + " cardID " + cardID + " playerCardIndex " + playerCardIndex);
+		console.log("isDealt " + App.Host.isDealt);
+		var cardIndex;
+		for(cardIndex in App.Host.isDealt)
+		{
+			console.log("isDealt[cardIndex] " + App.Host.isDealt[cardIndex]);
+			if(App.Host.isDealt[cardIndex] == 0)
+			{
+				App.Host.cards[myID][cardID] = App.Host.square[cardIndex];
+				App.Host.isDealt[cardIndex] = 1;
+				var data = {
+					   	cardIndex: cardIndex,
+					   	cardID: cardID,
+						myID: myID,
+					   	playerCardIndex: playerCardIndex,
+						gameID: App.gameID,
+						hostCards: App.Host.cards
+					   }
+				console.log("Inside loop inside drawCard");
+				IO.socket.emit('receiveNewCard',data);
+				break;
+				//send cardIndex, cardID, to playerID 
+			}
+		}
+	},
 
    //added by Becky
 		// Advance the round
@@ -980,16 +1036,24 @@ jQuery(function($){
 	    myID: 0,
 	    
 	    totalPlayerCount: 0,
+	
+	    cards: new Array(8),	    
  
 	    square: [],
             /**
              * Click handler for the 'JOIN' button
              */
+	    /**
+	    *gathering player Canvas and player Cnavas context
+	    */	
+	    pC : [],
+	    pCctx : [],	
             onJoinClick: function () {
                 // console.log('Clicked "Join A Game"');
 
                 // Display the Join Game HTML on the player's screen.
                 App.$gameArea.html(App.$templateJoinGame);
+	//	console.log("Players new player count" + totalPlayerCount);
             },
 
             /**
@@ -1003,16 +1067,18 @@ jQuery(function($){
                 var data = {
                     gameId : +($('#inputGameId').val()),
                     playerName : $('#inputPlayerName').val() || 'Jarvis'
-		    //myID : App.Player.myID
+		    //myID : App.Player.myID,
+		    //cardID : 
                };
+		//console.log("Players new player count" + totalPlayerCount);
                 // Send the gameId and playerName to the server
                 IO.socket.emit('playerJoinGame', data);
                 // Set the appropriate properties for the current player.
                 App.myRole = 'Player';
                 App.Player.myName = data.playerName;
 		/*******ADDED BY BECKY********/
-		App.Player.cards = [[0, 1, 2, 3],[11, 27, 5, 9],[4, 10, 11, 9], [15, 20, 1, 0], [9, 10, 3, 19], [20, 32, 7, 4], [2, 17, 23, 24], [34, 6, 13, 19]];
-
+	//	App.Player.cards = [[0, 1, 2, 3],[11, 27, 5, 9],[4, 10, 11, 9], [15, 20, 1, 0], [9, 10, 3, 19], [20, 32, 7, 4], [2, 17, 23, 24], [34, 6, 13, 19]];
+		//App.Player.cards = [];
 		/********Added By Seth**********/
 		//App.Host.dealCards();
 
@@ -1022,18 +1088,54 @@ jQuery(function($){
             },
 
 
-
 	    assignPlayerCount: function(playerCount) {
 		App.Player.myID = playerCount;
 		App.Player.totalPlayerCount = playerCount +1;
-	    },
+//	    console.log("Players new player count" + totalPlayerCount);
+		},
 
 	    onRotateClick: function() {
 		var $btn = $(this);     
                 var card = $btn.val();
 		App.Player.turnSquare(card);
 	    },
+	    squareMaker2: function(context, squareArr){ 
+		var pboard = [[33,0],[66,0],[100,33],[100,66],[66,100],[33,100],[0,66],[0,33]];
+		context.lineWidth = 5;
+		context.strokeStyle = '#584D58';
 
+		for(var i = 0; i < squareArr.length; i++){
+			context.beginPath();
+			
+			context.moveTo(pboard[i][0], pboard[i][1]);
+			if ((i == 0 && squareArr[i] == 1) || (i == 1 && squareArr[i] == 0)) {
+	                context.bezierCurveTo(pboard[i][0],(pboard[i][1]+20),pboard[squareArr[i]][0],(pboard[squareArr[i]][1]+20),pboard[squareArr[i]][0],pboard[squareArr[i]][1]);
+			context.lineTo(pboard[squareArr[i]][0], pboard[squareArr[i]][1]);
+			}
+			else if ((i == 2 && squareArr[i] == 3) || (i == 3 && squareArr[i] == 2)) {
+	                context.bezierCurveTo(pboard[i][0]-20,pboard[i][1],pboard[squareArr[i]][0]-20,pboard[squareArr[i]][1],pboard[squareArr[i]][0],pboard[squareArr[i]][1]);
+	        }
+	        else if ((i == 4 && squareArr[i] == 5) || (i == 5 && squareArr[i] == 4)) {
+	                context.bezierCurveTo(pboard[i][0],pboard[i][1]-20,pboard[squareArr[i]][0],pboard[squareArr[i]][1]-20,pboard[squareArr[i]][0],pboard[squareArr[i]][1]);
+	        }
+	        else if ((i == 6 && squareArr[i] == 7) || (i == 7 && squareArr[i] == 6)) {
+	                context.bezierCurveTo(pboard[i][0]+20,pboard[i][1],pboard[squareArr[i]][0]+20,pboard[squareArr[i]][1],pboard[squareArr[i]][0],pboard[squareArr[i]][1]);
+	        }
+	        else {
+	                context.lineTo(pboard[squareArr[i]][0], pboard[squareArr[i]][1]);
+	        }
+			//context.lineTo(pboard[squareArr[i]][0], pboard[squareArr[i]][1]);
+			context.stroke();
+		}
+	    },
+	    // turnSquare : function(/*turnRight*/){
+                /*if(turnRight)
+                {    
+                    var swapSquare = [App.Host.square.shift(), App.Host.square.shift()];//set swap square to first two of square array
+                    App.Host.square[6] = swapSquare[0];//moves these two to the end of square array
+                    App.Host.square[7] = swapSquare[1];
+                }else
+                {*/
 	     turnSquare : function(card){
                 var swapSquare = [App.Player.square[card].pop(), App.Player.square[card].pop()];//sets swapSquare to last two of square array
                 App.Player.square[card].unshift(swapSquare[1], swapSquare[0]);//adds the two swapSquare onto the front of the square array
@@ -1041,15 +1143,17 @@ jQuery(function($){
                 for(var i = 0; i <= 7; i++)
                 {
                       App.Player.square[card][i] = (App.Player.square[card][i] + 2)%8;
-
-                }
-                /*for(var i = 0; i <= 7; i++)
-                {
-                        App.Host.square[i] = (App.Host.square[i] - 2)%8;
-                        
-                }*/
+		}
+		App.Player.clearCard()
             },
-
+			
+	    clearCard : function(){
+		//Clears existing canvas on player and calls createPlayerCanvas to redraw square
+                for(var n = 0; n < 4; n++){
+                	 App.Player.pCctx[n].clearRect(0, 0, App.Player.pC[n].width, App.Player.pC[n].height);
+                }	
+		App.Player.createPlayerCanvas();
+            },
             /**
              *  Click handler for the Player hitting a word in the word list.
              */
@@ -1057,17 +1161,31 @@ jQuery(function($){
                 // console.log('Clicked Answer Button');
                 var $btn = $(this);      // the tapped button
                 var answer = $btn.val(); // The tapped word
+		var buttonIndex;
+		for(var card in App.Player.cards[App.Player.myID])
+		{
+console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + App.Player.cards[App.Player.myID][card]);
+			if(App.Player.cards[App.Player.myID][card] == answer)
+			{
+			console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + App.Player.cards[App.Player.myID][card]);
+				buttonIndex = card;
+			}
+		}
+		
 		var cardAnswer = App.Player.square[answer];
                 // Send the player info and tapped word to the server so
                 // the host can check the answer.
                 var data = {
                 	gameId: App.gameId,
                 	playerId: App.mySocketId,
+			myID: App.Player.myID,
+			playerCardIndex: buttonIndex,
                 	answer: answer,
 			cardAnswer: cardAnswer,
 			playerOrderId: App.Player.myID,
                 	round: App.currentRound
                 }
+		console.log(data);
                 IO.socket.emit('playerAnswer',data);
             },
 
@@ -1100,6 +1218,17 @@ jQuery(function($){
                 }
             },
 
+	    passedNewCard : function(data)
+	    {
+		console.log("App.Player.myID " + App.Player.myID + " playerCardIndex " + data.playerCardIndex + "  data.myID " + data.myID + " cardID " + data.cardID);
+		console.log("Player.cards " + App.Player.cards);
+		if(App.Player.myID == data.myID)
+		{
+			App.Player.cards[App.Player.myID][data.playerCardIndex] = data.cardID;
+			console.log("Player cards " + App.Player.cards);	
+		}
+	    },
+
             /**
              * Display 'Get Ready' while the countdown timer ticks down.
              * @param hostData
@@ -1127,8 +1256,18 @@ jQuery(function($){
 	     playerStoreSquare : function(square) {
 	     if (App.myRole == 'Player') {
 		App.Player.square = square;
+		App.Player.createPlayerCanvas();
 	     }
              },
+	     createPlayerCanvas : function(){
+		var n = 0;
+                for (var card in App.Player.cards[App.Player.myID]) {
+                       // console.log(App.Player.square);
+                       // console.log([App.Player.cards[App.Player.myID][card]]);
+                        App.Player.squareMaker2(App.Player.pCctx[n],App.Player.square[App.Player.cards[App.Player.myID][card]]);
+               		n += 1;
+		 }
+	     },	
 
 
             /**
@@ -1139,26 +1278,27 @@ jQuery(function($){
                 // Create an unordered list element
                 //var $list = $('<ul/>').attr('id','ulAnswers');
 		//App.Player.dealCards();
-		App.Player.cards[App.Player.myID] = [App.Player.myID * 4 + 0, App.Player.myID * 4 + 1, App.Player.myID * 4 + 2, App.Player.myID * 4 + 3];
+		
+		App.Player.cards[App.Player.myID] =  [App.Player.myID * 4 + 0, App.Player.myID * 4 + 1, App.Player.myID * 4 + 2, App.Player.myID * 4 + 3];
+		console.log(App.Player.cards[App.Player.myID]);
 		/*******ADDED BY BECKY********/	
 		//var topBox = '<div class="topBox">'+App.Player.myName+'</div>';
 		//var $cardlist = $('<ul/>').attr('id','ulAnswers');
 		//var $cardlist = $('<div/>').addClass('col-lg-10 col-md-10 col-sm-10 col-xs-10');
+		var $cardlist = $('<ul/>').attr('id','ulAnswers');
+		var card;
 		var n = 0;
-		for (var card in App.Player.cards[App.Player.myID]) {
+		for ( card in App.Player.cards[App.Player.myID]) {
 		    var cardNumber = App.Player.cards[App.Player.myID][card];
 		     $cardlist                                //  <ul> </ul>
-			.append( $('<ul/>')
-			.attr('id','ulAnswers')
                         .append( $('<li/>')              //  <ul> <li> </li> </ul>
                             .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
                                 .addClass('btnAnswer')   //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
                                 .addClass('btn')         //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
-                                .val(cardNumber)               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
-                                .html(cardNumber+'<canvas id="playerCanvas'+App.Player.myID+n+'" width="100" height="100"></canvas>')              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
+                               .val(cardNumber)               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
+                                .html('<canvas id="playerCanvas'+n+'" width="100" height="100"></canvas>')              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
                             )
                         )
-		 	)
 		      n += 1;
 		      $cardlist.append('<div class="rotate"><button value='+cardNumber+' class="btnRotate"><i class="fa fa-repeat"></i></button></div>');
 		};	
@@ -1182,7 +1322,21 @@ jQuery(function($){
                // $('#gameArea').html($list);
 		//$('#gameArea').html(topBox);
 		$('#gameArea').html($cardlist);
-            },
+		//Create Player Canvas and Context
+		//pC----Player Canvas, pCctx----Player Canvas Context
+                        for (var i = 0; i < 4; i++){
+                                App.Player.pC.push(document.getElementById('playerCanvas'+i));
+                        }
+                console.log(App.Player.pC);
+                for(var i = 0; i <App.Player.pC.length; i++){
+                        App.Player.pCctx.push(App.Player.pC[i].getContext("2d"));
+                }
+                console.log(App.Player.pCctx);
+
+
+		console.log('MyID: '+App.Player.myID);
+                console.log('MyName: '+App.Player.myName);  
+	  },
 
             /**
              * Show the "Game Over" screen.
