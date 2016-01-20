@@ -69,8 +69,7 @@ jQuery(function($){
         },
 	
 	sendPlayerCount : function(playerCount) {
-		App.Player.assignPlayerCount(playerCount);
-	
+		App.Player.assignPlayerCount(playerCount);	
 	},
 
 	sendLoseMessage : function(player) {
@@ -151,7 +150,8 @@ jQuery(function($){
 
             if(App.myRole === 'Host') {
 		//console.log('Player Turn: '+App.currentRound+', Answer: '+data.answer+', Player Y: '+playerY+', Player X: '+playerX+'. ');
-                App.Host.addSquare(playerY, playerX, data.answer);
+                App.Host.square[data.answer] = data.cardAnswer;
+		App.Host.addSquare(playerY, playerX, data.answer);
             }
 	    }
         },
@@ -387,14 +387,14 @@ jQuery(function($){
 
 		App.Host.playersLeft = [App.numOfPlayers, 0]; //keeps track of players still in the game;
 
-		var startingspots = [[0,2,4, '#900000'],
-				     [7,5,1, '#003366'],
-				     [5,0,2, '#006600'],
-				     [2,7,6, '#660099'],
-				     [7,3,1, '#FFCC33'],
-				     [0,4,5, '#000000'],
-				     [4,7,7, '#FFFFFF'],
-			             [3,0,3, '#33FFFF']];
+		var startingspots = [[0,2,4, '#D92442'],
+				     [7,5,1, '#476BB4'],
+				     [5,0,2, '#248838'],
+				     [2,7,6, '#D36AB4'],
+				     [7,3,1, '#E49937'],
+				     [0,4,5, '#919792'],
+				     [4,7,7, '#000000'],
+			             [3,0,3, '#FFFFFF']];
 		var innerPlayerArray = new Array(4);
                 // Display the players' names on screen
 		for(var i = 0; i < App.numOfPlayers; i++)
@@ -402,6 +402,8 @@ jQuery(function($){
 		    $('#playerScores')
 			
                     	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">'+App.Host.players[i].playerName+'</span> </div>');
+			$('#player'+(i+1)+'Score').children('.playerName').css('background-color',startingspots[i][3]);
+			$('#player8Score').children('.playerName').css('color','#000000');
 			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], 1, startingspots[i][3]];
 			//innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], App.Player.myName];
 			App.Host.player[i] = innerPlayerArray;	
@@ -596,7 +598,21 @@ jQuery(function($){
 			for(var i = 0; i < squareArr.length; i++){
 				ctx.beginPath();
 				ctx.moveTo(boardTile[i][0], boardTile[i][1]);
-				ctx.lineTo(boardTile[squareArr[i]][0], boardTile[squareArr[i]][1]);
+				if ((i == 0 && squareArr[i] == 1) || (i == 1 && squareArr[i] == 0)) {
+					ctx.bezierCurveTo(boardTile[i][0],(boardTile[i][1]+20),boardTile[squareArr[i]][0],(boardTile[squareArr[i]][1]+20),boardTile[squareArr[i]][0],boardTile[squareArr[i]][1]);
+				} 
+				else if ((i == 2 && squareArr[i] == 3) || (i == 3 && squareArr[i] == 2)) {
+					ctx.bezierCurveTo(boardTile[i][0]-20,boardTile[i][1],boardTile[squareArr[i]][0]-20,boardTile[squareArr[i]][1],boardTile[squareArr[i]][0],boardTile[squareArr[i]][1]);
+				}
+				else if ((i == 4 && squareArr[i] == 5) || (i == 5 && squareArr[i] == 4)) {
+					ctx.bezierCurveTo(boardTile[i][0],boardTile[i][1]-20,boardTile[squareArr[i]][0],boardTile[squareArr[i]][1]-20,boardTile[squareArr[i]][0],boardTile[squareArr[i]][1]);	
+				}
+				else if ((i == 6 && squareArr[i] == 7) || (i == 7 && squareArr[i] == 6)) {
+                                	ctx.bezierCurveTo(boardTile[i][0]+20,boardTile[i][1],boardTile[squareArr[i]][0]+20,boardTile[squareArr[i]][1],boardTile[squareArr[i]][0],boardTile[squareArr[i]][1]);
+				}
+				else {
+					ctx.lineTo(boardTile[squareArr[i]][0], boardTile[squareArr[i]][1]);
+				}
 				ctx.stroke();
 				newArr.push(boardTile[squareArr[i]])
 			}
@@ -1013,24 +1029,18 @@ jQuery(function($){
 	    },
 
 	    onRotateClick: function() {
-		
-
+		var $btn = $(this);     
+                var card = $btn.val();
+		App.Player.turnSquare(card);
 	    },
 
-	     turnSquare : function(/*turnRight*/){
-                /*if(turnRight)
-                {    
-                    var swapSquare = [App.Host.square.shift(), App.Host.square.shift()];//set swap square to first two of square array
-                    App.Host.square[6] = swapSquare[0];//moves these two to the end of square array
-                    App.Host.square[7] = swapSquare[1];
-                }else
-                {*/
-                var swapSquare = [App.Host.square.pop(), App.Host.square.pop()];//sets swapSquare to last two of square array
-                App.Host.square.unshift(swapSquare[1], swapSquare[0]);//adds the two swapSquare onto the front of the square array
+	     turnSquare : function(card){
+                var swapSquare = [App.Player.square[card].pop(), App.Player.square[card].pop()];//sets swapSquare to last two of square array
+                App.Player.square[card].unshift(swapSquare[1], swapSquare[0]);//adds the two swapSquare onto the front of the square array
                 //}
                 for(var i = 0; i <= 7; i++)
                 {
-                        App.Host.square[i] = (App.Host.square[i] + 2)%8;
+                      App.Player.square[card][i] = (App.Player.square[card][i] + 2)%8;
 
                 }
                 /*for(var i = 0; i <= 7; i++)
@@ -1047,13 +1057,14 @@ jQuery(function($){
                 // console.log('Clicked Answer Button');
                 var $btn = $(this);      // the tapped button
                 var answer = $btn.val(); // The tapped word
-
+		var cardAnswer = App.Player.square[answer];
                 // Send the player info and tapped word to the server so
                 // the host can check the answer.
                 var data = {
                 	gameId: App.gameId,
                 	playerId: App.mySocketId,
                 	answer: answer,
+			cardAnswer: cardAnswer,
 			playerOrderId: App.Player.myID,
                 	round: App.currentRound
                 }
@@ -1130,23 +1141,24 @@ jQuery(function($){
 		//App.Player.dealCards();
 		App.Player.cards[App.Player.myID] = [App.Player.myID * 4 + 0, App.Player.myID * 4 + 1, App.Player.myID * 4 + 2, App.Player.myID * 4 + 3];
 		/*******ADDED BY BECKY********/	
+		//var topBox = '<div class="topBox">'+App.Player.myName+'</div>';
 		var $cardlist = $('<ul/>').attr('id','ulAnswers');
 		var n = 0;
 		for (var card in App.Player.cards[App.Player.myID]) {
+		    var cardNumber = App.Player.cards[App.Player.myID][card];
 		     $cardlist                                //  <ul> </ul>
                         .append( $('<li/>')              //  <ul> <li> </li> </ul>
                             .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
                                 .addClass('btnAnswer')   //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
                                 .addClass('btn')         //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
-                                .val(App.Player.cards[App.Player.myID][card])               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
-                                .html('<canvas id="playerCanvas'+App.Player.myID+n+'" width="100" height="100"></canvas>')              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
+                                .val(cardNumber)               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
+                                .html(cardNumber+'<canvas id="playerCanvas'+App.Player.myID+n+'" width="100" height="100"></canvas>')              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
                             )
                         )
 		      n += 1;
-		      $cardlist.append('<div class="refresh"><i class="fa fa-repeat"></i></div>');
+		      $cardlist.append('<div class="rotate"><button value='+cardNumber+' class="btnRotate"><i class="fa fa-repeat"></i></button></div>');
 		};	
 		console.log('MyID: '+App.Player.myID);
-		console.log('MyName: '+App.Player.myName);
 		/*******ADDED BY BECKY********/
                 // Insert a list item for each word in the word list
                 // received from the server.
@@ -1164,6 +1176,7 @@ jQuery(function($){
 
                 // Insert the list onto the screen.
                // $('#gameArea').html($list);
+		//$('#gameArea').html(topBox);
 		$('#gameArea').html($cardlist);
             },
 
