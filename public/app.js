@@ -1128,6 +1128,14 @@ jQuery(function($){
 			context.stroke();
 		}
 	    },
+	    // turnSquare : function(/*turnRight*/){
+                /*if(turnRight)
+                {    
+                    var swapSquare = [App.Host.square.shift(), App.Host.square.shift()];//set swap square to first two of square array
+                    App.Host.square[6] = swapSquare[0];//moves these two to the end of square array
+                    App.Host.square[7] = swapSquare[1];
+                }else
+                {*/
 	     turnSquare : function(card){
                 var swapSquare = [App.Player.square[card].pop(), App.Player.square[card].pop()];//sets swapSquare to last two of square array
                 App.Player.square[card].unshift(swapSquare[1], swapSquare[0]);//adds the two swapSquare onto the front of the square array
@@ -1164,15 +1172,18 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
 			}
 		}
 		
+		var cardAnswer = App.Player.square[answer];
                 // Send the player info and tapped word to the server so
                 // the host can check the answer.
                 var data = {
-                    gameId: App.gameId,
-                    playerId: App.mySocketId,
-		    myID: App.Player.myID,
-                    answer: answer,
-                    round: App.currentRound,
-		    playerCardIndex: buttonIndex
+                	gameId: App.gameId,
+                	playerId: App.mySocketId,
+			myID: App.Player.myID,
+			playerCardIndex: buttonIndex,
+                	answer: answer,
+			cardAnswer: cardAnswer,
+			playerOrderId: App.Player.myID,
+                	round: App.currentRound
                 }
 		console.log(data);
                 IO.socket.emit('playerAnswer',data);
@@ -1273,8 +1284,9 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
 		/*******ADDED BY BECKY********/	
 		//var topBox = '<div class="topBox">'+App.Player.myName+'</div>';
 		var $cardlist = $('<ul/>').attr('id','ulAnswers');
+		var card;
 		var n = 0;
-		for (var card in App.Player.cards[App.Player.myID]) {
+		for ( card in App.Player.cards[App.Player.myID]) {
 		    var cardNumber = App.Player.cards[App.Player.myID][card];
 		     $cardlist                                //  <ul> </ul>
                         .append( $('<li/>')              //  <ul> <li> </li> </ul>
