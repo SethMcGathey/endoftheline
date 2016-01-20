@@ -21,6 +21,7 @@ exports.initGame = function(sio, socket){
     gameSocket.on('playerWin', playerWin);
     gameSocket.on('receiveNewCard', receiveNewCard);
 
+    gameSocket.on('sendSquare', sendSquare);
     // Player Events
     gameSocket.on('playerJoinGame', playerJoinGame);
     gameSocket.on('playerAnswer', playerAnswer);
@@ -76,6 +77,10 @@ function playerLost(data) {
 
 function playerWin(data) {
     io.sockets.in(data.gameId).emit('sendWinMessage', data.player);
+};
+
+function sendSquare(data) {
+    io.sockets.in(data.gameId).emit('receiveSquare', data.square);
 };
 
 /**

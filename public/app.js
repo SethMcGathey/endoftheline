@@ -26,6 +26,7 @@ jQuery(function($){
             IO.socket.on('newGameCreated', IO.onNewGameCreated );
             IO.socket.on('playerJoinedRoom', IO.playerJoinedRoom );
 	    IO.socket.on('sendPlayerCount', IO.sendPlayerCount );
+	    IO.socket.on('receiveSquare', IO.receiveSquare );
 	    IO.socket.on('sendLoseMessage', IO.sendLoseMessage );
 	    IO.socket.on('sendWinMessage', IO.sendWinMessage );
             IO.socket.on('beginNewGame', IO.beginNewGame );
@@ -69,8 +70,7 @@ jQuery(function($){
         },
 	
 	sendPlayerCount : function(playerCount) {
-		App.Player.assignPlayerCount(playerCount);
-	
+		App.Player.assignPlayerCount(playerCount);	
 	},
 
 	sendLoseMessage : function(player) {
@@ -80,6 +80,11 @@ jQuery(function($){
 
 	sendWinMessage : function(player) {
                 App.Player.youWin(player);
+
+        },
+
+	receiveSquare : function(square) {
+                App.Player.playerStoreSquare(square);
 
         },
 
@@ -114,8 +119,12 @@ jQuery(function($){
         },
 	/*****ADDED BY BECKY*****/
 	hostMovePlayer : function(data) {
+<<<<<<< HEAD
 	    console.log("Data within hostMovePlayer myID " + data.myID + " answer " +  data.answer + " playerCardIndex " +  data.playerCardIndex);
 	    App.Host.drawCard(data.myID, data.answer, data.playerCardIndex);
+=======
+	    if (App.currentRound == data.playerOrderId) {
+>>>>>>> 0ffc657412edc917973590dd8757d4363f4dc45b
 	    //move player to next square
 	    var playerX;
 	    var playerY;
@@ -147,8 +156,10 @@ jQuery(function($){
 
             if(App.myRole === 'Host') {
 		//console.log('Player Turn: '+App.currentRound+', Answer: '+data.answer+', Player Y: '+playerY+', Player X: '+playerX+'. ');
-                App.Host.addSquare(playerY, playerX, data.answer);
+                App.Host.square[data.answer] = data.cardAnswer;
+		App.Host.addSquare(playerY, playerX, data.answer);
             }
+	    }
         },
 
 	checkIfOut : function(player) {
@@ -256,6 +267,7 @@ jQuery(function($){
 	    App.$doc.on('click', '#btnJoinGame', App.Player.onJoinClick);
             App.$doc.on('click', '#btnStart',App.Player.onPlayerStartClick);
             App.$doc.on('click', '.btnAnswer',App.Player.onPlayerAnswerClick);
+	    App.$doc.on('click', '.btnRotate',App.Player.onRotateClick);
             App.$doc.on('click', '#btnPlayerRestart', App.Player.onPlayerRestart);
         },
 
@@ -386,14 +398,14 @@ jQuery(function($){
 
 		App.Host.playersLeft = [App.numOfPlayers, 0]; //keeps track of players still in the game;
 
-		var startingspots = [[0,2,4, '#900000'],
-				     [7,5,1, '#003366'],
-				     [5,0,2, '#006600'],
-				     [2,7,6, '#660099'],
-				     [7,3,1, '#FFCC33'],
-				     [0,4,5, '#000000'],
-				     [4,7,7, '#FFFFFF'],
-			             [3,0,3, '#33FFFF']];
+		var startingspots = [[0,2,4, '#D92442'],
+				     [7,5,1, '#476BB4'],
+				     [5,0,2, '#248838'],
+				     [2,7,6, '#D36AB4'],
+				     [7,3,1, '#E49937'],
+				     [0,4,5, '#919792'],
+				     [4,7,7, '#000000'],
+			             [3,0,3, '#FFFFFF']];
 		var innerPlayerArray = new Array(4);
                 // Display the players' names on screen
 		for(var i = 0; i < App.numOfPlayers; i++)
@@ -401,6 +413,8 @@ jQuery(function($){
 		    $('#playerScores')
 			
                     	.append('<div id="player'+ (i+1) + 'Score" class="playerScore col-xs-3"> <span class="score">&#x205C</span><span class="playerName">'+App.Host.players[i].playerName+'</span> </div>');
+			$('#player'+(i+1)+'Score').children('.playerName').css('background-color',startingspots[i][3]);
+			$('#player8Score').children('.playerName').css('color','#000000');
 			innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], 1, startingspots[i][3]];
 			//innerPlayerArray = [startingspots[i][0], startingspots[i][1], startingspots[i][2], App.Player.myName];
 			App.Host.player[i] = innerPlayerArray;	
@@ -459,8 +473,8 @@ jQuery(function($){
 	    drawBoard : function(size) { 
 				var c = document.getElementById("myCanvas");
                         	var ctx = c.getContext("2d");
-				ctx.strokeStyle = 'rgba(0,0,0,.2)';
-				ctx.lineWidth = 2;
+				ctx.strokeStyle = 'rgba(0,0,0,.1)';
+				ctx.lineWidth = 4;
 				//vertical line generator
 				for(var i = 1; i < size; i++){
 					ctx.beginPath();
@@ -518,6 +532,11 @@ jQuery(function($){
 				 [7,2,1,4,3,6,5,0],
 				 [7,3,4,1,2,6,5,0],
 				 [7,3,6,1,5,4,2,0]];
+		var data = {
+			square: App.Host.square,
+			gameId: App.gameId
+		}
+		IO.socket.emit('sendSquare',data);
 		App.Host.playerCards = [[0, 1, 2, 3], [3, 2, 1, 0], [1, 3, 2, 0], [2, 1, 0, 3]];
 		for (var i = 0; i < 8; i++) {
 			App.Host.board[i] = new Array(8);
@@ -590,7 +609,21 @@ jQuery(function($){
 			for(var i = 0; i < squareArr.length; i++){
 				ctx.beginPath();
 				ctx.moveTo(boardTile[i][0], boardTile[i][1]);
-				ctx.lineTo(boardTile[squareArr[i]][0], boardTile[squareArr[i]][1]);
+				if ((i == 0 && squareArr[i] == 1) || (i == 1 && squareArr[i] == 0)) {
+					ctx.bezierCurveTo(boardTile[i][0],(boardTile[i][1]+20),boardTile[squareArr[i]][0],(boardTile[squareArr[i]][1]+20),boardTile[squareArr[i]][0],boardTile[squareArr[i]][1]);
+				} 
+				else if ((i == 2 && squareArr[i] == 3) || (i == 3 && squareArr[i] == 2)) {
+					ctx.bezierCurveTo(boardTile[i][0]-20,boardTile[i][1],boardTile[squareArr[i]][0]-20,boardTile[squareArr[i]][1],boardTile[squareArr[i]][0],boardTile[squareArr[i]][1]);
+				}
+				else if ((i == 4 && squareArr[i] == 5) || (i == 5 && squareArr[i] == 4)) {
+					ctx.bezierCurveTo(boardTile[i][0],boardTile[i][1]-20,boardTile[squareArr[i]][0],boardTile[squareArr[i]][1]-20,boardTile[squareArr[i]][0],boardTile[squareArr[i]][1]);	
+				}
+				else if ((i == 6 && squareArr[i] == 7) || (i == 7 && squareArr[i] == 6)) {
+                                	ctx.bezierCurveTo(boardTile[i][0]+20,boardTile[i][1],boardTile[squareArr[i]][0]+20,boardTile[squareArr[i]][1],boardTile[squareArr[i]][0],boardTile[squareArr[i]][1]);
+				}
+				else {
+					ctx.lineTo(boardTile[squareArr[i]][0], boardTile[squareArr[i]][1]);
+				}
 				ctx.stroke();
 				newArr.push(boardTile[squareArr[i]])
 			}
@@ -1009,9 +1042,15 @@ jQuery(function($){
 	
 	    cards: new Array(8),	    
  
+	    square: [],
             /**
              * Click handler for the 'JOIN' button
              */
+	    /**
+	    *gathering player Canvas and player Cnavas context
+	    */	
+	    pC : [],
+	    pCctx : [],	
             onJoinClick: function () {
                 // console.log('Clicked "Join A Game"');
 
@@ -1058,6 +1097,47 @@ jQuery(function($){
 //	    console.log("Players new player count" + totalPlayerCount);
 		},
 
+	    onRotateClick: function() {
+		var $btn = $(this);     
+                var card = $btn.val();
+		App.Player.turnSquare(card);
+	    },
+	    squareMaker2: function(context, squareArr){ 
+		var pboard = [[33,0],[66,0],[100,33],[100,66],[66,100],[33,100],[0,66],[0,33]];
+		context.lineWidth = 7;
+		context.strokeStyle = 'black';
+
+		for(var i = 0; i < squareArr.length; i++){
+			context.beginPath();
+			
+			context.moveTo(pboard[i][0], pboard[i][1]);
+			context.lineTo(pboard[squareArr[i]][0], pboard[squareArr[i]][1]);
+			context.stroke();
+		}
+	    },
+	     turnSquare : function(/*turnRight*/){
+                /*if(turnRight)
+                {    
+                    var swapSquare = [App.Host.square.shift(), App.Host.square.shift()];//set swap square to first two of square array
+                    App.Host.square[6] = swapSquare[0];//moves these two to the end of square array
+                    App.Host.square[7] = swapSquare[1];
+                }else
+                {*/
+	     turnSquare : function(card){
+                var swapSquare = [App.Player.square[card].pop(), App.Player.square[card].pop()];//sets swapSquare to last two of square array
+                App.Player.square[card].unshift(swapSquare[1], swapSquare[0]);//adds the two swapSquare onto the front of the square array
+                //}
+                for(var i = 0; i <= 7; i++)
+                {
+                      App.Player.square[card][i] = (App.Player.square[card][i] + 2)%8;
+
+                }
+                /*for(var i = 0; i <= 7; i++)
+                {
+                        App.Host.square[i] = (App.Host.square[i] - 2)%8;
+                        
+                }*/
+            },
 
             /**
              *  Click handler for the Player hitting a word in the word list.
@@ -1066,6 +1146,7 @@ jQuery(function($){
                 // console.log('Clicked Answer Button');
                 var $btn = $(this);      // the tapped button
                 var answer = $btn.val(); // The tapped word
+<<<<<<< HEAD
 		var buttonIndex;
 		for(var card in App.Player.cards[App.Player.myID])
 		{
@@ -1086,6 +1167,18 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
                     answer: answer,
                     round: App.currentRound,
 		    playerCardIndex: buttonIndex
+=======
+		var cardAnswer = App.Player.square[answer];
+                // Send the player info and tapped word to the server so
+                // the host can check the answer.
+                var data = {
+                	gameId: App.gameId,
+                	playerId: App.mySocketId,
+                	answer: answer,
+			cardAnswer: cardAnswer,
+			playerOrderId: App.Player.myID,
+                	round: App.currentRound
+>>>>>>> 0ffc657412edc917973590dd8757d4363f4dc45b
                 }
 		console.log(data);
                 IO.socket.emit('playerAnswer',data);
@@ -1155,6 +1248,33 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
                 }
              },
 
+	     playerStoreSquare : function(square) {
+	     if (App.myRole == 'Player') {
+		App.Player.square = square;
+		App.Player.createPlayerCanvas();
+	     }
+             },
+	     createPlayerCanvas : function(){
+		//playerCanvascontext
+                        for (var i = 0; i<4; i++){
+                                App.Player.pC.push(document.getElementById('playerCanvas'+i));
+                        }
+                console.log(App.Player.pC);
+                for(var i = 0; i <App.Player.pC.length; i++){
+                        App.Player.pCctx.push(App.Player.pC[i].getContext("2d"));
+                }
+                console.log(App.Player.pCctx);
+
+		var n = 0;
+                for (var card in App.Player.cards[App.Player.myID]) {
+                       // console.log(App.Player.square);
+                       // console.log([App.Player.cards[App.Player.myID][card]]);
+                        App.Player.squareMaker2(App.Player.pCctx[n],App.Player.square[App.Player.cards[App.Player.myID][card]]);
+               		n += 1;
+		 }
+	     },	
+
+
             /**
              * Show the list of words for the current round.
              * @param data{{round: *, word: *, answer: *, list: Array}}
@@ -1162,26 +1282,38 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
             newWord : function(data) {
                 // Create an unordered list element
                 //var $list = $('<ul/>').attr('id','ulAnswers');
+<<<<<<< HEAD
 		//App.Player.dealCards();
 		
 		App.Player.cards[App.Player.myID] =  [App.Player.myID * 4 + 0, App.Player.myID * 4 + 1, App.Player.myID * 4 + 2, App.Player.myID * 4 + 3];
 		console.log(App.Player.cards[App.Player.myID]);
+=======
+		App.Player.cards[App.Player.myID] = [App.Player.myID * 4 + 0, App.Player.myID * 4 + 1, App.Player.myID * 4 + 2, App.Player.myID * 4 + 3];
+>>>>>>> 0ffc657412edc917973590dd8757d4363f4dc45b
 		/*******ADDED BY BECKY********/	
+		//var topBox = '<div class="topBox">'+App.Player.myName+'</div>';
 		var $cardlist = $('<ul/>').attr('id','ulAnswers');
+<<<<<<< HEAD
 		var card;
 		for (card in App.Player.cards[App.Player.myID]) {
+=======
+		var n = 0;
+		for (var card in App.Player.cards[App.Player.myID]) {
+		    var cardNumber = App.Player.cards[App.Player.myID][card];
+>>>>>>> 0ffc657412edc917973590dd8757d4363f4dc45b
 		     $cardlist                                //  <ul> </ul>
                         .append( $('<li/>')              //  <ul> <li> </li> </ul>
                             .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
                                 .addClass('btnAnswer')   //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
                                 .addClass('btn')         //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
-                                .val(App.Player.cards[App.Player.myID][card])               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
-                                .html(App.Player.cards[App.Player.myID][card])              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
+                               .val(cardNumber)               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
+                                .html(cardNumber+'<canvas id="playerCanvas'+App.Player.myID+n+'" width="100" height="100"></canvas>')              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
                             )
                         )
+		      n += 1;
+		      $cardlist.append('<div class="rotate"><button value='+cardNumber+' class="btnRotate"><i class="fa fa-repeat"></i></button></div>');
 		};	
 		console.log('MyID: '+App.Player.myID);
-		console.log('MyName: '+App.Player.myName);
 		/*******ADDED BY BECKY********/
                 // Insert a list item for each word in the word list
                 // received from the server.
@@ -1199,8 +1331,13 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
 
                 // Insert the list onto the screen.
                // $('#gameArea').html($list);
+		//$('#gameArea').html(topBox);
 		$('#gameArea').html($cardlist);
-            },
+
+
+		console.log('MyID: '+App.Player.myID);
+                console.log('MyName: '+App.Player.myName);  
+	  },
 
             /**
              * Show the "Game Over" screen.

@@ -231,6 +231,25 @@ p {
     color: #AE37B2;
 }
 
+.rotate {
+    width: 100%;
+    text-align: center;
+    color: #AE37B2;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
+    font-size: 3em;
+}
+
+.btnRotate {
+    background-color: #ECFFE0;
+}
+
+.topBox {
+    color: #AE37B2;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
+    font-size: 3em;
+}
 
 
 /* ******************************
