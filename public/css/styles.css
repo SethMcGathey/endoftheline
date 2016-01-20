@@ -271,9 +271,12 @@ p {
     right: 0;
 }
 
-#myCanvas {
+canvas {
     background-color: #F4EBCE;
 
+}
+i{
+float:right;
 }
 #hostWord {
     height: 100%;
