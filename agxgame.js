@@ -19,6 +19,7 @@ exports.initGame = function(sio, socket){
     gameSocket.on('hostNextRound', hostNextRound);
     gameSocket.on('playerLost', playerLost);
     gameSocket.on('playerWin', playerWin);
+    gameSocket.on('receiveNewCard', receiveNewCard);
 
     // Player Events
     gameSocket.on('playerJoinGame', playerJoinGame);
@@ -148,6 +149,13 @@ function playerAnswer(data) {
     // Emit an event with the answer so it can be checked by the 'Host'
     io.sockets.in(data.gameId).emit('hostMovePlayer', data);
 }
+
+
+function receiveNewCard(data)
+{
+	io.sockets.in(data.gameId).emit('passedNewCard', data);
+}
+
 
 /**
  * The game is over, and a player has clicked a button to restart the game.
