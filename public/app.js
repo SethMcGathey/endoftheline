@@ -119,12 +119,9 @@ jQuery(function($){
         },
 	/*****ADDED BY BECKY*****/
 	hostMovePlayer : function(data) {
-<<<<<<< HEAD
 	    console.log("Data within hostMovePlayer myID " + data.myID + " answer " +  data.answer + " playerCardIndex " +  data.playerCardIndex);
 	    App.Host.drawCard(data.myID, data.answer, data.playerCardIndex);
-=======
 	    if (App.currentRound == data.playerOrderId) {
->>>>>>> 0ffc657412edc917973590dd8757d4363f4dc45b
 	    //move player to next square
 	    var playerX;
 	    var playerY;
@@ -1156,7 +1153,6 @@ jQuery(function($){
                 // console.log('Clicked Answer Button');
                 var $btn = $(this);      // the tapped button
                 var answer = $btn.val(); // The tapped word
-<<<<<<< HEAD
 		var buttonIndex;
 		for(var card in App.Player.cards[App.Player.myID])
 		{
@@ -1177,18 +1173,6 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
                     answer: answer,
                     round: App.currentRound,
 		    playerCardIndex: buttonIndex
-=======
-		var cardAnswer = App.Player.square[answer];
-                // Send the player info and tapped word to the server so
-                // the host can check the answer.
-                var data = {
-                	gameId: App.gameId,
-                	playerId: App.mySocketId,
-                	answer: answer,
-			cardAnswer: cardAnswer,
-			playerOrderId: App.Player.myID,
-                	round: App.currentRound
->>>>>>> 0ffc657412edc917973590dd8757d4363f4dc45b
                 }
 		console.log(data);
                 IO.socket.emit('playerAnswer',data);
@@ -1282,25 +1266,16 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
             newWord : function(data) {
                 // Create an unordered list element
                 //var $list = $('<ul/>').attr('id','ulAnswers');
-<<<<<<< HEAD
 		//App.Player.dealCards();
 		
 		App.Player.cards[App.Player.myID] =  [App.Player.myID * 4 + 0, App.Player.myID * 4 + 1, App.Player.myID * 4 + 2, App.Player.myID * 4 + 3];
 		console.log(App.Player.cards[App.Player.myID]);
-=======
-		App.Player.cards[App.Player.myID] = [App.Player.myID * 4 + 0, App.Player.myID * 4 + 1, App.Player.myID * 4 + 2, App.Player.myID * 4 + 3];
->>>>>>> 0ffc657412edc917973590dd8757d4363f4dc45b
 		/*******ADDED BY BECKY********/	
 		//var topBox = '<div class="topBox">'+App.Player.myName+'</div>';
 		var $cardlist = $('<ul/>').attr('id','ulAnswers');
-<<<<<<< HEAD
-		var card;
-		for (card in App.Player.cards[App.Player.myID]) {
-=======
 		var n = 0;
 		for (var card in App.Player.cards[App.Player.myID]) {
 		    var cardNumber = App.Player.cards[App.Player.myID][card];
->>>>>>> 0ffc657412edc917973590dd8757d4363f4dc45b
 		     $cardlist                                //  <ul> </ul>
                         .append( $('<li/>')              //  <ul> <li> </li> </ul>
                             .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
