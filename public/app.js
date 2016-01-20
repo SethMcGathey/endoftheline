@@ -35,6 +35,7 @@ jQuery(function($){
             IO.socket.on('hostMovePlayer', IO.hostMovePlayer);
             IO.socket.on('gameOver', IO.gameOver);
             IO.socket.on('error', IO.error );
+	    IO.socket.on('passedNewCard', IO.passedNewCard);
         },
 
         /**
@@ -118,7 +119,12 @@ jQuery(function($){
         },
 	/*****ADDED BY BECKY*****/
 	hostMovePlayer : function(data) {
+<<<<<<< HEAD
+	    console.log("Data within hostMovePlayer myID " + data.myID + " answer " +  data.answer + " playerCardIndex " +  data.playerCardIndex);
+	    App.Host.drawCard(data.myID, data.answer, data.playerCardIndex);
+=======
 	    if (App.currentRound == data.playerOrderId) {
+>>>>>>> 0ffc657412edc917973590dd8757d4363f4dc45b
 	    //move player to next square
 	    var playerX;
 	    var playerY;
@@ -183,7 +189,12 @@ jQuery(function($){
          */
         error : function(data) {
             alert(data.message);
-        }
+        },
+
+
+	passedNewCard : function(data) {
+		App.Player.passedNewCard(data);
+	}
 
     };
 
@@ -485,7 +496,7 @@ jQuery(function($){
 		//App.Host.square = [[6, 5, 4, 7, 2, 1, 0, 3], [4, 7, 6, 5, 0, 3, 2, 1], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
 		//App.Host.square = [[5, 4, 7, 6, 1, 0, 3, 2], [6, 3, 5, 1, 7, 2, 0, 4], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
 		//App.Host.playerCards = [[0, 1, 2, 3], [3, 2, 1, 0], [1, 3, 2, 0], [2, 1, 0, 3]];
-	
+	       App.Host.deal();	
 	       App.Host.square =[[1,0,3,2,5,4,7,6],
 				 [4,5,6,7,0,1,2,3],
 				 [1,0,7,5,6,3,4,2],
@@ -589,7 +600,7 @@ jQuery(function($){
 	   squareMaker : function(brdy, brdx, squareArr){
 		
 			var c = document.getElementById("myCanvas");
-         	       var ctx = c.getContext("2d");
+         	        var ctx = c.getContext("2d");
 			var boardTile = App.Host.boardCoordinates[brdy][brdx];
 			ctx.lineWidth = 5;
 			ctx.strokeStyle = '#584D58';
@@ -797,7 +808,55 @@ jQuery(function($){
 		}
 	},
 
+	deal : function()
+	{	
+		App.Host.isDealt = new Array(36);
+		for(var i = 0; i < 36; i++)
+		{
+			App.Host.isDealt[i] = 0;
+		}
 
+		App.Host.cards = new Array(App.numOfPlayers);
+		var cardArray;
+		for(cardArray in App.Host.player)
+		{
+			App.Host.cards[cardArray] = [cardArray * 4 + 0, cardArray * 4 + 1, cardArray * 4 + 2, cardArray * 4 + 3];		
+		}
+		
+		for(var i = 0; i < App.numOfPlayers * 4; i++)
+		{
+			App.Host.isDealt[i] = 1;
+		}
+	},
+
+	//draw a card from the deck
+	drawCard : function(myID, cardID, playerCardIndex)
+	{
+		console.log("Inside drawCard myID " + myID + " cardID " + cardID + " playerCardIndex " + playerCardIndex);
+		console.log("isDealt " + App.Host.isDealt);
+		var cardIndex;
+		for(cardIndex in App.Host.isDealt)
+		{
+			console.log("isDealt[cardIndex] " + App.Host.isDealt[cardIndex]);
+			if(App.Host.isDealt[cardIndex] == 0)
+			{
+				App.Host.cards[myID][cardID] = App.Host.square[cardIndex];
+				App.Host.isDealt[cardIndex] = 1;
+				var data = {
+					   	cardIndex: cardIndex,
+					   	cardID: cardID,
+						myID: myID,
+					   	playerCardIndex: playerCardIndex,
+						gameID: App.gameID,
+						hostCards: App.Host.cards
+					   }
+				console.log("Inside loop inside drawCard");
+				IO.socket.emit('receiveNewCard',data);
+				break;
+				//send cardIndex, cardID, to playerID 
+			}
+		}
+	},
 
    //added by Becky
 		// Advance the round
@@ -980,6 +1039,8 @@ jQuery(function($){
 	    myID: 0,
 	    
 	    totalPlayerCount: 0,
+	
+	    cards: new Array(8),	    
  
 	    square: [],
             /**
@@ -995,6 +1056,7 @@ jQuery(function($){
 
                 // Display the Join Game HTML on the player's screen.
                 App.$gameArea.html(App.$templateJoinGame);
+	//	console.log("Players new player count" + totalPlayerCount);
             },
 
             /**
@@ -1008,16 +1070,18 @@ jQuery(function($){
                 var data = {
                     gameId : +($('#inputGameId').val()),
                     playerName : $('#inputPlayerName').val() || 'Jarvis'
-		    //myID : App.Player.myID
+		    //myID : App.Player.myID,
+		    //cardID : 
                };
+		//console.log("Players new player count" + totalPlayerCount);
                 // Send the gameId and playerName to the server
                 IO.socket.emit('playerJoinGame', data);
                 // Set the appropriate properties for the current player.
                 App.myRole = 'Player';
                 App.Player.myName = data.playerName;
 		/*******ADDED BY BECKY********/
-		App.Player.cards = [[0, 1, 2, 3],[11, 27, 5, 9],[4, 10, 11, 9], [15, 20, 1, 0], [9, 10, 3, 19], [20, 32, 7, 4], [2, 17, 23, 24], [34, 6, 13, 19]];
-
+	//	App.Player.cards = [[0, 1, 2, 3],[11, 27, 5, 9],[4, 10, 11, 9], [15, 20, 1, 0], [9, 10, 3, 19], [20, 32, 7, 4], [2, 17, 23, 24], [34, 6, 13, 19]];
+		//App.Player.cards = [];
 		/********Added By Seth**********/
 		//App.Host.dealCards();
 
@@ -1027,11 +1091,11 @@ jQuery(function($){
             },
 
 
-
 	    assignPlayerCount: function(playerCount) {
 		App.Player.myID = playerCount;
 		App.Player.totalPlayerCount = playerCount +1;
-	    },
+//	    console.log("Players new player count" + totalPlayerCount);
+		},
 
 	    onRotateClick: function() {
 		var $btn = $(this);     
@@ -1092,6 +1156,28 @@ jQuery(function($){
                 // console.log('Clicked Answer Button');
                 var $btn = $(this);      // the tapped button
                 var answer = $btn.val(); // The tapped word
+<<<<<<< HEAD
+		var buttonIndex;
+		for(var card in App.Player.cards[App.Player.myID])
+		{
+console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + App.Player.cards[App.Player.myID][card]);
+			if(App.Player.cards[App.Player.myID][card] == answer)
+			{
+			console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + App.Player.cards[App.Player.myID][card]);
+				buttonIndex = card;
+			}
+		}
+		
+                // Send the player info and tapped word to the server so
+                // the host can check the answer.
+                var data = {
+                    gameId: App.gameId,
+                    playerId: App.mySocketId,
+		    myID: App.Player.myID,
+                    answer: answer,
+                    round: App.currentRound,
+		    playerCardIndex: buttonIndex
+=======
 		var cardAnswer = App.Player.square[answer];
                 // Send the player info and tapped word to the server so
                 // the host can check the answer.
@@ -1102,7 +1188,9 @@ jQuery(function($){
 			cardAnswer: cardAnswer,
 			playerOrderId: App.Player.myID,
                 	round: App.currentRound
+>>>>>>> 0ffc657412edc917973590dd8757d4363f4dc45b
                 }
+		console.log(data);
                 IO.socket.emit('playerAnswer',data);
             },
 
@@ -1134,6 +1222,17 @@ jQuery(function($){
                         .text('Joined Game ' + data.gameId + '. Please wait for game to begin.');
                 }
             },
+
+	    passedNewCard : function(data)
+	    {
+		console.log("App.Player.myID " + App.Player.myID + " playerCardIndex " + data.playerCardIndex + "  data.myID " + data.myID + " cardID " + data.cardID);
+		console.log("Player.cards " + App.Player.cards);
+		if(App.Player.myID == data.myID)
+		{
+			App.Player.cards[App.Player.myID][data.playerCardIndex] = data.cardID;
+			console.log("Player cards " + App.Player.cards);	
+		}
+	    },
 
             /**
              * Display 'Get Ready' while the countdown timer ticks down.
@@ -1183,13 +1282,25 @@ jQuery(function($){
             newWord : function(data) {
                 // Create an unordered list element
                 //var $list = $('<ul/>').attr('id','ulAnswers');
+<<<<<<< HEAD
+		//App.Player.dealCards();
+		
+		App.Player.cards[App.Player.myID] =  [App.Player.myID * 4 + 0, App.Player.myID * 4 + 1, App.Player.myID * 4 + 2, App.Player.myID * 4 + 3];
+		console.log(App.Player.cards[App.Player.myID]);
+=======
 		App.Player.cards[App.Player.myID] = [App.Player.myID * 4 + 0, App.Player.myID * 4 + 1, App.Player.myID * 4 + 2, App.Player.myID * 4 + 3];
+>>>>>>> 0ffc657412edc917973590dd8757d4363f4dc45b
 		/*******ADDED BY BECKY********/	
 		//var topBox = '<div class="topBox">'+App.Player.myName+'</div>';
 		var $cardlist = $('<ul/>').attr('id','ulAnswers');
+<<<<<<< HEAD
+		var card;
+		for (card in App.Player.cards[App.Player.myID]) {
+=======
 		var n = 0;
 		for (var card in App.Player.cards[App.Player.myID]) {
 		    var cardNumber = App.Player.cards[App.Player.myID][card];
+>>>>>>> 0ffc657412edc917973590dd8757d4363f4dc45b
 		     $cardlist                                //  <ul> </ul>
                         .append( $('<li/>')              //  <ul> <li> </li> </ul>
                             .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
