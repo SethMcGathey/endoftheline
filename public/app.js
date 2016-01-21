@@ -1226,7 +1226,7 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
 		console.log("Player.cards " + App.Player.cards);
 		console.log("Player.cards " + App.Player.cards[App.Player.myID]);
 console.log("Display player cards " + data.hostCards);
-console.log("testing variables myname" + 
+//console.log("testing variables myname " +  
 
 
 		for(var i = 0; i < data.numOfPlayers; i++)
