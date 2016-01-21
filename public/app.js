@@ -819,7 +819,7 @@ jQuery(function($){
 		{
 			App.Host.cards[cardArray] = [cardArray * 4 + 0, cardArray * 4 + 1, cardArray * 4 + 2, cardArray * 4 + 3];		
 		}
-		
+		console.log("Hey over here these are the cards " + App.Host.cards);		
 		for(var i = 0; i < App.numOfPlayers * 4; i++)
 		{
 			App.Host.isDealt[i] = 1;
@@ -837,7 +837,7 @@ jQuery(function($){
 			console.log("isDealt[cardIndex] " + App.Host.isDealt[cardIndex]);
 			if(App.Host.isDealt[cardIndex] == 0)
 			{
-				App.Host.cards[myID][cardID] = App.Host.square[cardIndex];
+				App.Host.cards[myID][cardID] = cardIndex;
 				App.Host.isDealt[cardIndex] = 1;
 				var data = {
 					   	cardIndex: cardIndex,
@@ -845,8 +845,10 @@ jQuery(function($){
 						myID: myID,
 					   	playerCardIndex: playerCardIndex,
 						gameID: App.gameID,
-						hostCards: App.Host.cards
-					   }
+						hostCards: App.Host.cards,
+						numOfPlayers: App.numOfPlayers,
+					 	squareArray: App.Host.square
+					  }
 				console.log("Inside loop inside drawCard");
 				IO.socket.emit('receiveNewCard',data);
 				break;
@@ -1222,12 +1224,35 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
 	    {
 		console.log("App.Player.myID " + App.Player.myID + " playerCardIndex " + data.playerCardIndex + "  data.myID " + data.myID + " cardID " + data.cardID);
 		console.log("Player.cards " + App.Player.cards);
+		console.log("Player.cards " + App.Player.cards[App.Player.myID]);
+console.log("Display player cards " + data.hostCards);
+console.log("testing variables myname" + 
+
+
+		for(var i = 0; i < data.numOfPlayers; i++)
+		{
+			
+			App.Player.cards[i] = data.hostCards[i];
+		}
+		console.log("Display player cards " + data.hostCards);
+		console.log("Display player cards " + App.Player.cards);
 		if(App.Player.myID == data.myID)
 		{
 			App.Player.cards[App.Player.myID][data.playerCardIndex] = data.cardID;
 			console.log("Player cards " + App.Player.cards);	
 		}
-	    },
+
+		App.Player.square = [,,,,,,,,];
+
+		console.log("Print out this line of player.square " + App.Player.square[i]);
+		console.log("Print out this line of data.squareArray " + data.squareArray[i]);
+		for(var i = 0; i < data.squareArray.length; i++)
+		{
+			App.Player.square[i] = data.sqaureArray[i];
+		}
+		//App.Player.square = data.sqaureArray;
+                App.Player.clearCard();    
+	},
 
             /**
              * Display 'Get Ready' while the countdown timer ticks down.
