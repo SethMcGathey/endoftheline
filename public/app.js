@@ -503,7 +503,7 @@ jQuery(function($){
 				 [1,0,5,6,7,2,3,4],
 				 [2,4,0,5,1,3,7,6],
 				 [2,3,0,1,5,4,7,6],
-				 [2,4,0,6,1,5,6,5],
+				 [2,4,0,3,1,7,6,5],
 				 [2,5,0,6,7,1,3,4],
 				 [2,4,0,7,1,6,5,3],
 				 [2,5,0,7,6,1,4,3],
@@ -1308,6 +1308,8 @@ console.log("testing variables myname" +
 		console.log(App.Player.cards[App.Player.myID]);
 		/*******ADDED BY BECKY********/	
 		//var topBox = '<div class="topBox">'+App.Player.myName+'</div>';
+		//var $cardlist = $('<ul/>').attr('id','ulAnswers');
+		//var $cardlist = $('<div/>').addClass('col-lg-10 col-md-10 col-sm-10 col-xs-10');
 		var $cardlist = $('<ul/>').attr('id','ulAnswers');
 		var card;
 		var n = 0;
