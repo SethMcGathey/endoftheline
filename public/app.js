@@ -441,7 +441,6 @@ jQuery(function($){
 		//END CODE BY BECKY
             },
 
-
             /**
              * Show the word for the current round on screen.
              * @param data{{round: *, word: *, answer: *, list: Array}}
@@ -460,6 +459,7 @@ jQuery(function($){
                         App.Host.showPlayer(displayPlayerStartingPoints[player][0], displayPlayerStartingPoints[player][1],displayPlayerStartingPoints[player][2], App.Host.player[player][4]);
 			}
 		}
+		$('#turnDisplay').html(App.Host.players[0].playerName+'\'s Turn');
 		//ADDED BY BECKY
 
                 // Update the data for the current round
@@ -670,6 +670,9 @@ jQuery(function($){
 
 
            addSquare : function(y, x, squareNumber) {
+		//change turn
+		$('#turnDisplay').html(App.Host.players[App.currentRound].playerName+'\'s Turn');
+
 		App.Host.board[y][x] = squareNumber; 
 		/*$('#board').append(App.Host.board[0] + ' <br>');
                 $('#board').append(App.Host.board[1] + ' <br>');
@@ -718,6 +721,7 @@ jQuery(function($){
     			}
     			IO.socket.emit('playerLost',data);
 			App.Host.playersLeft[0] = App.Host.playersLeft[0] - 1;
+			$('#player'+(parseInt(individual)+1)+'Score').children('.playerName').html('Out!');
 		}
 	},
 	
@@ -801,7 +805,7 @@ jQuery(function($){
 			console.log(App.Host.playersLeft[1]);
                         IO.socket.emit('playerWin',data);
 			//playersLeft[1] will be equal to the number to access the winning player;
-			$('#playerScores').html('<div class="youWon">'+App.Host.players[App.Host.playersLeft[1]].playerName+' Is the Winner!</div>');
+			$('#turnDisplay').html('<div class="youWon">'+App.Host.players[App.Host.playersLeft[1]].playerName+' Is the Winner!</div>');
 		}
 	},
 
