@@ -119,8 +119,8 @@ jQuery(function($){
         },
 	/*****ADDED BY BECKY*****/
 	hostMovePlayer : function(data) {
-	    console.log("Data within hostMovePlayer myID " + data.myID + " answer " +  data.answer + " playerCardIndex " +  data.playerCardIndex);
-	    App.Host.drawCard(data.myID, data.answer, data.playerCardIndex);
+//	    console.log("Data within hostMovePlayer myID " + data.myID + " answer " +  data.answer + " playerCardIndex " +  data.playerCardIndex);
+//	    App.Host.drawCard(data.myID, data.answer, data.playerCardIndex);
 	    if (App.currentRound == data.playerOrderId) {
 	    //move player to next square
 	    var playerX;
@@ -493,7 +493,7 @@ jQuery(function($){
 		//App.Host.square = [[6, 5, 4, 7, 2, 1, 0, 3], [4, 7, 6, 5, 0, 3, 2, 1], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
 		//App.Host.square = [[5, 4, 7, 6, 1, 0, 3, 2], [6, 3, 5, 1, 7, 2, 0, 4], [7, 6, 5, 4, 3, 2, 1, 0], [7, 6, 3, 2, 5, 4, 1, 0]];
 		//App.Host.playerCards = [[0, 1, 2, 3], [3, 2, 1, 0], [1, 3, 2, 0], [2, 1, 0, 3]];
-	       App.Host.deal();	
+//	       App.Host.deal();	
 	       App.Host.square =[[1,0,3,2,5,4,7,6],
 				 [4,5,6,7,0,1,2,3],
 				 [1,0,7,5,6,3,4,2],
@@ -591,7 +591,7 @@ jQuery(function($){
     			}
    			App.Host.boardCoordinates.push(column);
 		}
-		console.log(App.Host.boardCoordinates);
+//		console.log(App.Host.boardCoordinates);
 	    },
 	/*****Added by MC*****/
 	   squareMaker : function(brdy, brdx, squareArr){
@@ -805,7 +805,7 @@ jQuery(function($){
 		}
 	},
 
-	deal : function()
+/*	deal : function()
 	{	
 		App.Host.isDealt = new Array(36);
 		for(var i = 0; i < 36; i++)
@@ -819,7 +819,7 @@ jQuery(function($){
 		{
 			App.Host.cards[cardArray] = [cardArray * 4 + 0, cardArray * 4 + 1, cardArray * 4 + 2, cardArray * 4 + 3];		
 		}
-		console.log("Hey over here these are the cards " + App.Host.cards);		
+		//console.log("Hey over here these are the cards " + App.Host.cards);		
 		for(var i = 0; i < App.numOfPlayers * 4; i++)
 		{
 			App.Host.isDealt[i] = 1;
@@ -829,12 +829,13 @@ jQuery(function($){
 	//draw a card from the deck
 	drawCard : function(myID, cardID, playerCardIndex)
 	{
-		console.log("Inside drawCard myID " + myID + " cardID " + cardID + " playerCardIndex " + playerCardIndex);
-		console.log("isDealt " + App.Host.isDealt);
+		console.log("Still calls this one");
+		//console.log("Inside drawCard myID " + myID + " cardID " + cardID + " playerCardIndex " + playerCardIndex);
+		//console.log("isDealt " + App.Host.isDealt);
 		var cardIndex;
 		for(cardIndex in App.Host.isDealt)
 		{
-			console.log("isDealt[cardIndex] " + App.Host.isDealt[cardIndex]);
+			//console.log("isDealt[cardIndex] " + App.Host.isDealt[cardIndex]);
 			if(App.Host.isDealt[cardIndex] == 0)
 			{
 				App.Host.cards[myID][cardID] = cardIndex;
@@ -849,14 +850,14 @@ jQuery(function($){
 						numOfPlayers: App.numOfPlayers,
 					 	squareArray: App.Host.square
 					  }
-				console.log("Inside loop inside drawCard");
+				//console.log("Inside loop inside drawCard");
 				IO.socket.emit('receiveNewCard',data);
 				break;
 				//send cardIndex, cardID, to playerID 
 			}
 		}
 	},
-
+*/
    //added by Becky
 		// Advance the round
                    /*     App.currentRound += 1;
@@ -1188,7 +1189,9 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
                 	round: App.currentRound
                 }
 		console.log(data);
+		App.Player.drawCard();
                 IO.socket.emit('playerAnswer',data);
+		//App.Player.drawCard();
             },
 
             /**
@@ -1220,13 +1223,13 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
                 }
             },
 
-	    passedNewCard : function(data)
+/*	    passedNewCard : function(data)
 	    {
 		console.log("App.Player.myID " + App.Player.myID + " playerCardIndex " + data.playerCardIndex + "  data.myID " + data.myID + " cardID " + data.cardID);
 		console.log("Player.cards " + App.Player.cards);
 		console.log("Player.cards " + App.Player.cards[App.Player.myID]);
-console.log("Display player cards " + data.hostCards);
-//console.log("testing variables myname " +  
+		console.log("Display player cards " + data.hostCards);
+		//console.log("testing variables myname " +  
 
 
 		for(var i = 0; i < data.numOfPlayers; i++)
@@ -1242,10 +1245,12 @@ console.log("Display player cards " + data.hostCards);
 			console.log("Player cards " + App.Player.cards);	
 		}
 
+		console.log("Print out this line of player.square " + App.Player.square[0]);
+
 		App.Player.square = [,,,,,,,,];
 
-		console.log("Print out this line of player.square " + App.Player.square[i]);
-		console.log("Print out this line of data.squareArray " + data.squareArray[i]);
+		console.log("Print out this line of player.square " + App.Player.square[0]);
+		console.log("Print out this line of data.squareArray " + data.squareArray[0]);
 		for(var i = 0; i < data.squareArray.length; i++)
 		{
 			App.Player.square[i] = data.sqaureArray[i];
@@ -1253,6 +1258,44 @@ console.log("Display player cards " + data.hostCards);
 		//App.Player.square = data.sqaureArray;
                 App.Player.clearCard();    
 	},
+
+*/
+	playerPassedNewCard : function(data)
+            {
+                console.log("App.Player.myID " + App.Player.myID + " playerCardIndex " + data.playerCardIndex + "  data.myID " + data.myID + " cardID " + data.cardID);
+                console.log("Player.cards " + App.Player.cards);
+                console.log("Player.cards " + App.Player.cards[App.Player.myID]);
+                console.log("Display player cards " + data.hostCards);
+                //console.log("testing variables myname " +  
+
+
+                for(var i = 0; i < data.numOfPlayers; i++)
+                {
+
+                        App.Player.cards[i] = data.hostCards[i];
+                }
+                console.log("Display player cards " + data.hostCards);
+                console.log("Display player cards " + App.Player.cards);
+                if(App.Player.myID == data.myID)
+                {
+                        App.Player.cards[App.Player.myID][data.playerCardIndex] = data.cardID;
+                        console.log("Player cards " + App.Player.cards);
+                }
+
+                console.log("Print out this line of player.square " + App.Player.square[0]);
+
+                App.Player.square = [,,,,,,,,];
+
+                console.log("Print out this line of player.square " + App.Player.square[0]);
+                console.log("Print out this line of data.squareArray " + data.squareArray[0]);
+                for(var i = 0; i < data.squareArray.length; i++)
+                {
+//                        App.Player.square[i] = data.sqaureArray[i];
+                }
+                //App.Player.square = data.sqaureArray;
+                App.Player.clearCard();
+        },
+
 
             /**
              * Display 'Get Ready' while the countdown timer ticks down.
@@ -1295,6 +1338,59 @@ console.log("Display player cards " + data.hostCards);
 	     },	
 
 
+	     drawCard : function()
+            {
+               console.log("Inside drawCard myID " + App.Player.myID + " cardID " + App.Player.cardID + " playerCardIndex " + App.Player.playerCardIndex);
+               console.log("isDealt " + App.Host.isDealt);
+                var cardIndex;
+                for(cardIndex in App.Player.isDealt)
+                {
+                        //console.log("isDealt[cardIndex] " + App.Host.isDealt[cardIndex]);
+                        if(App.Player.isDealt[cardIndex] == 0)
+                        {
+                                App.Player.cards[App.Player.myID][App.Player.cardID] = cardIndex;
+                                App.Player.isDealt[cardIndex] = 1;
+                                /*var data = {
+                                                cardIndex: cardIndex,
+                                                cardID: cardID,
+                                                myID: myID,
+                                                playerCardIndex: playerCardIndex,
+                                                gameID: App.gameID,
+                                                hostCards: App.Host.cards,
+                                                numOfPlayers: App.numOfPlayers,
+                                                squareArray: App.Host.square
+                                          }*/
+                                console.log("Inside loop inside drawCard");
+                               // IO.socket.emit('receiveNewCard',data);
+                                break;
+                                //send cardIndex, cardID, to playerID 
+                        }
+                }
+		App.Player.clearCard();
+            },
+
+            deal : function()
+            {
+                App.Player.isDealt = new Array(36);
+                for(var i = 0; i < 36; i++)
+                {
+                        App.Player.isDealt[i] = 0;
+                }
+
+                App.Player.cards = new Array(App.numOfPlayers);
+                var cardArray;
+                for(cardArray in App.Player.player)
+                {
+                        App.Player.cards[cardArray] = [cardArray * 4 + 0, cardArray * 4 + 1, cardArray * 4 + 2, cardArray * 4 + 3];
+                }
+                console.log("Hey over here these are the cards " + App.Player.cards);
+                for(var i = 0; i < App.numOfPlayers * 4; i++)
+                {
+                        App.Player.isDealt[i] = 1;
+                }
+             },
+
+
             /**
              * Show the list of words for the current round.
              * @param data{{round: *, word: *, answer: *, list: Array}}
@@ -1303,7 +1399,8 @@ console.log("Display player cards " + data.hostCards);
                 // Create an unordered list element
                 //var $list = $('<ul/>').attr('id','ulAnswers');
 		//App.Player.dealCards();
-		
+	
+//		App.Player.deal();	
 		App.Player.cards[App.Player.myID] =  [App.Player.myID * 4 + 0, App.Player.myID * 4 + 1, App.Player.myID * 4 + 2, App.Player.myID * 4 + 3];
 		console.log(App.Player.cards[App.Player.myID]);
 		/*******ADDED BY BECKY********/	
