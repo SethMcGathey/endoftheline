@@ -22,8 +22,21 @@ html, body {
      (Inspired by Bootstrap 3.0)
    ****************************** */
 p {
-    display: inline-block;
+    /*display: inline-block;*/
     margin-bottom: 5px;
+    color: #F4EBCE;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 400;
+    font-size: 1.4em;
+    line-height: 1.2;
+    text-align: center;
+   /* background-color: #801B08;*/
+   /* white-space: nowrap;*/
+   /* vertical-align: middle;*/
+}
+h2 {
+    display: inline-block;
+    margin: 45px 0px 5px 0px;
     color: #F4EBCE;
     font-family: 'Quicksand', sans-serif;
     font-weight: 800;
@@ -33,6 +46,7 @@ p {
     background-color: #801B08;
     white-space: nowrap;
     vertical-align: middle;
+    padding: 2px 10px;
 }
 .btn, select {
     display: inline-block;
@@ -97,25 +111,27 @@ p {
 .titleWrapper {
     font-family: 'Quicksand', sans-serif;
     font-weight: 400;
-    position: absolute;
+   /* position: absolute;*/
     height: 50%;
     width: 80%;
     margin: auto;
-    bottom: 0;
+   /* bottom: 0;
     left: 0;
     top: 0;
-    right: 0;
+    right: 0;*/
 }
 
 .title {
-    margin: 0px auto;
-    text-align: center;
+    margin: 40px auto 45px auto;
+   text-align: center;
     width: 90%;
     font-family: 'Quicksand', sans-serif;
     color: #F4EBCE;
-    font-weight: 300;
+    font-weight: 600;
 }
-
+.game-rules{
+    text-align: center;
+}
 .buttons {
     width: 100%;
     text-align: center;
@@ -230,9 +246,10 @@ p {
     font-size: 3em;
     color: #AE37B2;
 }
-
+.row {
+    background-color: #801B08;
+}
 .rotate {
-    width: 100%;
     text-align: center;
     color: #AE37B2;
     font-family: 'Quicksand', sans-serif;
@@ -242,8 +259,15 @@ p {
 
 .btnRotate {
     background-color: #ECFFE0;
+    height: 100px;
+    width: 100px;
+    margin-top: 10px;
 }
 
+.fa-repeat {
+    margin-right: 25px;
+    
+}
 .topBox {
     color: #AE37B2;
     font-family: 'Quicksand', sans-serif;
