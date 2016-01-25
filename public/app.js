@@ -1291,6 +1291,10 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
 		for ( card in App.Player.cards[App.Player.myID]) {
 		    var cardNumber = App.Player.cards[App.Player.myID][card];
 		     $cardlist                                //  <ul> </ul>
+			.append( $('<div/>')
+				.addClass('row') 
+			.append( $('<div/>')	
+				.addClass('col-xs-10')
                         .append( $('<li/>')              //  <ul> <li> </li> </ul>
                             .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
                                 .addClass('btnAnswer')   //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
@@ -1299,8 +1303,10 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
                                 .html('<canvas id="playerCanvas'+n+'" width="100" height="100"></canvas>')              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
                             )
                         )
+			)
+			.append('<div class="col-xs-2 rotate"><button value='+cardNumber+' class="btnRotate"><i class="fa fa-repeat"></i></button></div>')
+			)
 		      n += 1;
-		      $cardlist.append('<div class="rotate"><button value='+cardNumber+' class="btnRotate"><i class="fa fa-repeat"></i></button></div>');
 		};	
 		console.log('MyID: '+App.Player.myID);
 		/*******ADDED BY BECKY********/
