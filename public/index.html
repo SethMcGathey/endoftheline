@@ -16,7 +16,7 @@
 <body>
 
 
-    <div id="gameArea">
+    <div id="gameArea" class="container-fluid">
         <!-- This is where the templates defined below will be used -->
     </div>
 
@@ -28,10 +28,17 @@
             <div class="title">
                 End Of The Line
             </div>
+	    <div class="game-rules">	
+		<p>End Of The Line is a game of paths.</p>
+		<p>Each player begins at the perimeter of the board. </p>
+		<p>By placing a tile and following the path, each player travels the board.</p>
+	    	<p>The object of the game is to keep your path from connecting to the edge of the board.</p>
+	        <p>The last remaining player wins.</p>
+	    </div>
 
             <div class="buttons">
 		<div>
-			<p># of Players</p>
+			<h2>Select # of Players</h2>
 			<br/>
 			<select id="numOfPlayers" class="numOfPlayersClass">
 				<option value="2">2</option>
