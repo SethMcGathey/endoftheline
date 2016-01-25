@@ -1418,19 +1418,20 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
 		    var cardNumber = App.Player.cards[App.Player.myID][card];
 		     $cardlist                                //  <ul> </ul>
 			.append( $('<div/>')
-				.addClass('row') 
-			.append( $('<div/>')	
-				.addClass('col-xs-10')
-                        .append( $('<li/>')              //  <ul> <li> </li> </ul>
-                            .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
-                                .addClass('btnAnswer')   //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
-                                .addClass('btn')         //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
-                               .val(cardNumber)               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
+				.addClass('row')
+				.addClass('player-square') 
+			    .append( $('<div/>')	
+				    .addClass('col-xs-8')
+                                .append( $('<li/>')              //  <ul> <li> </li> </ul>
+                                    .append( $('<button/>')      //  <ul> <li> <button> </button> </li> </ul>
+                                        .addClass('btnAnswer')   //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
+                                        .addClass('btn')         //  <ul> <li> <button class='btnAnswer'> </button> </li> </ul>
+                                        .val(cardNumber)               //  <ul> <li> <button class='btnAnswer' value='word'> </button> </li> </ul>
                                 .html('<canvas id="playerCanvas'+n+'" width="100" height="100"></canvas>')              //  <ul> <li> <button class='btnAnswer' value='word'>word</button> </li> </ul>
-                            )
-                        )
-			)
-			.append('<div class="col-xs-2 rotate"><button value='+cardNumber+' class="btnRotate"><i class="fa fa-repeat"></i></button></div>')
+                                    )
+                                )
+		       	    )
+		        	.append('<div class="col-xs-4 rotate"><button value='+cardNumber+' class="btnRotate"><i class="fa fa-repeat"></i></button></div>')
 			)
 		      n += 1;
 		};	
