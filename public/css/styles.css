@@ -241,13 +241,13 @@ h2 {
 
 .btnAnswer {
     width: 100%;
-    border-bottom: 1px dotted white;
-    font-weight: 400;
-    font-size: 3em;
+    margin-top: 5px;
+    border: none;
     color: #AE37B2;
 }
-.row {
+.player-square {
     background-color: #801B08;
+    border-bottom: 1px dotted white;
 }
 .rotate {
     text-align: center;
@@ -259,13 +259,12 @@ h2 {
 
 .btnRotate {
     background-color: #ECFFE0;
-    height: 100px;
-    width: 100px;
-    margin-top: 10px;
+    height: 50px;
+    width: 50px;
+    margin-top: 40px;
 }
 
 .fa-repeat {
-    margin-right: 25px;
     
 }
 .topBox {
@@ -385,6 +384,7 @@ float:right;
     color: #F4EBCE;
 }
 .youWon {
+    font-size: 2em;
 }
 
 .btnGameOver {
