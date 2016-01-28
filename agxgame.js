@@ -19,7 +19,7 @@ exports.initGame = function(sio, socket){
     gameSocket.on('hostNextRound', hostNextRound);
     gameSocket.on('playerLost', playerLost);
     gameSocket.on('playerWin', playerWin);
-    gameSocket.on('receiveNewCard', receiveNewCard);
+//    gameSocket.on('receiveNewCard', receiveNewCard);
 
     gameSocket.on('sendSquare', sendSquare);
     // Player Events
@@ -156,10 +156,10 @@ function playerAnswer(data) {
 }
 
 
-function receiveNewCard(data)
+/*function receiveNewCard(data)
 {
 	io.sockets.in(data.gameId).emit('passedNewCard', data);
-}
+}*/
 
 
 /**

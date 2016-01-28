@@ -1164,14 +1164,14 @@ jQuery(function($){
                 // console.log('Clicked Answer Button');
                 var $btn = $(this);      // the tapped button
                 var answer = $btn.val(); // The tapped word
-		var buttonIndex;
+		App.Player.buttonIndex;
 		for(var card in App.Player.cards[App.Player.myID])
 		{
 console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + App.Player.cards[App.Player.myID][card]);
 			if(App.Player.cards[App.Player.myID][card] == answer)
 			{
 			console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + App.Player.cards[App.Player.myID][card]);
-				buttonIndex = card;
+				App.Player.buttonIndex = card;
 			}
 		}
 		
@@ -1182,7 +1182,7 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
                 	gameId: App.gameId,
                 	playerId: App.mySocketId,
 			myID: App.Player.myID,
-			playerCardIndex: buttonIndex,
+//			playerCardIndex: buttonIndex,
                 	answer: answer,
 			cardAnswer: cardAnswer,
 			playerOrderId: App.Player.myID,
@@ -1340,7 +1340,7 @@ console.log("Answer " + answer + " App.Player.cards[App.Player.myID][card] " + A
 
 	     drawCard : function()
             {
-               console.log("Inside drawCard myID " + App.Player.myID + " cardID " + App.Player.cardID + " playerCardIndex " + App.Player.playerCardIndex);
+               console.log("Inside drawCard myID " + App.Player.myID + " cardID  + App.Player.cardID +  playerCardIndex " + App.Player.playerCardIndex);
                console.log("isDealt " + App.Host.isDealt);
                 var cardIndex;
                 for(cardIndex in App.Player.isDealt)
